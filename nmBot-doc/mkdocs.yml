@@ -1,0 +1,26 @@
+site_name: nmBot Telegram 帮助文档
+theme: 
+  name: material
+  logo: https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png
+  favicon: https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png
+  language: zh
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - footnotes
+
+nav:
+- 首页: index.md
+- 在群组中使用 nmBot:
+  - 设置管理员权限: group/group-setup.md
+  - 群组管理功能:
+    - 使用 ban、block 指令禁言或封禁成员和频道: group/ban.md
+  - 群组娱乐功能:
+    - banme: group/banme.md
+- nmBot 面板:
+    - 关于 nmBot 面板: about-panel.md
+    - 启动 nmBot 面板: launch-panel.md
+- nmartChat: nmartchat.md
+- 更多帮助: 
+  - 关于 nmBot: about.md
+  - 支持: support.md
