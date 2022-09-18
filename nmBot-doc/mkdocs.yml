@@ -15,6 +15,10 @@ nav:
   - 设置管理员权限: group/group-setup.md
   - 群组管理功能:
     - 使用 ban、block 指令禁言或封禁成员和频道: group/ban.md
+    - 使用 warn 指令警告成员和频道: group/warn.md
+    - 使用 pin 指令置顶或取消置顶消息: group/pin.md
+    - 入群验证: group/join-verification.md
+    - 关键词回复: group/key-word-reply.md
   - 群组娱乐功能:
     - banme: group/banme.md
   - nmBot 群组功能所需权限说明: group/admin-rights-and-features.md
