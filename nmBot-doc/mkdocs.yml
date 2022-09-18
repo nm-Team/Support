@@ -18,6 +18,7 @@ nav:
     - 使用 warn 指令警告成员和频道: group/warn.md
   - 群组娱乐功能:
     - banme: group/banme.md
+  - nmBot 群组功能所需权限说明: group/admin-rights-and-features.md
 - nmBot 面板:
     - 关于 nmBot 面板: about-panel.md
     - 启动 nmBot 面板: launch-panel.md
