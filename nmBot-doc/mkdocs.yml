@@ -1,31 +1,40 @@
 site_name: nmBot Telegram 帮助文档
-theme: 
+theme:
   name: material
   logo: https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png
   favicon: https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png
   language: zh
+  palette:
+    primary: blue
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/nm-Team/nmBot-Telegram-doc
+copyright: Copyright 2022 nmTeam. All rights reserved. <br>nmBot Telegram Doc is licensed under the MIT License.
+
 markdown_extensions:
   - attr_list
   - md_in_html
   - footnotes
 
 nav:
-- 首页: index.md
-- 在群组中使用 nmBot:
-  - 设置管理员权限: group/group-setup.md
-  - 群组管理功能:
-    - 使用 ban、block 指令禁言或封禁成员和频道: group/ban.md
-    - 使用 warn 指令警告成员和频道: group/warn.md
-    - 使用 pin 指令置顶或取消置顶消息: group/pin.md
-    - 入群验证: group/join-verification.md
-    - 关键词回复: group/key-word-reply.md
-  - 群组娱乐功能:
-    - banme: group/banme.md
-  - nmBot 群组功能所需权限说明: group/admin-rights-and-features.md
-- nmBot 面板:
-    - 关于 nmBot 面板: about-panel.md
-    - 启动 nmBot 面板: launch-panel.md
-- nmartChat: nmartchat.md
-- 更多帮助: 
-  - 关于 nmBot: about.md
-  - 支持: support.md
+  - 首页: index.md
+  - 在群组中使用 nmBot:
+      - 设置管理员权限: group/group-setup.md
+      - 群组管理功能:
+          - 使用 ban、block 指令禁言或封禁成员和频道: group/ban.md
+          - 使用 warn 指令警告成员和频道: group/warn.md
+          - 使用 pin 指令置顶或取消置顶消息: group/pin.md
+          - 入群验证: group/join-verification.md
+          - 关键词回复: group/key-word-reply.md
+      - 群组娱乐功能:
+          - banme: group/banme.md
+      - nmBot 群组功能所需权限说明: group/admin-rights-and-features.md
+  - nmBot 面板:
+      - 关于 nmBot 面板: about-panel.md
+      - 启动 nmBot 面板: launch-panel.md
+  - nmartChat: nmartchat.md
+  - 更多帮助:
+      - 关于 nmBot: about.md
+      - 支持: support.md
