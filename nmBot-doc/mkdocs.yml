@@ -17,6 +17,9 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - footnotes
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
 
 nav:
   - 首页: index.md
@@ -28,13 +31,15 @@ nav:
           - 使用 pin 指令置顶或取消置顶消息: group/pin.md
           - 入群验证: group/join-verification.md
           - 关键词回复: group/key-word-reply.md
+          - nmBootsChat 同频气氛组: group/nmBootsChat.md
       - 群组娱乐功能:
           - banme: group/banme.md
       - nmBot 群组功能所需权限说明: group/admin-rights-and-features.md
   - nmBot 面板:
       - 关于 nmBot 面板: about-panel.md
       - 启动 nmBot 面板: launch-panel.md
-  - nmartChat: nmartchat.md
+  - nmartChat 智能聊天: nmartchat.md
+  
   - 更多帮助:
       - 关于 nmBot: about.md
       - 支持: support.md
