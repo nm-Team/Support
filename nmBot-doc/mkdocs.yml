@@ -31,7 +31,7 @@ nav:
           - 使用 pin 指令置顶或取消置顶消息: group/pin.md
           - 入群验证: group/join-verification.md
           - 关键词回复: group/key-word-reply.md
-          - nmBootsChat 同频气氛组: group/nmBootsChat.md
+          - 同频气氛组: group/reply-channel.md
       - 群组娱乐功能:
           - banme: group/banme.md
       - nmBot 群组功能所需权限说明: group/admin-rights-and-features.md
