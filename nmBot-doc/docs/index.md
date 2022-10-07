@@ -32,4 +32,4 @@
 
 [https://nmteam.xyz/products/overview/nmBot-Telegram](https://nmteam.xyz/products/overview/nmBot-Telegram?lan=zh_CN)
 
-[^*]: nmBot 帮助文档处于 Beta 阶段，内容可能不完整，欢迎您的反馈。
+[^*]: nmBot 帮助文档处于 Beta 阶段，内容可能存在问题或不完整，欢迎您的反馈。
