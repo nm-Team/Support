@@ -40,4 +40,4 @@ nmBot 在收到私信和打开 nmartChat 功能的群组回复的贴纸消息时
 
 !!! faq "为什么在频道（或在群聊内使用频道身份）发送以 nm 开头的消息，nmBot 不回复我?"
     请注意：nmartChat 仅支持与个人身份的用户进行对话，并不支持频道身份。  
-    如果您需要在频道内使用 nmartChat，可以试试 nmBot 的 [“同频气氛组”](./group/nmBootsChat.md) 功能。
+    如果您需要在频道内使用 nmartChat，可以试试 nmBot 的 [“同频气氛组”](./group/reply-channel.md) 功能。
