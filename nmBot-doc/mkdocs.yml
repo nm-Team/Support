@@ -40,7 +40,8 @@ nav:
       - 关于 nmBot 面板: about-panel.md
       - 启动 nmBot 面板: launch-panel.md
   - nmartChat 智能聊天: nmartchat.md
-  
+  - 常见问题:
+      - nmBot /pm 指令提示“可能是 Telegram 会员”: faq/pm_might_be_premium.md
   - 更多帮助:
       - 关于 nmBot: about.md
       - 支持: support.md
