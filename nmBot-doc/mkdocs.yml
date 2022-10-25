@@ -35,6 +35,7 @@ nav:
       - 群组娱乐功能:
           - banme: group/banme.md
           - pm Telegram 会员身份鉴定: group/is-premium.md
+      - 频道透视眼: group/channel-perspective-eye.md
       - nmBot 群组功能所需权限说明: group/admin-rights-and-features.md
       - 在 nmBot 面板管理群组（若面板中找不到群组）: group/reg-panel.md
   - nmBot 面板:
