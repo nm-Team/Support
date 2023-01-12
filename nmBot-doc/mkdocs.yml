@@ -29,6 +29,7 @@ nav:
           - 使用 ban、block 指令禁言或封禁成员和频道: group/ban.md
           - 使用 warn 指令警告成员和频道: group/warn.md
           - 使用 pin 指令置顶或取消置顶消息: group/pin.md
+          - 自动识别并删除骚扰消息: group/anti-spam.md
           - 入群验证: group/join-verification.md
           - 关键词回复: group/key-word-reply.md
           - 同频气氛组: group/reply-channel.md
