@@ -43,6 +43,7 @@ nav:
   - nmBot 面板:
       - 关于 nmBot 面板: about-panel.md
       - 启动 nmBot 面板: launch-panel.md
+  - 设置 nmBot 语言: set-language.md
   - nmBot 积分:
     - 关于 nmBot 积分: credit/credit.md
   - nmartChat 智能聊天: nmartchat.md
