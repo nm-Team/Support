@@ -2,13 +2,13 @@
 
 nmBot 管理功能仅在授予 nmBot 必要的管理员权限后可用。  
 
-若要使用 nmBot 管理功能，请为 nmBot 授予删除消息、Ban 用户、置顶消息（如果需要）等权限。  
+若要使用 nmBot 管理功能，请为 nmBot 授予删除消息、封禁用户、置顶消息（如果需要）等权限。  
 
-若 nmBot 已拥有管理员权限，拥有更改群组信息权限的管理员可使用 /config 命令打开 nmBot 设置菜单以启用和关闭 nmBot 功能。  
+若 nmBot 已拥有管理员权限，拥有更改群组信息权限的管理员可使用 `/config` 命令打开 nmBot 设置菜单以启用和关闭 nmBot 功能。  
 
 >💡 启用“管理功能”后，才可以控制 nmBot 聊天功能（nmartChat）的开启和关闭。  
 
->💡 启用“管理功能”后，nmBot 将响应 /ban, /block, /pin 等群组管理命令。
+>💡 启用“管理功能”后，nmBot 将响应 `/ban`, `/block`, `/pin` 等群组管理命令。
 
 ## 在 Telegram 中授予 nmBot 管理员权限
 
