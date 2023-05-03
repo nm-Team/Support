@@ -55,6 +55,7 @@ nav:
       - 2023 年 1 月: update-log/2023-01.md
       - update-log/previous-log.md
   - 常见问题:
+      - 如果您无法访问 nmBot 面板: faq/cannot-access-panel.md
       - nmBot /pm 指令提示“可能是 Telegram 会员”: faq/pm_might_be_premium.md
   - 更多帮助:
       - 关于 nmBot: about.md
