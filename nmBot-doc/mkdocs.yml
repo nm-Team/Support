@@ -56,6 +56,7 @@ nav:
       - update-log/previous-log.md
   - 常见问题:
       - 如果您无法访问 nmBot 面板: faq/cannot-access-panel.md
+      - 如果“频道验证”在您的群组中不工作: faq/channel-verification-not-working.md
       - nmBot /pm 指令提示“可能是 Telegram 会员”: faq/pm_might_be_premium.md
   - 更多帮助:
       - 关于 nmBot: about.md

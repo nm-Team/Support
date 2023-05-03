@@ -27,4 +27,5 @@ nmBot 支持设置自动通过 Telegram 会员（Premium）入群或拒绝非 Te
 
 管理员可以在入群验证消息中选择通过或封禁成员，或在成员被封禁后点击解除封禁。
 
-## 实例
+## 疑难解答
+- [如果“频道验证”在您的群组中不工作](/faq/channel-verification-not-working/)
