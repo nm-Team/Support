@@ -5,7 +5,18 @@ theme:
   favicon: https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png
   language: zh
   palette:
-    primary: blue
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到深色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: 切换到浅色模式
 
 extra:
   social:
