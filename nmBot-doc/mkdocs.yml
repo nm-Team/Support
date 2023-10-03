@@ -70,6 +70,9 @@ nav:
       - 2023 年 2 月: update-log/2023-02.md
       - 2023 年 1 月: update-log/2023-01.md
       - update-log/previous-log.md
+  - 条款和条件:
+      - 使用条款: legal/terms-of-use.md
+      - 隐私政策: legal/privacy-policy.md
   - 常见问题:
       - 如果您无法访问 nmBot 面板: faq/cannot-access-panel.md
       - 如果您无法在 nmBot 面板登录: faq/cannot-log-in-to-panel.md
