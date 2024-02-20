@@ -79,6 +79,7 @@ nav:
       - 使用条款: legal/terms-of-use.md
       - 隐私政策: legal/privacy-policy.md
   - 常见问题:
+      - 关于看起来由 nmBot 发送的消息: faq/about-message-content-of-bot.md
       - 如果您无法访问 nmBot 面板: faq/cannot-access-panel.md
       - 如果您无法在 nmBot 面板登录: faq/cannot-log-in-to-panel.md
       - 如果“频道验证”在您的群组中不工作: faq/channel-verification-not-working.md
