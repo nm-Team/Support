@@ -13,6 +13,6 @@
 
 nmBot 面板支持在现代 Web 浏览器中使用，提供独立于 Telegram Web App 的优质体验，并且在平板电脑和电脑设备上充分利用空间。  
 
-您可以访问 [https://nmbottelegram.nmnm.fun](https://nmbottelegram.nmnm.fun) 来启动 nmBot 面板。
+您可以访问 [https://nmbot.nmnm.fun](https://nmbot.nmnm.fun) 来启动 nmBot 面板。
 
 在浏览器中使用 nmBot 面板时，可能需要使用 Telegram 账号登录。
