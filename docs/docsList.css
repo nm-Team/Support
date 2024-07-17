@@ -1,0 +1,54 @@
+:root {
+    --docs-list-border: var(--md-default-fg-color--lighter);
+}
+
+.docsList {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--docs-list-border);
+    border-radius: 5px;
+    margin: 0;
+}
+
+.docsList * {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.docsList .docsItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid var(--docs-list-border);
+}
+
+.docsList .docsItem:last-child {
+    border-bottom: none;
+}
+
+.docsList .docsItem .icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    margin-inline-end: 10px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.docsList .docsItem .icon.doc {
+    background-image: url(img/icons/doc.svg);
+}
+
+.docsList .docsItem .icon.folder {
+    background-image: url(img/icons/folder.svg);
+}
+
+.docsList .docsItem .text .description {
+    font-size: 14px;
+    opacity: .8;
+    line-height: 1.6;
+}
