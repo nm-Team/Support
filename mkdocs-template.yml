@@ -7,13 +7,15 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: blue
-      accent: indigo
+      primary: yellow
+      accent: yellow
       toggle:
         icon: material/weather-sunny
         name: лɫģʽ
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: yellow
+      accent: yellow
       toggle:
         icon: material/weather-night
         name: лǳɫģʽ
