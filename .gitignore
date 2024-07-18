@@ -131,4 +131,4 @@ dmypy.json
 # nmTeam Doc Generator
 /generated
 /cache
-mkdocs-template.yaml
+mkdocs.yaml
