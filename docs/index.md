@@ -3,7 +3,7 @@ title: nmTeam 支持文档
 description: 在此获取 nmTeam 旗下产品的支持。
 hide_docs_list: true
 ---
-# nmTeam 标准文档
+# nmTeam 帮助文档
 
 在此获取 nmTeam 旗下产品的支持。
 
