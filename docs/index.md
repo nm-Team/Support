@@ -42,7 +42,11 @@ hide_docs_list: true
         <h3>nmBot</h3>
     </a>
     <a class="product" href="nmteam-account">
-        <img src="https://websiteres.nmteam.xyz/producticon/nmTeam/logo@128.png" alt="nmBot logo" />
+        <img src="https://websiteres.nmteam.xyz/producticon/nmTeam/logo@128.png" alt="nmTeam account logo" />
         <h3>nmTeam 账号</h3>
+    </a>
+    <a class="product" href="contact-us">
+        <img src="https://websiteres.nmteam.xyz/producticon/nmTeam-Support/logo@512.png" alt="contact logo" />
+        <h3>联系方式</h3>
     </a>
 </div>
