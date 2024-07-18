@@ -232,10 +232,10 @@ title: {index_title}\n"
     # If index.md has content, add to yaml
     if index_content:
         if path == 'docs':
-            link = '/'
+            link = ''
         else:
             link = f"{path.replace('docs/', '')}/"
-        yaml = f"  - {index_title}: '{link}'\n" + yaml
+        yaml = f"  - {index_title}: '{link}index.md'\n" + yaml
     else:
         # If index.md has no content, use default content
         index_content = index_content_default.format(
