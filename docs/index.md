@@ -4,7 +4,6 @@ description: 在此获取 nmTeam 旗下产品的支持。
 hide_docs_list: true
 hide:
   - navigation
-  - toc
 ---
 # nmTeam 支持
 

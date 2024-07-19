@@ -206,6 +206,7 @@ def read(path):
     index_content = ""
 
     # If has index.md, copy its content
+    hide_navigation = False
     if os.path.exists(f"{path}/index.md"):
         with open(f"{path}/index.md", 'r', encoding='UTF-8', errors='ignore') as f:
             all = f.read()
@@ -222,6 +223,9 @@ def read(path):
                         index_content += "\n".join(lines[i+1:])
                         break
 
+            # If has navigation hide
+            if re.search(r"hide:\n  - navigation", all):
+                hide_navigation = True
             else:
                 index_content = all
 
@@ -231,6 +235,9 @@ title: {index_title}\n"
     index_metadata += """
 hide:
   - toc\n"""
+    # If page set hide navigation
+    if hide_navigation:
+        index_metadata += "  - navigation\n"
     index_metadata += "---\n\n"
 
     # If index.md has content, add to yaml
