@@ -2,7 +2,7 @@
 title: nmBot Telegram 帮助文档
 ---
 
-# nmBot Telegram 帮助文档 <small>Beta [^*]</small>
+# nmBot Telegram 帮助文档
 
 ![欢迎](img/welcome.png)
 
@@ -35,5 +35,3 @@ title: nmBot Telegram 帮助文档
 在 nmTeam 官网查看 nmBot 官方介绍。
 
 [https://nmteam.xyz/products/overview/nmBot-Telegram](https://nmteam.xyz/products/overview/nmBot-Telegram?lan=zh_CN)
-
-[^*]: nmBot 帮助文档处于 Beta 阶段，内容可能存在问题或不完整，欢迎您的反馈。
