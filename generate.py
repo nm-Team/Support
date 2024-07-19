@@ -223,9 +223,9 @@ def read(path):
                         index_content += "\n".join(lines[i+1:])
                         break
 
-            # If has navigation hide
-            if re.search(r"hide:\n  - navigation", all):
-                hide_navigation = True
+                # If has navigation hide
+                if re.search(r"hide:\n  - navigation", all):
+                    hide_navigation = True
             else:
                 index_content = all
 
