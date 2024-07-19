@@ -19,7 +19,12 @@ theme:
       toggle:
         icon: material/weather-night
         name: лǳɫģʽ
-extra_css: [docsList.css]
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+  extra_css: [docsList.css]
 docs_dir: generated
 
 extra:
