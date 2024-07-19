@@ -8,7 +8,7 @@ description: 了解如何在社交媒体上关注 nmTeam，获取最新消息和
 
 ## Twitter
 您可以在 Twitter 上关注 nmTeam，获取最新消息和帮助。
-我们的 Twitter 账号是 [@nmteamHQ](https://twitter.com/nmnmfun)。
+我们的 Twitter 账号是 [@nmnmfun](https://twitter.com/nmnmfun)。
 
 ## Telegram
 您可以订阅 nmTeam Newsroom 频道，获取 nmTeam 的最新消息。
