@@ -5,17 +5,44 @@ hide_docs_list: true
 hide:
   - navigation
 ---
-# nmTeam 支持
 
-在此获取 nmTeam 旗下产品的支持。
+# 
+<div class="headerBackground">
+    <h1>nmTeam 支持</h1>
+    <p>在此获取 nmTeam 旗下产品的支持。</p>
+</div>
 
 <style>
+    .headerBackground {
+        width: 120%;
+        height: 300px;
+        background-color: var(--md-default-bg-color);
+        background-image: url(../img/nmteam-support-background.jpg);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: -90px -10% 20px -10%;
+        padding: 1rem;
+    }
+    .headerBackground h1,
+    .headerBackground p {
+        text-align: center;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+        font-weight: bold !important;
+        color: #fff !important;
+    }
     .productsTable {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1rem;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
     }
     .product {
+        width: 200px;
         display: flex;
         flex-direction: column;
         align-items: center;
