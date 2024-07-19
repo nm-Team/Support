@@ -31,6 +31,7 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/nm-Team/nmBot-Telegram-doc
+      name: GitHub
 copyright: Copyright 2022-2024 nmTeam. All rights reserved. <br>This website is licensed under the MIT License.
 
 markdown_extensions:
