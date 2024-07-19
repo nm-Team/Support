@@ -1,9 +1,12 @@
 ---
-title: nmTeam 支持文档
+title: nmTeam 支持
 description: 在此获取 nmTeam 旗下产品的支持。
 hide_docs_list: true
+hide:
+  - navigation
+  - toc
 ---
-# nmTeam 帮助文档
+# nmTeam 支持
 
 在此获取 nmTeam 旗下产品的支持。
 

@@ -1,4 +1,4 @@
-site_name: nmTeam Support Documentation
+site_name: nmTeam Support
 theme:
   name: material
   logo: https://websiteres.nmteam.xyz/producticon/nmTeam/logo@128.png
@@ -31,7 +31,7 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/nm-Team/nmBot-Telegram-doc
-copyright: Copyright 2022-2024 nmTeam. All rights reserved. <br>nmTeam Support Documentation is licensed under the MIT License.
+copyright: Copyright 2022-2024 nmTeam. All rights reserved. <br>This website is licensed under the MIT License.
 
 markdown_extensions:
   - attr_list
