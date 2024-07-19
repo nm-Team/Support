@@ -146,6 +146,7 @@ def read(path):
             sub_folder = sub[0]
             sub_index_title = sub[1]
             sub_index_description = sub[2]
+            sub_parent_index = sub[3]
             if sub_folder:
                 # add yaml tab
                 space_count = len(path.split("/"))
@@ -155,15 +156,17 @@ def read(path):
                 sub_folder = space + sub_folder.replace("\n", f"\n{space}")
                 # remove the last space
                 sub_folder = sub_folder[:-len(space)]
-                yaml += f"  - {sub_index_title}:\n{sub_folder}"
+                sub_yaml = f"  - {sub_index_title}:\n{sub_folder}"
+                # Read the
                 # Add to index list
                 index_dir_list.append({"title": sub_index_title,
                                        "description": sub_index_description,
                                        "path": f"{path}/{doc}",
                                        "metadata": "",
                                        "doc": doc,
-                                       "index": 0,
-                                       "type": "folder"})
+                                       "index": sub_parent_index,
+                                       "type": "folder",
+                                       "yaml": sub_yaml})
 
         else:
             # Copy the file to cache
@@ -173,20 +176,18 @@ def read(path):
     # Sort index_dir_list, folders first
     index_dir_list.sort(key=lambda x: x["type"], reverse=True)
     # Sort index_dir_list by index, keep original order if index is the same
-    index_dir_list_index_sorted = []
-    for i in range(len(index_dir_list)):
-        # Append to matched index position of index_dir_list_index_sorted
-        for j in range(len(index_dir_list_index_sorted)):
-            if index_dir_list[j]["index"] > index_dir_list[i]["index"]:
-                index_dir_list_index_sorted.insert(j, index_dir_list[i])
-                break
-        else:
-            index_dir_list_index_sorted.append(index_dir_list[i])
+    index_dir_list_index_sorted = sorted(
+        index_dir_list, key=lambda x: (x["index"], index_dir_list.index(x)))
+    print(f"index_dir_list: {index_dir_list_index_sorted}")
+
     index_dir_list = index_dir_list_index_sorted
 
     # Generate yaml
     for i in index_dir_list:
-        if i["type"] != 'doc' or i["doc"] == "index.md":
+        if i["type"] == 'folder':
+            yaml += i["yaml"]
+            continue
+        elif i["doc"] == "index.md":
             continue
         yaml += f"  - {i['title']}: '{i['path']}'\n"
 
@@ -207,6 +208,7 @@ def read(path):
 
     # If has index.md, copy its content
     hide_navigation = False
+    parent_index = 0
     if os.path.exists(f"{path}/index.md"):
         with open(f"{path}/index.md", 'r', encoding='UTF-8', errors='ignore') as f:
             all = f.read()
@@ -226,6 +228,12 @@ def read(path):
                 # If has navigation hide
                 if re.search(r"hide:\n  - navigation", all):
                     hide_navigation = True
+
+                # If has parent index
+                if re.search(r"index: (.*)", all):
+                    parent_index = int(re.search(
+                        r"index: (.*)", all).group(1))
+
             else:
                 index_content = all
 
@@ -277,7 +285,7 @@ hide:
     with open(f"cache/{path_relative}/index.md", 'w', encoding='UTF-8', errors='ignore') as f:
         f.write(index_metadata + index_content)
 
-    return (yaml, index_title, index_description)
+    return (yaml, index_title, index_description, parent_index)
 
 
 if __name__ == "__main__":
