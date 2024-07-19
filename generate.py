@@ -224,15 +224,16 @@ def read(path):
                     if len(lines[j]) > 0:
                         index_content += "\n".join(lines[i+1:])
                         break
+                metadata = "".join(lines[1:i])
 
                 # If has navigation hide
-                if re.search(r"hide:\n  - navigation", all):
+                if re.search(r"- navigation", metadata):
                     hide_navigation = True
 
                 # If has parent index
-                if re.search(r"index: (.*)", all):
+                if re.search(r"index: (.*)", metadata):
                     parent_index = int(re.search(
-                        r"index: (.*)", all).group(1))
+                        r"index: (.*)", metadata).group(1))
 
             else:
                 index_content = all

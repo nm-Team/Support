@@ -6,30 +6,43 @@ hide:
   - navigation
 ---
 
-# 
 <div class="headerBackground">
+    <div class="image"></div>
     <h1>nmTeam 支持</h1>
     <p>在此获取 nmTeam 旗下产品的支持。</p>
 </div>
 
 <style>
     .headerBackground {
+        position: relative;
         width: 120%;
         height: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: -50px -10% 20px -10%;
+    }
+    .headerBackground .image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         background-color: var(--md-default-bg-color);
         background-image: url(../img/nmteam-support-background.jpg);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: -90px -10% 20px -10%;
-        padding: 1rem;
+        z-index: -1;
+    }
+    body[data-md-color-media="(prefers-color-scheme: dark)"] .headerBackground .image {
+        filter: brightness(0.7);
     }
     .headerBackground h1,
     .headerBackground p {
+        position: relative;
+        z-index: 1;
         text-align: center;
         text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
         font-weight: bold !important;
