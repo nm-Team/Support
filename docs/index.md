@@ -12,6 +12,44 @@ hide:
     <p>在此获取 nmTeam 旗下产品的支持。</p>
 </div>
 
+<center>
+
+## 产品和服务
+
+</center>
+<div class="productsTable">
+    <a class="product" href="nmbot-telegram">
+        <img src="https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png" alt="nmBot logo" />
+        <h3>nmBot</h3>
+    </a>
+    <a class="product" href="nmteam-account">
+        <img src="https://websiteres.nmteam.xyz/producticon/nmTeam/logo@128.png" alt="nmTeam account logo" />
+        <h3>nmTeam 账号</h3>
+    </a>
+    <a class="product" href="contact-us">
+        <img src="https://websiteres.nmteam.xyz/producticon/nmTeam-Support/logo@512.png" alt="contact logo" />
+        <h3>联系方式</h3>
+    </a>
+</div>
+
+<center>
+
+## 关于帮助文档
+
+nmTeam 帮助文档为您提供 nmTeam 旗下产品的使用指南和支持信息。您还可以找到联系 nmTeam 支持的方式。
+
+您可以[在此](./about.md)了解关于 nmTeam 帮助文档的信息。
+
+### 参与改进 nmTeam 帮助文档
+
+nmTeam 帮助文档由 nmTeam 成员和社区志愿者共同编辑。您可以在 [GitHub](https://github.com/nm-Team/nmBot-Telegram-doc) 上参与贡献此文档。
+
+## nmTeam 官方网站
+
+访问 [nmTeam 官网](https://nmteam.xyz)了解 nmTeam 的最新动态和产品信息。
+
+</center>
+
 <style>
     .headerBackground {
         position: relative;
@@ -77,18 +115,3 @@ hide:
         margin-bottom: 0;
     }
 </style>
-
-<div class="productsTable">
-    <a class="product" href="nmbot-telegram">
-        <img src="https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png" alt="nmBot logo" />
-        <h3>nmBot</h3>
-    </a>
-    <a class="product" href="nmteam-account">
-        <img src="https://websiteres.nmteam.xyz/producticon/nmTeam/logo@128.png" alt="nmTeam account logo" />
-        <h3>nmTeam 账号</h3>
-    </a>
-    <a class="product" href="contact-us">
-        <img src="https://websiteres.nmteam.xyz/producticon/nmTeam-Support/logo@512.png" alt="contact logo" />
-        <h3>联系方式</h3>
-    </a>
-</div>
