@@ -201,10 +201,6 @@ def read(path):
             break
 
     # Generate new index.md content
-    index_metadata = f"---\n\
-automatically_generated: Don't edit this file directly, it's auto generated.\n\
-title: {index_title}\n"
-    index_metadata += "---\n\n"
     index_content_default = f"# {index_title}\n\
 {index_description}\n"
     index_content = ""
@@ -228,6 +224,14 @@ title: {index_title}\n"
 
             else:
                 index_content = all
+
+    index_metadata = f"---\n\
+automatically_generated: Don't edit this file directly, it's auto generated.\n\
+title: {index_title}\n"
+    index_metadata += """
+hide:
+  - toc\n"""
+    index_metadata += "---\n\n"
 
     # If index.md has content, add to yaml
     if index_content:
