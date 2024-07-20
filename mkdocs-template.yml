@@ -11,14 +11,14 @@ theme:
       accent: yellow
       toggle:
         icon: material/weather-sunny
-        name: лɫģʽ
+        name: 浅色模式
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: yellow
       accent: yellow
       toggle:
         icon: material/weather-night
-        name: лǳɫģʽ
+        name: 深色模式
   features:
     - navigation.tabs
     - navigation.sections
