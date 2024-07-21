@@ -1,5 +1,5 @@
 # Support
-**[nmTeam 支持](https://support.nmteam.xyz)**官方网站。使用 `mkdocs-material` 进行构建。
+[**nmTeam 支持**](https://support.nmteam.xyz)官方网站。使用 `mkdocs-material` 进行构建。
 
 # 部署
 
