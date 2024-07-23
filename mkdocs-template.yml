@@ -30,7 +30,7 @@ docs_dir: generated
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/nm-Team/nmBot-Telegram-doc
+      link: https://github.com/nm-Team/Support
       name: GitHub
 copyright: Copyright 2022-2024 nmTeam. All rights reserved. <br>This website is licensed under the MIT License.
 
