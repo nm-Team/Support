@@ -4,7 +4,7 @@ title: nmBot Telegram 帮助文档
 
 # nmBot Telegram 帮助文档
 
-![欢迎](../img/doc%20cover.png)
+![欢迎](./img/doc%20cover.png)
 
 尊敬的用户，您好！
 
