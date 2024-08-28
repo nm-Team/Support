@@ -19,7 +19,7 @@ title: nmBot Telegram 帮助文档
 <a href="https://nmbot.nmnm.fun" target="_blank">
 ![开始使用 nmBot](./img/doc%20start%20panel.png){ width="200" }
 </a>
-<a href="https://nmteam.xyz/products/nmBot-Telegram" target="_blank">
+<a href="https://nmteam.xyz/products/overview/nmBot-Telegram" target="_blank">
 ![开始使用 nmBot](./img/doc%20start%20intro.png){ width="200" }
 </a>
 </center>
