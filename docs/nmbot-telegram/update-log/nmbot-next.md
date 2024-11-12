@@ -113,6 +113,7 @@ nmBot 版本号：24.6.1-wine+5004
 nmTeam 今日正式推出 nmBot NEXT。
 
 nmBot NEXT 包含数十项新功能，包括：
+
 - [消息模板](https://t.me/nmbotchannel/321)为预设消息提供了全新方式，全面升级了[多项功能支持发送消息的种类](https://t.me/nmbotchannel/322)，并完成从关键词回复、入群验证到锁定模式等各项功能在内的全面打通。
 - 新增多项专为频道打造的功能，例如[频道帖子自动回复](https://t.me/nmbotchannel/328)、[自动美化文本格式](https://t.me/nmbotchannel/332)、自动为帖子添加按钮等。
 - 支持 [Telegram 商业机器人功能](https://t.me/nmbotchannel/330)：[商业关键词回复](https://t.me/nmbotchannel/330)为商业用户提供群组级别的自定义选项。
