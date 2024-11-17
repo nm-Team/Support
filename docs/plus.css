@@ -1,0 +1,8 @@
+nmbot-plus-icon {
+    width: 1em;
+    height: 1em;
+    background-image: url(https://websiteres.nmteam.xyz/nmBot/plus.svg);
+    background-size: cover;
+    display: inline-block;
+    margin-bottom: -0.2em;
+}

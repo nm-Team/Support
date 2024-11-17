@@ -24,7 +24,7 @@ theme:
     - navigation.sections
     - toc.integrate
     - navigation.top
-extra_css: [docsList.css]
+extra_css: [docsList.css, plus.css]
 docs_dir: generated
 
 extra:
