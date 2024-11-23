@@ -32,8 +32,8 @@ Telegram 使用 TON 作为加密货币支付方式。
 1. 下载并安装 TONKeeper 应用。
 请使用您的手机下载 TONKeeper 应用。以下是下载链接：
 
-- [App Store](https://apps.apple.com/us/app/tonkeeper-ton-wallet/id1587742107)
-- [Google Play](https://play.google.com/store/apps/details?id=com.ton_keeper)
+    - [App Store](https://apps.apple.com/us/app/tonkeeper-ton-wallet/id1587742107)
+    - [Google Play](https://play.google.com/store/apps/details?id=com.ton_keeper)
 
 2. 创建 TON 钱包。
 打开 TONKeeper 应用，按照应用提示创建 TON 钱包。
