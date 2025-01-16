@@ -35,7 +35,7 @@ extra:
   analytics:
     provider: google
     property: G-KF37QRD9LN
-copyright: Copyright 2022-2024 nmTeam. All rights reserved. <br>This website is licensed under the MIT License.
+copyright: Copyright 2022-2025 nmTeam. All rights reserved. <br>This website is licensed under the MIT License.
 
 markdown_extensions:
   - attr_list
