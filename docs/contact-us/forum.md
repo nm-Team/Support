@@ -10,7 +10,7 @@ description: 了解如何参与 nmTeam 社区讨论。
 ## GitHub Discussions
 
 您可以在 nmTeam GitHub Discussions 中与其他用户交流。
-GitHub Discussions链接：https://github.com/orgs/nm-Team/discussions
+GitHub Discussions 链接：[https://github.com/orgs/nm-Team/discussions](https://github.com/orgs/nm-Team/discussions)
 
 ## Telegram 群组
 
