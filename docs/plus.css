@@ -6,3 +6,12 @@ nmbot-plus-icon {
     display: inline-block;
     margin-bottom: -0.2em;
 }
+
+nmbot-intelligence-icon {
+    width: 1em;
+    height: 1em;
+    background-image: url(https://websiteres.nmteam.xyz/pintroimg/nmBot-Telegram/v2/nmbot-intelligence.svg);
+    background-size: cover;
+    display: inline-block;
+    margin-bottom: -0.2em;
+}
