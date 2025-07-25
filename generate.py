@@ -178,8 +178,6 @@ def read(path):
                     # Just copy the file as is
                     shutil.copyfile(f"{path}/{doc}",
                                     f"cache/{path_relative}/{doc}")
-            else:
-                print(f"index.md: {doc}")
 
         # If the file is a folder
         elif os.path.isdir(f"{path}/{doc}"):
@@ -226,7 +224,7 @@ def read(path):
     # Sort index_dir_list by index, keep original order if index is the same
     index_dir_list_index_sorted = sorted(
         index_dir_list, key=lambda x: (x["index"], index_dir_list.index(x)))
-    print(f"index_dir_list: {index_dir_list_index_sorted}")
+    # print(f"index_dir_list: {index_dir_list_index_sorted}")
 
     index_dir_list = index_dir_list_index_sorted
 
