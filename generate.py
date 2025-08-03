@@ -128,10 +128,56 @@ def read(path):
 
             # Copy the file to cache if is not index.md
             if doc != "index.md":
-                shutil.copyfile(f"{path}/{doc}",
-                                f"cache/{path_relative}/{doc}")
-            else:
-                print(f"index.md: {doc}")
+                # Check if we should add contributing note
+                if not should_hide_contributing_note(metadata, doc_path, doc):
+                    # Read original file content
+                    with open(f"{path}/{doc}", 'r', encoding='UTF-8', errors='ignore') as f:
+                        original_content = f.read()
+
+                    # Split content into metadata and body
+                    if original_content.startswith("---"):
+                        parts = original_content.split("---", 2)
+                        if len(parts) >= 3:
+                            metadata_part = f"---{parts[1]}---"
+                            body_part = parts[2]
+                        else:
+                            metadata_part = ""
+                            body_part = original_content
+                    else:
+                        metadata_part = ""
+                        body_part = original_content
+
+                    # Find the first heading and insert contributing note after it
+                    lines = body_part.split('\n')
+                    heading_found = False
+                    insert_index = 0
+
+                    for i, line in enumerate(lines):
+                        if line.strip().startswith('#'):
+                            heading_found = True
+                            insert_index = i + 1
+                            break
+
+                    if heading_found:
+                        # Insert contributing note after the heading
+                        contributing_note = generate_contributing_note(
+                            doc_path)
+                        lines.insert(insert_index, contributing_note)
+                        modified_body = '\n'.join(lines)
+                    else:
+                        # If no heading found, insert at the beginning
+                        contributing_note = generate_contributing_note(
+                            doc_path)
+                        modified_body = contributing_note + body_part
+
+                    # Write modified content to cache
+                    modified_content = metadata_part + modified_body
+                    with open(f"cache/{path_relative}/{doc}", 'w', encoding='UTF-8', errors='ignore') as f:
+                        f.write(modified_content)
+                else:
+                    # Just copy the file as is
+                    shutil.copyfile(f"{path}/{doc}",
+                                    f"cache/{path_relative}/{doc}")
 
         # If the file is a folder
         elif os.path.isdir(f"{path}/{doc}"):
@@ -178,7 +224,7 @@ def read(path):
     # Sort index_dir_list by index, keep original order if index is the same
     index_dir_list_index_sorted = sorted(
         index_dir_list, key=lambda x: (x["index"], index_dir_list.index(x)))
-    print(f"index_dir_list: {index_dir_list_index_sorted}")
+    # print(f"index_dir_list: {index_dir_list_index_sorted}")
 
     index_dir_list = index_dir_list_index_sorted
 
@@ -287,6 +333,50 @@ hide:
         f.write(index_metadata + index_content)
 
     return (yaml, index_title, index_description, parent_index)
+
+
+def generate_contributing_note(doc_path):
+    """Generate contributing note HTML for a document"""
+    github_edit_url = f"https://github.com/nm-Team/Support/edit/main/docs/{doc_path}"
+
+    contributing_note = f'''
+!!! tip "帮助我们改进此文档"
+    发现文档有错误或需要改进的地方？您可以：
+
+    - [在 GitHub 上直接编辑此页面]({github_edit_url})
+    - [提交 Issue 报告问题](https://github.com/nm-Team/Support/issues/new)
+    - [加入我们的讨论](https://github.com/nm-Team/Support/discussions)
+
+    您的贡献将帮助更多用户获得更好的体验！
+
+'''
+    return contributing_note
+
+
+def should_hide_contributing_note(metadata, doc_path, doc_name):
+    """Check if contributing note should be hidden for this document"""
+    # Check if metadata contains Hide Contributing Note
+    if metadata and re.search(r"hideContributingNote", metadata, re.IGNORECASE):
+        return True
+
+    # Check if it's an index.md file
+    if doc_name == "index.md":
+        return True
+
+    # Define excluded path patterns (regex patterns)
+    excluded_patterns = [
+        r"^legal/",      # Files directly in legal folder
+        r"/legal/",      # Files in any legal subfolder
+        r"/update-log/",  # Files in update-log folder
+        # Add more patterns here as needed
+    ]
+
+    # Check if the document path matches any excluded pattern
+    for pattern in excluded_patterns:
+        if re.search(pattern, doc_path):
+            return True
+
+    return False
 
 
 if __name__ == "__main__":
