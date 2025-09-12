@@ -1,0 +1,8 @@
+{
+  "redirects": {
+    "/old-path/": "/new-path/",
+    "/nmbot-telegram/old-feature/": "/nmbot-telegram/new-feature/",
+    "/contact/": "/contact-us/",
+    "/help/": "/contact-us/forum/"
+  }
+}

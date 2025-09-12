@@ -25,6 +25,7 @@ theme:
     - toc.integrate
     - navigation.top
 extra_css: [docsList.css, plus.css]
+extra_javascript: [assets/js/redirects.js]
 docs_dir: generated
 
 extra:

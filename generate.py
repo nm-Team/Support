@@ -2,6 +2,7 @@
 # This script should be run before building the documentation.
 
 import html
+import json
 import os
 import re
 import shutil
@@ -36,6 +37,9 @@ def generate():
 
     shutil.copytree('cache', 'generated')
 
+    # Generate redirects script
+    generate_redirects()
+
     print("Documentation generated. ")
 
 
@@ -44,6 +48,7 @@ def read(path):
     yaml = ""
     index_dir_list = []
     docs = os.listdir(path)
+    hide_docs_list = False  # Initialize here to avoid UnboundLocalError
 
     # Create path folder in cache
     if not os.path.exists(f"cache/{path_relative}"):
@@ -377,6 +382,50 @@ def should_hide_contributing_note(metadata, doc_path, doc_name):
             return True
 
     return False
+
+
+def generate_redirects():
+    """Generate redirects JavaScript from redirects.json"""
+    try:
+        # Read redirects configuration
+        with open('redirects.json', 'r', encoding='utf-8') as f:
+            config = json.load(f)
+        
+        # Generate JavaScript content
+        js_content = '''// 自动生成的重定向脚本
+(function() {
+    // 重定向映射
+    const redirects = ''' + json.dumps(config['redirects'], ensure_ascii=False, indent=8) + ''';
+
+    // 获取当前路径
+    const currentPath = window.location.pathname;
+    
+    // 检查是否需要重定向
+    for (const oldPath in redirects) {
+        if (currentPath === oldPath || currentPath.startsWith(oldPath)) {
+            const newPath = redirects[oldPath];
+            // 执行重定向
+            window.location.replace(newPath);
+            break;
+        }
+    }
+})();'''
+        
+        # Ensure assets/js directory exists
+        assets_dir = 'cache/assets/js'
+        if not os.path.exists(assets_dir):
+            os.makedirs(assets_dir)
+        
+        # Write the JavaScript file
+        with open('cache/assets/js/redirects.js', 'w', encoding='utf-8') as f:
+            f.write(js_content)
+        
+        print("Redirects script generated.")
+        
+    except FileNotFoundError:
+        print("Warning: redirects.json not found. Skipping redirects generation.")
+    except Exception as e:
+        print(f"Warning: Failed to generate redirects: {e}")
 
 
 if __name__ == "__main__":
