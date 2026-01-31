@@ -2,16 +2,20 @@ nmbot-plus-icon {
     width: 1em;
     height: 1em;
     background-image: url(https://websiteres.nmteam.xyz/nmBot/plus.svg);
-    background-size: cover;
+    background-size: contain;
     display: inline-block;
     margin-bottom: -0.2em;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 nmbot-intelligence-icon {
     width: 1em;
     height: 1em;
     background-image: url(https://websiteres.nmteam.xyz/pintroimg/nmBot-Telegram/v2/nmbot-intelligence.svg);
-    background-size: cover;
+    background-size: contain;
     display: inline-block;
     margin-bottom: -0.2em;
+    background-position: center;
+    background-repeat: no-repeat;
 }
