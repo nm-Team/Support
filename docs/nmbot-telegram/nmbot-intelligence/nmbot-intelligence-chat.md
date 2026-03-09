@@ -48,7 +48,7 @@ nmBot Copilot 将根据该群组的设置和功能为您提供帮助。
 
 nmartChat+ 是 nmBot Copilot 的增强版本，在保留一贯聊天风格的基础上，带来了对对话上下文的增强理解。
 
-nmartChat+ 目前为 Beta 版本，面向 nmBot+ 订阅用户提供。
+nmartChat+ 目前为 Beta 版本，所有用户均可使用。
 
 ## 反馈不正确的内容、使用问题和建议
 
