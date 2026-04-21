@@ -1,0 +1,41 @@
+name: 文档反馈
+description: 反馈现有文档中的错误、缺失或不清晰内容
+title: "[文档反馈] "
+labels:
+  - documentation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你的反馈！请尽量提供完整信息，帮助我们快速定位问题。
+  - type: input
+    id: source-link
+    attributes:
+      label: 原文链接
+      description: 请提供出现问题的文档页面链接
+      placeholder: https://support.nmteam.xyz/...
+    validations:
+      required: true
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: 问题描述
+      description: 具体说明文档中的问题（如错误、歧义、缺失步骤等）
+      placeholder: 请清晰描述你发现的问题
+    validations:
+      required: true
+  - type: textarea
+    id: expected-content
+    attributes:
+      label: 期望内容
+      description: 你认为文档应如何表述或补充
+      placeholder: 描述你期望看到的正确内容
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 补充信息（可选）
+      description: 可提供截图、复现步骤或上下文信息
+      placeholder: 例如截图、环境信息、相关链接等
+
