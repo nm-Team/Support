@@ -1,0 +1,41 @@
+name: 文档建议
+description: 对文档内容、结构或体验提出改进建议
+title: "[文档建议] "
+labels:
+  - documentation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        欢迎提出文档改进建议，帮助我们持续完善内容。
+  - type: input
+    id: related-link
+    attributes:
+      label: 相关文档链接
+      description: 请提供你建议修改或补充的文档页面链接
+      placeholder: https://support.nmteam.xyz/...
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 建议内容
+      description: 请描述你的建议（新增内容、调整结构、优化表述等）
+      placeholder: 请尽量详细说明你的建议
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: 建议原因
+      description: 说明该建议能够解决什么问题或带来哪些改进
+      placeholder: 为什么这个建议对用户有帮助？
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 补充信息（可选）
+      description: 可提供参考资料、示例链接或其他背景信息
+      placeholder: 例如参考文档、场景说明等
+

@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: nmTeam 产品问题
+    url: https://github.com/orgs/nm-Team/discussions
+    about: 非文档类问题请前往产品讨论区提交
+  - name: nmTeam 支持
+    url: https://support.nmteam.xyz/contact-us/
+    about: 如需人工支持请通过支持渠道联系我们
+
