@@ -39,6 +39,8 @@ nmBot 商业功能允许 Telegram Business 用户将 nmBot 设置为商业机器
 - 定时修改您的个人简介
 - 定时修改您的用户名
 
+[商业定时任务详细介绍](./scheduled-task.md)
+
 ### 使用场景
 
 例如，您可以设置：
