@@ -1,10 +1,10 @@
 ---
-title: 管理对 nmBot 的授权
+title: 管理对 nmBot 面板的授权
 description: 了解在使用 nmBot 面板时的 Telegram 授权与 nmTeam 账号绑定。
 index: 2
 ---
 
-# 管理对 nmBot 的授权
+# 管理对 nmBot 面板的授权
 
 在使用 nmBot 和 nmBot 面板时，您或许会授权 nmBot 访问您的 Telegram 账号。
 
