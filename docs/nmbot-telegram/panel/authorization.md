@@ -8,6 +8,8 @@ index: 2
 
 在使用 nmBot 和 nmBot 面板时，您或许会授权 nmBot 访问您的 Telegram 账号。
 
+本文介绍了授权的类型，授权范围以及如何查看并解除授权。
+
 ## 在通过 Telegram 迷你 App 使用或通过网页登录 nmBot 面板时授权
 
 在通过 Telegram 迷你 App 使用或通过网页登录 nmBot 面板时，您需要授权 nmBot 获取您的 Telegram 账号信息，以便 nmBot 确认确实是您在登录。
