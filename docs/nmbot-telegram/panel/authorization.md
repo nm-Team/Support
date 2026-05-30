@@ -15,7 +15,7 @@ index: 2
 此授权仅用于身份验证，并将不会允许 nmBot 访问您的个人账号或收取、修改或发送您的消息。
 Telegram 会在首次请求时向您显示弹窗来要求您确认授权。只有您在 Telegram 应用中点击确认或 Telegram 网站上授权并在 Telegram 应用中验证，这些信息才会发送给 nmBot。
 
-![Telegram 登录授权弹窗](https://github.com/user-attachments/assets/a9ed54ae-cb86-4eb0-a872-39f740e96dfe)
+![Telegram 登录授权弹窗](https://github.com/user-attachments/assets/487aff88-1ef4-4806-9b67-cb1e90b8c8c1)
 
 当通过网页上的 Telegram Login Widget 登录 nmBot 面板时，请求权限的机器人可能来自 @nmpanelbot 而不是 @nmnmfunbot。这是我们向新版 nmBot 面板过渡时的备用机器人。
 
@@ -23,7 +23,7 @@ Telegram 会在首次请求时向您显示弹窗来要求您确认授权。只�
 
 您可以在设置 (Settings) - 隐私和安全 (Privacy and Security) - 活跃网站 (Active Websites) 查看现有授权。
 
-![Telegram 活跃网站授权列表](https://github.com/user-attachments/assets/3f4b7b6a-2011-4ac0-9b9b-d4e76160a145)
+![Telegram 活跃网站授权列表](https://github.com/user-attachments/assets/3e684ede-e7e0-45d1-862b-13c8ef633001)
 
 若不再需要授权，可以向右滑动并选择“注销 (Log out)”来取消授权。
 
