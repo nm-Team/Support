@@ -6,12 +6,39 @@ import json
 from pathlib import Path
 
 
+class RedirectConfigError(ValueError):
+    """Raised when redirects.json cannot be safely managed."""
+
+
+def read_redirects(path: Path) -> dict[str, str]:
+    """Read and validate redirects for management commands."""
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        redirects = payload["redirects"]
+    except (json.JSONDecodeError, KeyError, OSError, TypeError) as error:
+        raise RedirectConfigError(f"无法读取重定向配置: {error}") from error
+    if not isinstance(redirects, dict) or not all(
+        isinstance(old, str) and isinstance(new, str) for old, new in redirects.items()
+    ):
+        raise RedirectConfigError("redirects 必须是字符串到字符串的映射")
+    return redirects
+
+
+def write_redirects(path: Path, redirects: dict[str, str]) -> None:
+    """Write a validated redirect map with stable UTF-8 formatting."""
+    payload = json.dumps({"redirects": redirects}, ensure_ascii=False, indent=2)
+    path.write_text(payload + "\n", encoding="utf-8")
+
+
 def load_redirects(path: Path) -> dict[str, str] | None:
     """Load the redirect map; return None when the file is missing or invalid."""
+    if not path.is_file():
+        return None
     try:
-        with path.open(encoding="utf-8") as f:
-            return json.load(f)["redirects"]
-    except json.JSONDecodeError, KeyError, OSError:
+        return read_redirects(path)
+    except RedirectConfigError:
         return None
 
 
