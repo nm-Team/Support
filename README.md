@@ -1,67 +1,55 @@
 # Support
-[**nmTeam 支持**](https://support.nmteam.xyz)官方网站。使用 `mkdocs-material` 进行构建。
+[**nmTeam 支持**](https://support.nmteam.xyz)官方网站。使用 `mkdocs-material` 构建，工具链由 `uv` 管理。
 
-# 快速开始
+## 环境要求
+- Python 3.14+（由 `uv` 按 `.python-version` 自动管理）
+- [uv](https://docs.astral.sh/uv/)（`curl -LsSf https://astral.sh/uv/install.sh | sh`）
 
-## 安装依赖
+## 快速开始
+
+### 安装依赖
 ```bash
-# 方式1: 使用管理脚本自动安装
-python manage.py install
-
-# 方式2: 手动安装
-pip install -r requirements.txt
+uv sync
 ```
 
-## 开发模式 (推荐)
+### 开发模式（推荐）
 ```bash
-# 启动开发服务器 (支持热更新)
-python manage.py dev
-
-# 或使用便捷脚本 (Windows)
-.\dev.ps1 dev
-dev.bat dev
-
-# 或使用便捷脚本 (Linux/macOS)
-./dev.sh dev
+uv run python manage.py dev
 ```
-
 开发模式会：
-- 自动生成文档结构
-- 启动 MkDocs 开发服务器 (http://127.0.0.1:8000)
-- 监听 `docs/` 目录文件变化并自动重新生成
-- 支持热更新，修改后自动刷新页面
+- 自动生成文档结构（`cache/`、`generated/`、`mkdocs.yml`）
+- 启动 MkDocs 开发服务器（http://127.0.0.1:8000）
+- 监听 `docs/` 目录变化并自动重新生成，浏览器热更新
 
-## 构建生产版本
+### 构建生产版本
 ```bash
-# 构建静态站点
-python manage.py build
+uv run python manage.py build
+```
+构建结果输出到 `site/` 目录。
 
-# 或使用便捷脚本
-.\dev.ps1 build
+### 其他命令
+```bash
+uv run python manage.py clean     # 清理 cache/ generated/ site/
+uv run python manage.py install   # 等价于 uv sync
+uv run python -m nmteam_support   # 仅重新生成文档结构
 ```
 
-构建过程会：
-1. 运行 `generate.py` 生成文档结构
-2. 执行 `mkdocs build` 生成静态站点到 `site/` 目录
-
-## 其他命令
+## 质量检查
 ```bash
-# 清理生成的文件
-python manage.py clean
+uv run ruff check .              # lint
+uv run ruff format --check .     # Python 格式检查
+uv run pytest                    # 单元测试
+uv run mdformat --check docs/    # Markdown 格式检查
+uv run mkdocs build --strict     # 严格模式构建
+```
+以上步骤由 CI（`.github/workflows/ci.yml`）自动执行。
 
-# 查看帮助
-python manage.py help
+## 重定向管理
+```bash
+uv run python redirects_manager.py list
+uv run python redirects_manager.py add "/old-path/" "/new-path/"
+uv run python redirects_manager.py remove "/old-path/"
 ```
 
-# 传统部署方式
-
-如果你更喜欢传统的分步操作：
-
-- 安装依赖 `pip install -r requirements.txt`
-- 启动本地服务器 `python -m mkdocs serve`
-- 构建生成目录 `python generate.py`
-- 构建静态界面 `python -m mkdocs build`
-
-# 贡献
-
+## 贡献
 欢迎您在 GitHub 上提出问题并贡献文档。
