@@ -31,7 +31,7 @@ uv run nmteam dev
 
 - 自动生成文档结构（`cache/`、`generated/`、`mkdocs.yml`）
 - 启动 MkDocs 开发服务器（<http://127.0.0.1:8000>）
-- 监听 `docs/` 目录变化并自动重新生成，浏览器热更新
+- 监听 `docs/`、`assets/` 和 MkDocs 模板变化并自动重新生成，浏览器热更新
 
 ### 构建生产版本
 
@@ -40,6 +40,26 @@ uv run nmteam build
 ```
 
 构建结果输出到 `site/` 目录。
+
+最终 HTML 会由 `mkdocs-minify-plugin` 压缩；生成器元标签仅保留 MkDocs
+版本，不暴露主题及其版本。
+
+## 静态资源
+
+仓库内资源统一存放在：
+
+- `assets/images/`：PNG、JPEG 图片母版
+- `assets/icons/`：SVG 图标
+- `assets/styles/`：站点样式
+
+文档使用 `/assets/...` 引用这些资源。生成文档时，每张 PNG 或 JPEG
+图片会同时产生：
+
+- WebP 优先版本：质量 80
+- 原格式 fallback：JPEG 使用质量 80；PNG 使用 256 色有损量化
+
+Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
+优先的 `<picture>` 元素。外部 URL 不会被下载或镜像。
 
 ### 其他命令
 
