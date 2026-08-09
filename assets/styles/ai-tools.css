@@ -1,0 +1,39 @@
+/* AI tools: view-as-Markdown, open in ChatGPT / Claude.
+   Glassmorphism style (frosted translucent pill buttons), adapting to the
+   Material light/dark palettes via theme CSS variables. */
+.ai-tools {
+    display: inline-flex;
+    gap: 6px;
+    margin-inline-start: 8px;
+    vertical-align: middle;
+}
+
+.ai-tools__link {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--md-typeset-color);
+    background: color-mix(in srgb, var(--md-default-bg-color) 62%, transparent);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid color-mix(in srgb, var(--md-default-fg-color) 22%, transparent);
+    border-radius: 999px;
+    box-shadow: 0 1px 4px color-mix(in srgb, var(--md-default-fg-color) 12%, transparent);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .2s, color .2s, border-color .2s, box-shadow .2s;
+}
+
+.ai-tools__link:hover {
+    color: var(--md-primary-fg-color);
+    background: color-mix(in srgb, var(--md-default-bg-color) 88%, var(--md-primary-fg-color));
+    border-color: color-mix(in srgb, var(--md-primary-fg-color) 45%, transparent);
+    box-shadow: 0 2px 10px color-mix(in srgb, var(--md-primary-fg-color) 25%, transparent);
+}
+
+.ai-tools__link:focus-visible {
+    outline: 2px solid var(--md-primary-fg-color);
+    outline-offset: 2px;
+}

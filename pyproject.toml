@@ -51,7 +51,7 @@ exclude = ["docs"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "W", "C4", "RUF"]
 ignore = ["E501"]
-allowed-confusables = ["，", "。", "？", "：", "！"]
+allowed-confusables = ["，", "。", "？", "：", "；", "！"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["nmteam_support"]

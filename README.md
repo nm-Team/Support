@@ -61,6 +61,20 @@ uv run nmteam build
 Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
 优先的 `<picture>` 元素。外部 URL 不会被下载或镜像。
 
+## AI 支持
+
+站点面向语言模型提供以下能力：
+
+- `/llms.txt`：按 [llmstxt.org](https://llmstxt.org/) 规范生成的站点索引，
+    每个链接指向页面的 Markdown 版本。
+- 每页 Markdown 版本：`nmteam build` 时在每个页面旁生成同路径的 `.md` 文件
+    （如 `/nmbot-telegram/mcp.md`）。
+- 页面顶部的 AI 工具按钮：**Markdown**（查看本页 Markdown）、**ChatGPT** /
+    **Claude**（将本页内容作为上下文在 ChatGPT/Claude 中打开）。
+
+注意：`llms.txt` 与 `.md` 版本由 `nmteam build` 输出到 `site/`；开发模式
+（`nmteam dev`）下 ChatGPT/Claude 按钮会退化为仅携带页面链接的提示词。
+
 ### 其他命令
 
 ```bash
