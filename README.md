@@ -70,7 +70,8 @@ Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
 - 每页 Markdown 版本：`nmteam build` 时在每个页面旁生成同路径的 `.md` 文件
     （如 `/nmbot-telegram/mcp.md`）。
 - 页面顶部的 **Open** 菜单：提供 GitHub 源文件、Markdown 版本，以及
-    Scira AI、ChatGPT、Claude、Cursor 六种打开方式。
+    Perplexity、Grok、ChatGPT、Claude Web、Claude Desktop、Claude Code、
+    OpenAI Codex、Cursor 八种 AI 打开方式。
 
 注意：`llms.txt` 与 `.md` 版本由 `nmteam build` 输出到 `site/`；开发模式
 （`nmteam dev`）下 View as Markdown 会提示先构建，AI 操作仍可通过当前页面

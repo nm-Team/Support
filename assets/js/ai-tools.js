@@ -3,11 +3,18 @@
     "use strict";
 
     var ENDPOINTS = {
-        scira: "https://scira.ai/?q=",
+        perplexity: "https://www.perplexity.ai/search?q=",
+        grok: "https://grok.com/?q=",
         chatgpt: "https://chatgpt.com/?prompt=",
         claude: "https://claude.ai/new?q=",
+        "claude-desktop": "claude://claude.ai/new?q=",
+        "claude-code": "https://claude.ai/code/new?q=",
+        codex: "codex://new?prompt=",
         cursor: "https://cursor.com/link/prompt?text=",
     };
+
+    var CLAUDE_CODE_REPOSITORY = "nm-Team/Support";
+    var CLAUDE_CODE_BRANCH = "main";
 
     function mdUrl(raw) {
         if (!raw) {
@@ -28,6 +35,15 @@
         var url = ENDPOINTS[provider] + encodeURIComponent(prompt);
         if (provider === "chatgpt") {
             return url + "&hints=search";
+        }
+        if (provider === "claude-code") {
+            return (
+                url +
+                "&repo=" +
+                encodeURIComponent(CLAUDE_CODE_REPOSITORY) +
+                "&branch=" +
+                encodeURIComponent(CLAUDE_CODE_BRANCH)
+            );
         }
         return url;
     }
@@ -101,11 +117,18 @@
         var prompt = providerPrompt(pageUrl(raw));
 
         wireMarkdown(markdown, mdUrl(raw));
-        ["scira", "chatgpt", "claude", "cursor"].forEach(function (provider) {
-            menu.querySelector('[data-ai="' + provider + '"]').href = providerUrl(
-                provider,
-                prompt
-            );
+        [
+            "perplexity",
+            "grok",
+            "chatgpt",
+            "claude",
+            "claude-desktop",
+            "claude-code",
+            "codex",
+            "cursor",
+        ].forEach(function (provider) {
+            menu.querySelector('[data-ai="' + provider + '"]').href =
+                providerUrl(provider, prompt);
         });
 
         trigger.addEventListener("click", function () {
