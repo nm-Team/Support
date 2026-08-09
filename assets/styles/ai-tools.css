@@ -10,13 +10,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 30px;
-    gap: 8px;
-    padding: 5px 9px;
+    min-height: 36px;
+    gap: 7px;
+    padding: 7px 11px;
     font: inherit;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    line-height: 18px;
+    line-height: 20px;
     color: var(--md-default-fg-color);
     background: var(--md-default-bg-color);
     border: 1px solid var(--md-default-fg-color--lightest);
@@ -37,6 +37,36 @@
     outline-offset: 2px;
 }
 
+.ai-tools__provider-icons {
+    display: inline-flex;
+    align-items: center;
+    padding-left: 1px;
+}
+
+.ai-tools__provider-icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    padding: 1px;
+    background: var(--md-default-bg-color);
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px var(--md-default-bg-color);
+}
+
+.ai-tools__provider-icon + .ai-tools__provider-icon {
+    margin-left: -4px;
+}
+
+.ai-tools__provider-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.ai-tools__provider-icon--github svg {
+    fill: currentcolor;
+}
+
 .ai-tools__chevron,
 .ai-tools__item-icon,
 .ai-tools__external {
@@ -47,8 +77,8 @@
 }
 
 .ai-tools__chevron {
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
     color: var(--md-default-fg-color--light);
     transition: transform 140ms ease;
 }
