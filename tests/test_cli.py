@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+import pytest
 from typer.testing import CliRunner
 
 import nmteam_support.cli as cli
@@ -114,6 +115,49 @@ def test_redirects_add_preserves_malformed_config(tmp_path, monkeypatch):
     assert result.exit_code == 1
     assert "无法读取重定向配置" in result.stderr
     assert path.read_text(encoding="utf-8") == "{ invalid"
+
+
+def test_check_runs_complete_pipeline_in_order(tmp_path, monkeypatch):
+    options = _options(tmp_path)
+    commands = []
+    build_options = []
+    monkeypatch.setattr(cli.subprocess, "call", lambda command: commands.append(command) or 0)
+    monkeypatch.setattr(cli, "cmd_build", lambda received: build_options.append(received) or 0)
+
+    assert cli.cmd_check(options) == 0
+    assert commands == [
+        ["ruff", "check", "."],
+        ["ruff", "format", "--check", "."],
+        ["pytest"],
+        ["mdformat", "--check", "README.md", "docs/"],
+    ]
+    assert build_options == [options]
+
+
+def test_check_stops_after_first_failed_command(tmp_path, monkeypatch):
+    calls = []
+
+    def run(command):
+        calls.append(command)
+        return 9 if command[:2] == ["ruff", "format"] else 0
+
+    monkeypatch.setattr(cli.subprocess, "call", run)
+    monkeypatch.setattr(
+        cli,
+        "cmd_build",
+        lambda options: pytest.fail(f"build must not run: {options}"),
+    )
+
+    assert cli.cmd_check(_options(tmp_path)) == 9
+    assert calls == [["ruff", "check", "."], ["ruff", "format", "--check", "."]]
+
+
+def test_check_command_propagates_failure(monkeypatch):
+    monkeypatch.setattr(cli, "cmd_check", lambda options: 13)
+
+    result = runner.invoke(cli.app, ["check"])
+
+    assert result.exit_code == 13
 
 
 def test_watcher_continues_after_generation_error(tmp_path, monkeypatch, capsys):
