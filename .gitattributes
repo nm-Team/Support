@@ -1,0 +1,2 @@
+# Keep formatter-sensitive Markdown stable across platforms.
+*.md text eol=lf
