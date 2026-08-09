@@ -1,7 +1,8 @@
 ---
 title: update-pictures
-description: 
+description:
 ---
 
 # {index_title}
+
 {index_description}

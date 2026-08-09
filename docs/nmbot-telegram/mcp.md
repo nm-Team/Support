@@ -38,11 +38,11 @@ description: 创建和管理 nmBot MCP Access Token，并在 VS Code 等外部�
 请按以下步骤操作：
 
 1. 打开 nmBot 面板中的 `MCP 配置` 页面。
-2. 点击 `创建 Token`。
-3. 在弹出的窗口中输入一个便于识别的 `Token 名称`，例如 `My VS Code`。
-4. 点击 `确认`。
-5. 创建成功后，系统会弹出提示框并展示完整 Token。
-6. 立即复制该 Token，并保存在安全的位置。
+1. 点击 `创建 Token`。
+1. 在弹出的窗口中输入一个便于识别的 `Token 名称`，例如 `My VS Code`。
+1. 点击 `确认`。
+1. 创建成功后，系统会弹出提示框并展示完整 Token。
+1. 立即复制该 Token，并保存在安全的位置。
 
 ![创建 MCP Access Token](img/mcp/mcp-create-token-dialog.png){ width="360" }
 
