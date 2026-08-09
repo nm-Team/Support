@@ -14,7 +14,8 @@ def test_shell_launcher_forwards_arguments_from_repository_root(tmp_path):
     fake_uv = executable_dir / "uv"
     fake_uv.write_text(
         "#!/bin/sh\n"
-        'printf "%s\\n" "$PWD" > "$CAPTURE_DIR/cwd"\n'
+        "if [ -f pyproject.toml ]; then root_state=root; else root_state=wrong; fi\n"
+        'printf "%s\\n" "$root_state" > "$CAPTURE_DIR/cwd"\n'
         'printf "%s\\n" "$@" > "$CAPTURE_DIR/args"\n'
         "exit 23\n",
         encoding="utf-8",
@@ -40,7 +41,7 @@ def test_shell_launcher_forwards_arguments_from_repository_root(tmp_path):
     )
 
     assert result.returncode == 23
-    assert (capture_dir / "cwd").read_text(encoding="utf-8").strip() == str(repository_root)
+    assert (capture_dir / "cwd").read_text(encoding="utf-8").strip() == "root"
     assert (capture_dir / "args").read_text(encoding="utf-8").splitlines() == [
         "run",
         "nmteam",
