@@ -11,7 +11,7 @@ def load_redirects(path: Path) -> dict[str, str] | None:
     try:
         with path.open(encoding="utf-8") as f:
             return json.load(f)["redirects"]
-    except (json.JSONDecodeError, KeyError, OSError):
+    except json.JSONDecodeError, KeyError, OSError:
         return None
 
 

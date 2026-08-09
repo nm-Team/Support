@@ -43,7 +43,9 @@ def test_generate_injects_contributing_note(tmp_path, docs_dir):
 def test_generate_skips_contributing_note_for_update_log(tmp_path, docs_dir):
     d = docs_dir / "nmbot-telegram" / "update-log"
     d.mkdir()
-    (d / "2026-01.md").write_text("---\nindex: -2601\n---\n\n# 2026-01\n\n内容。\n", encoding="utf-8")
+    (d / "2026-01.md").write_text(
+        "---\nindex: -2601\n---\n\n# 2026-01\n\n内容。\n", encoding="utf-8"
+    )
     options = _full_options(tmp_path, docs_dir)
     generate(options)
     content = (options.generated_dir / "nmbot-telegram" / "update-log" / "2026-01.md").read_text(

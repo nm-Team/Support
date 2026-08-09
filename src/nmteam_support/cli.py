@@ -42,7 +42,15 @@ def cmd_dev(options: GeneratorOptions) -> int:
     watcher.start()
     try:
         return subprocess.call(
-            [sys.executable, "-m", "mkdocs", "serve", "--dirtyreload", "--dev-addr", "127.0.0.1:8000"]
+            [
+                sys.executable,
+                "-m",
+                "mkdocs",
+                "serve",
+                "--dirtyreload",
+                "--dev-addr",
+                "127.0.0.1:8000",
+            ]
         )
     finally:
         stop.set()

@@ -1,6 +1,6 @@
 """Frontmatter parsing smoke tests."""
 
-from nmteam_support.frontmatter import parse_page, split_frontmatter, split_frontmatter_lines
+from nmteam_support.frontmatter import parse_page, split_frontmatter
 
 
 def test_split_frontmatter_roundtrip():
@@ -45,7 +45,7 @@ def test_index_garbage_defaults_to_zero():
 
 def test_description_skips_images_html_and_admonitions():
     meta, _ = parse_page(
-        "---\n---\n\n# T\n\n![图](./img/a.png)\n\n<center>HTML</center>\n\n!!! note \"注\"\n    内容\n\n正文第一句。\n",
+        '---\n---\n\n# T\n\n![图](./img/a.png)\n\n<center>HTML</center>\n\n!!! note "注"\n    内容\n\n正文第一句。\n',
         "x.md",
     )
     assert meta.description == "正文第一句。"

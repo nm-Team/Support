@@ -23,10 +23,7 @@ def render_index_page(scan: ScannedDir) -> str:
     head_lines.append("")
     head = "\n".join(head_lines) + "\n"
 
-    if scan.index_body:
-        content = scan.index_body
-    else:
-        content = f"# {scan.index_meta.title}\n{scan.index_meta.description}\n"
+    content = scan.index_body or f"# {scan.index_meta.title}\n{scan.index_meta.description}\n"
 
     if not scan.index_meta.hide_docs_list:
         entries = sort_entries(scan.docs + folder_entries(scan))
