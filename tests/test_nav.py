@@ -46,3 +46,24 @@ def test_folder_with_empty_index_skipped(docs_dir):
     (d / "index.md").write_text("---\n---\n", encoding="utf-8")
     nav = build_nav_yaml(scan_docs(docs_dir))
     assert "notes" not in nav
+
+
+def test_folder_index_comes_from_its_index_md(docs_dir):
+    # contact-us/index.md has index: 100 -> folder sorts after nmbot-telegram (0)
+    nav = build_nav_yaml(scan_docs(docs_dir))
+    assert nav.index("nmbot-telegram") < nav.index("contact-us")
+
+
+def test_negative_index_doc_precedes_default_index_doc(docs_dir):
+    # forum.md has index: -1 -> sorts before a same-level default-index (0) doc,
+    # while the folder's index.md overview still renders first.
+    (docs_dir / "contact-us" / "support.md").write_text(
+        "---\ntitle: 支持文档\nindex: 0\n---\n\n# 支持文档\n",
+        encoding="utf-8",
+    )
+    nav = build_nav_yaml(scan_docs(docs_dir))
+    assert (
+        nav.index("'contact-us/index.md'")
+        < nav.index("'contact-us/forum.md'")
+        < nav.index("'contact-us/support.md'")
+    )
