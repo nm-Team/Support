@@ -1,6 +1,7 @@
 site_name: nmTeam Support
 theme:
   name: material
+  custom_dir: overrides
   logo: https://websiteres.nmteam.xyz/producticon/nmTeam/logo@128.png
   favicon: https://websiteres.nmteam.xyz/producticon/nmTeam/logo@128.png
   language: zh
