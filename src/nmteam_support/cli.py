@@ -64,7 +64,10 @@ def _watch_and_regenerate(options: GeneratorOptions, stop: threading.Event) -> N
         if current != last:
             last = current
             print("🔄 检测到变更，重新生成...")
-            generate(options)
+            try:
+                generate(options)
+            except Exception as error:
+                print(f"⚠️ 文档生成失败，继续监听: {error}", file=sys.stderr)
 
 
 def _snapshot(options: GeneratorOptions) -> tuple[tuple[int, int], ...]:
