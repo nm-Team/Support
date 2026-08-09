@@ -2,9 +2,13 @@
 
 from pathlib import Path
 
+from typer.testing import CliRunner
+
 import nmteam_support.cli as cli
 from nmteam_support.cli import cmd_clean
 from nmteam_support.generator import GeneratorOptions
+
+runner = CliRunner()
 
 
 def _options(tmp_path: Path) -> GeneratorOptions:
@@ -27,6 +31,32 @@ def test_cmd_clean_removes_output_dirs(tmp_path):
     assert not opts.cache_dir.exists()
     assert not opts.generated_dir.exists()
     assert not (tmp_path / "site").exists()
+
+
+def test_cli_without_command_displays_help():
+    assert hasattr(cli, "app")
+    result = runner.invoke(cli.app)
+    assert result.exit_code == 0
+    assert "Usage:" in result.stdout
+    assert "generate" in result.stdout
+
+
+def test_generate_command_calls_generator(monkeypatch):
+    calls = []
+    monkeypatch.setattr(cli, "generate", lambda options: calls.append(options))
+
+    result = runner.invoke(cli.app, ["generate"])
+
+    assert result.exit_code == 0
+    assert len(calls) == 1
+
+
+def test_build_command_propagates_failure(monkeypatch):
+    monkeypatch.setattr(cli, "cmd_build", lambda options: 17)
+
+    result = runner.invoke(cli.app, ["build"])
+
+    assert result.exit_code == 17
 
 
 def test_watcher_continues_after_generation_error(tmp_path, monkeypatch, capsys):

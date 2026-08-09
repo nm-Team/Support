@@ -1,15 +1,18 @@
-"""Command-line interface: generate / dev / build / clean / install."""
+"""Cross-platform command-line interface for the documentation toolchain."""
 
 from __future__ import annotations
 
-import argparse
 import shutil
 import subprocess
 import sys
 import threading
 from pathlib import Path
 
+import typer
+
 from nmteam_support.generator import GeneratorOptions, default_options, generate
+
+app = typer.Typer(invoke_without_command=True)
 
 
 def _rm(path: Path) -> None:
@@ -87,23 +90,47 @@ def cmd_install() -> int:
     return subprocess.call(["uv", "sync"])
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="nmteam", description="nmTeam Support 文档站工具链")
-    parser.add_argument(
-        "command",
-        nargs="?",
-        default="generate",
-        choices=["generate", "dev", "build", "clean", "install"],
-    )
-    args = parser.parse_args(argv)
-    options = default_options()
-    if args.command == "generate":
-        generate(options)
-        return 0
-    if args.command == "dev":
-        return cmd_dev(options)
-    if args.command == "build":
-        return cmd_build(options)
-    if args.command == "clean":
-        return cmd_clean(options)
-    return cmd_install()
+def _exit_on_error(code: int) -> None:
+    if code:
+        raise typer.Exit(code=code)
+
+
+@app.callback()
+def root(context: typer.Context) -> None:
+    """Manage the nmTeam Support documentation site."""
+    if context.invoked_subcommand is None:
+        typer.echo(context.get_help())
+
+
+@app.command("generate")
+def generate_command() -> None:
+    """Generate documentation configuration and derived files."""
+    generate(default_options())
+
+
+@app.command("dev")
+def dev_command() -> None:
+    """Serve the site and regenerate derived files after changes."""
+    _exit_on_error(cmd_dev(default_options()))
+
+
+@app.command("build")
+def build_command() -> None:
+    """Generate and build the production documentation site."""
+    _exit_on_error(cmd_build(default_options()))
+
+
+@app.command("clean")
+def clean_command() -> None:
+    """Remove generated documentation output."""
+    _exit_on_error(cmd_clean(default_options()))
+
+
+@app.command("install")
+def install_command() -> None:
+    """Install project dependencies with uv."""
+    _exit_on_error(cmd_install())
+
+
+def main() -> None:
+    app()
