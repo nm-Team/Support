@@ -44,6 +44,11 @@
     data-md-url="{{ page.url }}"
     data-page-title="{{ page.title | e }}"
   >
+    <button class="ai-tools__copy" type="button">
+      <span class="ai-tools__copy-icon ai-tools__copy-icon--idle" aria-hidden="true">{% include ".icons/material/content-copy.svg" %}</span>
+      <span class="ai-tools__copy-icon ai-tools__copy-icon--success" aria-hidden="true" hidden>{% include ".icons/material/check.svg" %}</span>
+      <span class="ai-tools__copy-label" aria-live="polite">复制本文 Markdown</span>
+    </button>
     <button
       class="ai-tools__trigger"
       type="button"
@@ -51,12 +56,13 @@
       aria-expanded="false"
       aria-controls="ai-tools-menu"
     >
+      <span>使用</span>
       <span class="ai-tools__provider-icons" aria-hidden="true">
         <span class="ai-tools__provider-icon ai-tools__provider-icon--github">{% include ".icons/fontawesome/brands/github.svg" %}</span>
         <span class="ai-tools__provider-icon">{% include ".icons/ai/claude.svg" %}</span>
         <span class="ai-tools__provider-icon">{% include ".icons/ai/codex.svg" %}</span>
       </span>
-      <span>Open</span>
+      <span>打开本文章</span>
       <span class="ai-tools__chevron">{% include ".icons/material/chevron-down.svg" %}</span>
     </button>
     <div class="ai-tools__menu" id="ai-tools-menu" role="menu" hidden>

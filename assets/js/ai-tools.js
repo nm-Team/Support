@@ -66,6 +66,86 @@
         );
     }
 
+    function showCopyFailed() {
+        window.alert("无法复制 Markdown，请稍后重试。");
+    }
+
+    function copyWithSelection(text) {
+        var textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        var copied = document.execCommand("copy");
+        textarea.remove();
+        if (!copied) {
+            return Promise.reject(new Error("Copy command failed"));
+        }
+        return Promise.resolve();
+    }
+
+    function copyText(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text).catch(function () {
+                return copyWithSelection(text);
+            });
+        }
+        return copyWithSelection(text);
+    }
+
+    function setCopyState(button, copied) {
+        button.querySelector(".ai-tools__copy-icon--idle").hidden = copied;
+        button.querySelector(".ai-tools__copy-icon--success").hidden = !copied;
+        button.querySelector(".ai-tools__copy-label").textContent = copied
+            ? "已复制"
+            : "复制本文 Markdown";
+    }
+
+    function wireCopy(button, md, availability) {
+        var resetTimer;
+
+        button.addEventListener("click", function () {
+            button.disabled = true;
+            availability
+                .then(function (available) {
+                    if (!available) {
+                        showMarkdownUnavailable();
+                        return null;
+                    }
+                    return fetch(md);
+                })
+                .then(function (response) {
+                    if (!response) {
+                        return null;
+                    }
+                    var contentType = response.headers.get("Content-Type") || "";
+                    if (!response.ok || contentType.indexOf("html") !== -1) {
+                        throw new Error("Markdown is unavailable");
+                    }
+                    return response.text();
+                })
+                .then(function (markdown) {
+                    if (markdown === null) {
+                        return;
+                    }
+                    return copyText(markdown).then(function () {
+                        window.clearTimeout(resetTimer);
+                        setCopyState(button, true);
+                        resetTimer = window.setTimeout(function () {
+                            setCopyState(button, false);
+                        }, 1800);
+                    });
+                })
+                .catch(showCopyFailed)
+                .then(function () {
+                    button.disabled = false;
+                });
+        });
+    }
+
     function wireMarkdown(link, md) {
         var availability = fetch(md, { method: "HEAD" })
             .then(function (response) {
@@ -107,16 +187,21 @@
                 showMarkdownUnavailable();
             });
         });
+
+        return availability;
     }
 
     function wireMenu(box) {
         var trigger = box.querySelector(".ai-tools__trigger");
+        var copy = box.querySelector(".ai-tools__copy");
         var menu = box.querySelector(".ai-tools__menu");
         var raw = box.getAttribute("data-md-url") || "";
         var markdown = menu.querySelector('[data-ai="markdown"]');
+        var md = mdUrl(raw);
         var prompt = providerPrompt(pageUrl(raw));
+        var availability = wireMarkdown(markdown, md);
 
-        wireMarkdown(markdown, mdUrl(raw));
+        wireCopy(copy, md, availability);
         [
             "perplexity",
             "grok",
