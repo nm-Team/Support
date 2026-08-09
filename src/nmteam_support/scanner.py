@@ -25,7 +25,7 @@ class ScannedDir:
     index_meta: PageMetadata  # metadata from index.md (or name-derived defaults)
     index_body: str  # index.md body after frontmatter ("" when absent/empty)
     docs: list[DocEntry] = field(default_factory=list)  # non-index .md files
-    subdirs: list["ScannedDir"] = field(default_factory=list)
+    subdirs: list[ScannedDir] = field(default_factory=list)
     other_files: list[str] = field(default_factory=list)  # non-.md files, relative paths
     image_dirs: list[str] = field(default_factory=list)  # dirs named "img", relative paths
 

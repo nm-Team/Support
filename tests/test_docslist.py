@@ -14,7 +14,9 @@ def test_render_docs_list_structure():
 
 
 def test_render_docs_list_strips_md_and_escapes():
-    entries = [DocEntry(title="A&B", description='say "hi"', path="n/b.md", name="b.md", kind="doc")]
+    entries = [
+        DocEntry(title="A&B", description='say "hi"', path="n/b.md", name="b.md", kind="doc")
+    ]
     out = render_docs_list(entries)
     assert 'href="/n/b"' in out
     assert "A&amp;B" in out
