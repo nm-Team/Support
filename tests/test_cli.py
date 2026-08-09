@@ -1,5 +1,6 @@
 """CLI command tests."""
 
+import json
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -57,6 +58,62 @@ def test_build_command_propagates_failure(monkeypatch):
     result = runner.invoke(cli.app, ["build"])
 
     assert result.exit_code == 17
+
+
+def test_redirects_add_persists_quoted_paths(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+
+    result = runner.invoke(cli.app, ["redirects", "add", "/old path/", "/new path/"])
+
+    assert result.exit_code == 0
+    payload = json.loads((tmp_path / "redirects.json").read_text(encoding="utf-8"))
+    assert payload == {"redirects": {"/old path/": "/new path/"}}
+
+
+def test_redirects_list_displays_existing_rules(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "redirects.json").write_text(
+        json.dumps({"redirects": {"/old/": "/new/"}}), encoding="utf-8"
+    )
+
+    result = runner.invoke(cli.app, ["redirects", "list"])
+
+    assert result.exit_code == 0
+    assert "/old/ -> /new/" in result.stdout
+
+
+def test_redirects_remove_deletes_existing_rule(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "redirects.json").write_text(
+        json.dumps({"redirects": {"/old/": "/new/"}}), encoding="utf-8"
+    )
+
+    result = runner.invoke(cli.app, ["redirects", "remove", "/old/"])
+
+    assert result.exit_code == 0
+    payload = json.loads((tmp_path / "redirects.json").read_text(encoding="utf-8"))
+    assert payload == {"redirects": {}}
+
+
+def test_redirects_remove_reports_missing_rule(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+
+    result = runner.invoke(cli.app, ["redirects", "remove", "/missing/"])
+
+    assert result.exit_code == 1
+    assert "未找到重定向" in result.stderr
+
+
+def test_redirects_add_preserves_malformed_config(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    path = tmp_path / "redirects.json"
+    path.write_text("{ invalid", encoding="utf-8")
+
+    result = runner.invoke(cli.app, ["redirects", "add", "/old/", "/new/"])
+
+    assert result.exit_code == 1
+    assert "无法读取重定向配置" in result.stderr
+    assert path.read_text(encoding="utf-8") == "{ invalid"
 
 
 def test_watcher_continues_after_generation_error(tmp_path, monkeypatch, capsys):

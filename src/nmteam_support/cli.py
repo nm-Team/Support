@@ -11,8 +11,15 @@ from pathlib import Path
 import typer
 
 from nmteam_support.generator import GeneratorOptions, default_options, generate
+from nmteam_support.redirects import (
+    RedirectConfigError,
+    read_redirects,
+    write_redirects,
+)
 
 app = typer.Typer(invoke_without_command=True)
+redirects_app = typer.Typer(no_args_is_help=True)
+app.add_typer(redirects_app, name="redirects")
 
 
 def _rm(path: Path) -> None:
@@ -95,6 +102,15 @@ def _exit_on_error(code: int) -> None:
         raise typer.Exit(code=code)
 
 
+def _managed_redirects() -> tuple[Path, dict[str, str]]:
+    path = default_options().redirects_path
+    try:
+        return path, read_redirects(path)
+    except RedirectConfigError as error:
+        typer.echo(str(error), err=True)
+        raise typer.Exit(code=1) from error
+
+
 @app.callback()
 def root(context: typer.Context) -> None:
     """Manage the nmTeam Support documentation site."""
@@ -130,6 +146,38 @@ def clean_command() -> None:
 def install_command() -> None:
     """Install project dependencies with uv."""
     _exit_on_error(cmd_install())
+
+
+@redirects_app.command("list")
+def list_redirects_command() -> None:
+    """List configured redirects."""
+    _, redirects = _managed_redirects()
+    if not redirects:
+        typer.echo("当前没有配置任何重定向")
+        return
+    for old_path, new_path in redirects.items():
+        typer.echo(f"{old_path} -> {new_path}")
+
+
+@redirects_app.command("add")
+def add_redirect_command(old_path: str, new_path: str) -> None:
+    """Add or replace a redirect."""
+    path, redirects = _managed_redirects()
+    redirects[old_path] = new_path
+    write_redirects(path, redirects)
+    typer.echo(f"已添加重定向: {old_path} -> {new_path}")
+
+
+@redirects_app.command("remove")
+def remove_redirect_command(old_path: str) -> None:
+    """Remove an existing redirect."""
+    path, redirects = _managed_redirects()
+    if old_path not in redirects:
+        typer.echo(f"未找到重定向: {old_path}", err=True)
+        raise typer.Exit(code=1)
+    del redirects[old_path]
+    write_redirects(path, redirects)
+    typer.echo(f"已删除重定向: {old_path}")
 
 
 def main() -> None:
