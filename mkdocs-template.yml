@@ -1,4 +1,10 @@
 site_name: nmTeam Support
+plugins:
+  - search
+  - minify:
+      minify_html: true
+      htmlmin_opts:
+        remove_comments: true
 theme:
   name: material
   custom_dir: overrides
