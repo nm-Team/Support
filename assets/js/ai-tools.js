@@ -72,6 +72,25 @@
         var markdownLink = box.querySelector('[data-ai="markdown"]');
         if (markdownLink) {
             markdownLink.setAttribute("href", md);
+            // The Markdown twins are only staged into site/ by `nmteam build`;
+            // under `mkdocs serve` they 404, so explain instead of dead-linking.
+            markdownLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                fetch(md, { method: "HEAD" }).then(function (response) {
+                    var contentType = response.headers.get("Content-Type") || "";
+                    // `mkdocs serve` renders .md URLs as HTML pages; only the
+                    // static twins staged by `nmteam build` are served as
+                    // Markdown. Navigate only for the real thing.
+                    if (response.ok && contentType.indexOf("html") === -1) {
+                        location.href = md;
+                    } else {
+                        window.alert(
+                            "Markdown 版本在构建产物中提供。请先运行 `uv run nmteam build`，" +
+                                "或改用 ChatGPT / Claude 按钮。"
+                        );
+                    }
+                });
+            });
         }
         var chatgpt = box.querySelector('[data-ai="chatgpt"]');
         if (chatgpt) {
