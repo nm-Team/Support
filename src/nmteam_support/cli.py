@@ -21,6 +21,13 @@ app = typer.Typer(invoke_without_command=True)
 redirects_app = typer.Typer(no_args_is_help=True)
 app.add_typer(redirects_app, name="redirects")
 
+QUALITY_COMMANDS = (
+    ["ruff", "check", "."],
+    ["ruff", "format", "--check", "."],
+    ["pytest"],
+    ["mdformat", "--check", "README.md", "docs/"],
+)
+
 
 def _rm(path: Path) -> None:
     if path.exists():
@@ -97,6 +104,15 @@ def cmd_install() -> int:
     return subprocess.call(["uv", "sync"])
 
 
+def cmd_check(options: GeneratorOptions) -> int:
+    """Run repository quality checks and a strict documentation build."""
+    for command in QUALITY_COMMANDS:
+        code = subprocess.call(command)
+        if code:
+            return code
+    return cmd_build(options)
+
+
 def _exit_on_error(code: int) -> None:
     if code:
         raise typer.Exit(code=code)
@@ -146,6 +162,12 @@ def clean_command() -> None:
 def install_command() -> None:
     """Install project dependencies with uv."""
     _exit_on_error(cmd_install())
+
+
+@app.command("check")
+def check_command() -> None:
+    """Run linting, tests, formatting checks, and a strict build."""
+    _exit_on_error(cmd_check(default_options()))
 
 
 @redirects_app.command("list")
