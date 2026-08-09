@@ -22,16 +22,16 @@
   {% endif %}
 {% endif %}
 
-{% macro ai_action(label, icon, kind, href="#") -%}
+{% macro ai_action(label, icon, kind, href="#", group_start=false, brand=false) -%}
   <a
-    class="ai-tools__item"
+    class="ai-tools__item{% if group_start %} ai-tools__item--group-start{% endif %}"
     href="{{ href }}"
     role="menuitem"
     data-ai="{{ kind }}"
     target="_blank"
     rel="noopener noreferrer"
   >
-    <span class="ai-tools__item-icon">{% include ".icons/" ~ icon %}</span>
+    <span class="ai-tools__item-icon{% if brand %} ai-tools__item-icon--brand{% endif %}">{% include ".icons/" ~ icon %}</span>
     <span class="ai-tools__label">{{ label }}</span>
     <span class="ai-tools__external">{% include ".icons/material/open-in-new.svg" %}</span>
   </a>
@@ -57,9 +57,13 @@
     <div class="ai-tools__menu" id="ai-tools-menu" role="menu" hidden>
       {{ ai_action("Open in GitHub", "fontawesome/brands/github.svg", "github", source_url) }}
       {{ ai_action("View as Markdown", "material/language-markdown.svg", "markdown") }}
-      {{ ai_action("Open in Scira AI", "material/creation-outline.svg", "scira") }}
-      {{ ai_action("Open in ChatGPT", "fontawesome/brands/openai.svg", "chatgpt") }}
-      {{ ai_action("Open in Claude", "simple/anthropic.svg", "claude") }}
+      {{ ai_action("Open in Perplexity", "ai/perplexity.svg", "perplexity", group_start=true, brand=true) }}
+      {{ ai_action("Open in Grok", "simple/x.svg", "grok") }}
+      {{ ai_action("Open in ChatGPT", "ai/openai.svg", "chatgpt", brand=true) }}
+      {{ ai_action("Open in Claude Web", "ai/claude.svg", "claude", brand=true) }}
+      {{ ai_action("Open in Claude Desktop", "ai/claude.svg", "claude-desktop", group_start=true, brand=true) }}
+      {{ ai_action("Open in Claude Code", "ai/claude-code.svg", "claude-code", brand=true) }}
+      {{ ai_action("Open in OpenAI Codex", "ai/codex.svg", "codex", brand=true) }}
       {{ ai_action("Open in Cursor", "simple/cursor.svg", "cursor") }}
     </div>
   </div>
