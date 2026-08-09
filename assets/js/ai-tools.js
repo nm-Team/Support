@@ -1,23 +1,15 @@
-// AI tools: view-as-Markdown, open in ChatGPT / Claude.
-// The page's raw Markdown twin lives at the same docs-relative path with a
-// ".md" suffix (e.g. /nmbot-telegram/mcp.md); it is staged into site/ by the
-// build. When the twin is missing (e.g. `mkdocs serve`), ChatGPT/Claude fall
-// back to a prompt that references the page URL instead of its content.
+// Fumadocs-style page actions menu.
 (function () {
     "use strict";
 
     var ENDPOINTS = {
-        chatgpt: "https://chatgpt.com/?q=",
+        scira: "https://scira.ai/?q=",
+        chatgpt: "https://chatgpt.com/?prompt=",
         claude: "https://claude.ai/new?q=",
+        cursor: "https://cursor.com/link/prompt?text=",
     };
-    // Keep the prompt URL short enough for chat providers to accept.
-    var MAX_PROMPT = 60000;
 
     function mdUrl(raw) {
-        // Root-relative: a relative path would resolve against the page URL,
-        // e.g. /nmbot-telegram/mcp/ + "nmbot-telegram/mcp.md" -> wrong twin.
-        // The home page has an empty page.url and its twin is /index.md
-        // (already carries the ".md" suffix).
         if (!raw) {
             return "/index.md";
         }
@@ -28,77 +20,119 @@
         return location.origin + "/" + (raw || "");
     }
 
-    function buildPrompt(content, url) {
-        if (!content) {
-            return "请阅读此文档页面并回答我的问题：" + url;
-        }
-        var header = "以下是 support.nmteam.xyz 文档页面的内容，请基于此内容回答我的问题：\n\n";
-        var body = content;
-        if (body.length > MAX_PROMPT) {
-            body = body.slice(0, MAX_PROMPT) + "\n\n…（内容过长已截断）";
-        }
-        return header + body;
+    function providerPrompt(url) {
+        return "Read " + url + ", I want to ask questions about it.";
     }
 
-    function openAi(which, prompt) {
-        window.open(ENDPOINTS[which] + encodeURIComponent(prompt), "_blank", "noopener");
+    function providerUrl(provider, prompt) {
+        var url = ENDPOINTS[provider] + encodeURIComponent(prompt);
+        if (provider === "chatgpt") {
+            return url + "&hints=search";
+        }
+        return url;
     }
 
-    function wireFetch(button, which, md, url) {
-        button.addEventListener("click", function (event) {
+    function setOpen(box, open, restoreFocus) {
+        var trigger = box.querySelector(".ai-tools__trigger");
+        var menu = box.querySelector(".ai-tools__menu");
+        box.classList.toggle("is-open", open);
+        trigger.setAttribute("aria-expanded", String(open));
+        menu.hidden = !open;
+        if (!open && restoreFocus) {
+            trigger.focus();
+        }
+    }
+
+    function showMarkdownUnavailable() {
+        window.alert(
+            "Markdown 版本在构建产物中提供。请先运行 `uv run nmteam build`，" +
+                "或使用其他打开方式。"
+        );
+    }
+
+    function wireMarkdown(link, md) {
+        var availability = fetch(md, { method: "HEAD" })
+            .then(function (response) {
+                var contentType = response.headers.get("Content-Type") || "";
+                return response.ok && contentType.indexOf("html") === -1;
+            })
+            .catch(function () {
+                return false;
+            })
+            .then(function (available) {
+                link.dataset.rawAvailable = String(available);
+                return available;
+            });
+
+        link.href = md;
+        link.addEventListener("click", function (event) {
+            if (link.dataset.rawAvailable === "true") {
+                return;
+            }
+
             event.preventDefault();
-            fetch(md)
-                .then(function (response) {
-                    return response.ok ? response.text() : "";
-                })
-                .catch(function () {
-                    return "";
-                })
-                .then(function (content) {
-                    openAi(which, buildPrompt(content, url));
-                });
+            if (link.dataset.rawAvailable === "false") {
+                showMarkdownUnavailable();
+                return;
+            }
+
+            var target = window.open("about:blank", "_blank");
+            if (target) {
+                target.opener = null;
+            }
+            availability.then(function (available) {
+                if (available && target) {
+                    target.location.replace(md);
+                    return;
+                }
+                if (target) {
+                    target.close();
+                }
+                showMarkdownUnavailable();
+            });
+        });
+    }
+
+    function wireMenu(box) {
+        var trigger = box.querySelector(".ai-tools__trigger");
+        var menu = box.querySelector(".ai-tools__menu");
+        var raw = box.getAttribute("data-md-url") || "";
+        var markdown = menu.querySelector('[data-ai="markdown"]');
+        var prompt = providerPrompt(pageUrl(raw));
+
+        wireMarkdown(markdown, mdUrl(raw));
+        ["scira", "chatgpt", "claude", "cursor"].forEach(function (provider) {
+            menu.querySelector('[data-ai="' + provider + '"]').href = providerUrl(
+                provider,
+                prompt
+            );
+        });
+
+        trigger.addEventListener("click", function () {
+            setOpen(box, menu.hidden, false);
+        });
+
+        menu.addEventListener("click", function (event) {
+            if (event.target.closest(".ai-tools__item")) {
+                setOpen(box, false, false);
+            }
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!menu.hidden && !box.contains(event.target)) {
+                setOpen(box, false, false);
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && !menu.hidden) {
+                event.preventDefault();
+                setOpen(box, false, true);
+            }
         });
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        var box = document.querySelector(".ai-tools");
-        if (!box) {
-            return;
-        }
-        var raw = box.getAttribute("data-md-url") || "";
-        var md = mdUrl(raw);
-        var url = pageUrl(raw);
-
-        var markdownLink = box.querySelector('[data-ai="markdown"]');
-        if (markdownLink) {
-            markdownLink.setAttribute("href", md);
-            // The Markdown twins are only staged into site/ by `nmteam build`;
-            // under `mkdocs serve` they 404, so explain instead of dead-linking.
-            markdownLink.addEventListener("click", function (event) {
-                event.preventDefault();
-                fetch(md, { method: "HEAD" }).then(function (response) {
-                    var contentType = response.headers.get("Content-Type") || "";
-                    // `mkdocs serve` renders .md URLs as HTML pages; only the
-                    // static twins staged by `nmteam build` are served as
-                    // Markdown. Navigate only for the real thing.
-                    if (response.ok && contentType.indexOf("html") === -1) {
-                        location.href = md;
-                    } else {
-                        window.alert(
-                            "Markdown 版本在构建产物中提供。请先运行 `uv run nmteam build`，" +
-                                "或改用 ChatGPT / Claude 按钮。"
-                        );
-                    }
-                });
-            });
-        }
-        var chatgpt = box.querySelector('[data-ai="chatgpt"]');
-        if (chatgpt) {
-            wireFetch(chatgpt, "chatgpt", md, url);
-        }
-        var claude = box.querySelector('[data-ai="claude"]');
-        if (claude) {
-            wireFetch(claude, "claude", md, url);
-        }
+        document.querySelectorAll(".ai-tools").forEach(wireMenu);
     });
 })();

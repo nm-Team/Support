@@ -69,11 +69,12 @@ Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
     每个链接指向页面的 Markdown 版本。
 - 每页 Markdown 版本：`nmteam build` 时在每个页面旁生成同路径的 `.md` 文件
     （如 `/nmbot-telegram/mcp.md`）。
-- 页面顶部的 AI 工具按钮：**Markdown**（查看本页 Markdown）、**ChatGPT** /
-    **Claude**（将本页内容作为上下文在 ChatGPT/Claude 中打开）。
+- 页面顶部的 **Open** 菜单：提供 GitHub 源文件、Markdown 版本，以及
+    Scira AI、ChatGPT、Claude、Cursor 六种打开方式。
 
 注意：`llms.txt` 与 `.md` 版本由 `nmteam build` 输出到 `site/`；开发模式
-（`nmteam dev`）下 ChatGPT/Claude 按钮会退化为仅携带页面链接的提示词。
+（`nmteam dev`）下 View as Markdown 会提示先构建，AI 操作仍可通过当前页面
+URL 打开。
 
 ### 其他命令
 
