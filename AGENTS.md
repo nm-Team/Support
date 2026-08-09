@@ -19,7 +19,8 @@ redirects.json ──────┘        (含生成的 assets/js/redirects.js
 
 构建后还有一步：`stage_markdown_copies()` 把 `cache/` 下每个 `.md` 复制到 `site/`
 同路径（如 `site/nmbot-telegram/mcp.md`），作为每页的 Markdown 版本，供
-`/llms.txt` 链接、View-as-Markdown 按钮与 AI 打开菜单。
+`/llms.txt` 链接、“复制本文 Markdown”按钮、View-as-Markdown 菜单项与 AI
+打开菜单。
 
 `generate()`（`src/nmteam_support/generator.py`）编排的完整链路：
 
@@ -47,7 +48,7 @@ redirects.json ──────┘        (含生成的 assets/js/redirects.js
 | `docs/contact-us/`、`docs/nmteam-account/`    | 其他产品线                                                                                                                                                                                                                                                                 |
 | `docs/superpowers/`                           | 本地设计与实现工件（plans/specs），**已 gitignore，勿提交**                                                                                                                                                                                                                |
 | `assets/images/`                              | 图片母版：`shared/`（站级共享）、`nmbot/`（含 `mcp/`、`update-pictures/` 子目录）；`assets/icons/`（SVG）、`assets/styles/`（CSS）、`assets/js/`（AI 工具脚本 `ai-tools.js`，随构建 stage 到生成站）                                                                       |
-| `overrides/`                                  | mkdocs `custom_dir`：`main.html` 覆写 site_meta 移除主题版本号；`partials/actions.html` 追加 Fumadocs 风格 Open 菜单（GitHub / Markdown / Perplexity / Grok / ChatGPT / Claude Web / Claude Desktop / Claude Code / OpenAI Codex / Cursor）；`.icons/ai/` 存放菜单品牌图标 |
+| `overrides/`                                  | mkdocs `custom_dir`：`main.html` 覆写 site_meta 移除主题版本号；`partials/actions.html` 追加 Fumadocs 风格文章操作区（复制 Markdown + GitHub / Markdown / Perplexity / Grok / ChatGPT / Claude Web / Claude Desktop / Claude Code / OpenAI Codex / Cursor 打开菜单）；`.icons/ai/` 存放菜单品牌图标 |
 | `scripts/`                                    | 三平台薄启动器（`nmteam.sh` / `nmteam.ps1` / `nmteam.bat`）                                                                                                                                                                                                                |
 | `tests/`                                      | pytest 测试（17 个文件 + conftest.py）                                                                                                                                                                                                                                     |
 | `cache/`、`generated/`、`site/`、`mkdocs.yml` | 生成产物，勿手改勿提交                                                                                                                                                                                                                                                     |
@@ -122,9 +123,9 @@ Markdown 文档（`docs/`）：
 | `.github/workflows/ci.yml`                                    | 三 OS 矩阵 CI（push main/dev + PR）：uv sync --frozen → nmteam check → 验证三个启动器                                                                  |
 | `.mdformat.toml`                                              | mdformat 配置（wrap=keep、LF）                                                                                                                         |
 | `overrides/main.html`                                         | 移除 meta 中 mkdocs-material 版本号                                                                                                                    |
-| `overrides/partials/actions.html`                             | 覆盖 material actions partial：保留编辑/查看按钮，追加十项 Open 操作菜单                                                                               |
-| `assets/js/ai-tools.js`                                       | 菜单交互：开关状态、外部点击/Escape 关闭、View-as-Markdown 开发模式提示，以及八种 AI 服务的页面 URL 深链                                               |
-| `assets/styles/ai-tools.css`                                  | Open 触发器与半透明弹层样式，适配明暗主题和窄屏                                                                                                        |
+| `overrides/partials/actions.html`                             | 覆盖 material actions partial：保留编辑/查看按钮，追加复制 Markdown 按钮与十项文章打开菜单                                                             |
+| `assets/js/ai-tools.js`                                       | 文章操作交互：复制当前页 Markdown、菜单开关、外部点击/Escape 关闭、开发模式提示，以及八种 AI 服务的页面 URL 深链                                        |
+| `assets/styles/ai-tools.css`                                  | 文章操作按钮组与半透明弹层样式，适配明暗主题和窄屏                                                                                                      |
 
 ## Runtime/Tooling Preferences
 
