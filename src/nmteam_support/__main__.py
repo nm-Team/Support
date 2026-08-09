@@ -1,6 +1,6 @@
-"""Entry point: ``uv run python -m nmteam_support`` regenerates the site."""
+"""Module entry point for the nmTeam Support CLI."""
 
-from nmteam_support.generator import default_options, generate
+from nmteam_support.cli import main
 
 if __name__ == "__main__":
-    generate(default_options())
+    main()
