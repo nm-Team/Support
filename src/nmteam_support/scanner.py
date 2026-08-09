@@ -44,7 +44,7 @@ def _scan(dir_path: Path, rel_path: str) -> ScannedDir:
     index_body = ""
     has_index = False
 
-    for name in os.listdir(dir_path):  # keep listdir order for stable ties
+    for name in sorted(os.listdir(dir_path)):  # deterministic order, cross-platform
         entry = dir_path / name
         child_rel = f"{rel_path}/{name}" if rel_path else name
         if entry.is_dir():
