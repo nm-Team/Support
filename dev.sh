@@ -17,4 +17,4 @@ if [ $# -eq 0 ]; then
     exit 0
 fi
 
-python manage.py "$@"
+uv run python manage.py "$@"

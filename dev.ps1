@@ -26,10 +26,10 @@ if ($Command -eq "" -or $Command -eq "help") {
     Write-Host "示例:" -ForegroundColor Yellow
     Write-Host "  .\dev.ps1 dev      # 启动开发服务器" -ForegroundColor Gray
     Write-Host "  .\dev.ps1 build    # 构建生产版本" -ForegroundColor Gray
-    Write-Host "  .\dev.ps1 clean    # 清理临时文件" -ForegroundColor Gray
+    Write-Host "  .\dev.ps1 clean    # 清理生成的文件" -ForegroundColor Gray
     exit 0
 }
 
 # 执行 Python 脚本
 $arguments = @($Command) + $RemainingArgs
-& python manage.py $arguments
+& uv run python manage.py $arguments

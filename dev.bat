@@ -17,4 +17,4 @@ if "%1"=="" (
     goto :eof
 )
 
-python manage.py %*
+uv run python manage.py %*
