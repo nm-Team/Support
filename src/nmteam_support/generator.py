@@ -20,6 +20,7 @@ class GeneratorOptions:
     """All paths the generator touches; tests inject tmp_path-based values."""
 
     docs_dir: Path
+    assets_dir: Path
     template_path: Path
     redirects_path: Path
     cache_dir: Path
@@ -31,6 +32,7 @@ def default_options(root: Path | None = None) -> GeneratorOptions:
     root = root or Path.cwd()
     return GeneratorOptions(
         docs_dir=root / "docs",
+        assets_dir=root / "assets",
         template_path=root / "mkdocs-template.yml",
         redirects_path=root / "redirects.json",
         cache_dir=root / "cache",
@@ -51,6 +53,8 @@ def generate(options: GeneratorOptions) -> None:
 
     _write_tree(options.docs_dir, cache_dir, root)
     _write_indexes(cache_dir, root)
+    if options.assets_dir.exists():
+        shutil.copytree(options.assets_dir, cache_dir / "assets", dirs_exist_ok=True)
 
     nav_yaml = build_nav_yaml(root)
     template = options.template_path.read_text(encoding="UTF-8", errors="ignore")

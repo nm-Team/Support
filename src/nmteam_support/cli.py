@@ -96,7 +96,7 @@ def _watch_and_regenerate(options: GeneratorOptions, stop: threading.Event) -> N
 
 def _snapshot(options: GeneratorOptions) -> tuple[tuple[int, int], ...]:
     stamps: list[tuple[int, int]] = []
-    for root in (options.docs_dir, options.template_path):
+    for root in (options.docs_dir, options.assets_dir, options.template_path):
         if root.is_file():
             stamps.append((root.stat().st_mtime_ns, root.stat().st_size))
         elif root.is_dir():

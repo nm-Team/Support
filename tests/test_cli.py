@@ -16,6 +16,7 @@ runner = CliRunner()
 def _options(tmp_path: Path) -> GeneratorOptions:
     return GeneratorOptions(
         docs_dir=tmp_path / "docs",
+        assets_dir=tmp_path / "assets",
         template_path=tmp_path / "mkdocs-template.yml",
         redirects_path=tmp_path / "redirects.json",
         cache_dir=tmp_path / "cache",
@@ -192,3 +193,13 @@ def test_watcher_continues_after_generation_error(tmp_path, monkeypatch, capsys)
 
     assert generate_calls == 2
     assert "temporary failure" in capsys.readouterr().err
+
+
+def test_snapshot_changes_when_asset_changes(tmp_path):
+    opts = _options(tmp_path)
+    opts.assets_dir.mkdir()
+    before = cli._snapshot(opts)
+
+    (opts.assets_dir / "site.css").write_text("body {}\n", encoding="utf-8")
+
+    assert cli._snapshot(opts) != before

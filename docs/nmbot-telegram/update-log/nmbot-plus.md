@@ -4,7 +4,7 @@ index: -2411
 
 # nmBot+ (2024 年 11 月)
 
-![nmBot+](../img/update-pictures/nmBot%20plus.png)
+![nmBot+](/assets/images/nmbot/update-pictures/nmBot%20plus.png)
 
 nmTeam 今日推出 nmBot+，一项为需要更多高级功能的 nmBot 用户和群组量身打造的专属付费方案。
 
