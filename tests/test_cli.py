@@ -129,7 +129,14 @@ def test_check_runs_complete_pipeline_in_order(tmp_path, monkeypatch):
         ["ruff", "check", "."],
         ["ruff", "format", "--check", "."],
         ["pytest"],
-        ["mdformat", "--check", "README.md", "docs/"],
+        [
+            "mdformat",
+            "--check",
+            "--exclude",
+            "docs/superpowers/**",
+            "README.md",
+            "docs/",
+        ],
     ]
     assert build_options == [options]
 

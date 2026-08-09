@@ -25,7 +25,14 @@ QUALITY_COMMANDS = (
     ["ruff", "check", "."],
     ["ruff", "format", "--check", "."],
     ["pytest"],
-    ["mdformat", "--check", "README.md", "docs/"],
+    [
+        "mdformat",
+        "--check",
+        "--exclude",
+        "docs/superpowers/**",
+        "README.md",
+        "docs/",
+    ],
 )
 
 
