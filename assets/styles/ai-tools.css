@@ -4,8 +4,11 @@
 .ai-tools {
     display: inline-flex;
     gap: 6px;
-    margin-inline-start: 8px;
-    vertical-align: middle;
+    /* Align with Material's action buttons (edit/view) in the top-right
+       corner of the content area; without the float the group renders
+       stacked against the hero banner on the home page. */
+    float: right;
+    margin: 8px 8px 0 0;
 }
 
 .ai-tools__link {
