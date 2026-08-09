@@ -2,9 +2,21 @@
 
 from __future__ import annotations
 
+import yaml
+
 from nmteam_support.docslist import render_docs_list
 from nmteam_support.nav import folder_entries, sort_entries
 from nmteam_support.scanner import ScannedDir
+
+
+def _yaml_title_scalar(title: str) -> str:
+    """Render ``title`` as a single valid YAML scalar, quoting only when needed."""
+    out = yaml.safe_dump(title, default_flow_style=True, allow_unicode=True)
+    # PyYAML >= 6.0.3 closes a plain root scalar with an explicit document-end
+    # marker ("..."); it is not part of the scalar, so drop it.
+    if out.endswith("\n...\n"):
+        out = out[: -len("\n...\n")] + "\n"
+    return out.strip()
 
 
 def render_index_page(scan: ScannedDir) -> str:
@@ -12,7 +24,8 @@ def render_index_page(scan: ScannedDir) -> str:
     head_lines = [
         "---",
         "automatically_generated: Don't edit this file directly, it's auto generated.",
-        f"title: {scan.index_meta.title}",
+        # safe_dump emits a properly quoted/escaped YAML scalar for any title.
+        f"title: {_yaml_title_scalar(scan.index_meta.title)}",
         "",
         "hide:",
         "  - toc",

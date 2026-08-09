@@ -1,5 +1,8 @@
 """Directory scanning tests."""
 
+import os
+
+from nmteam_support import scanner
 from nmteam_support.scanner import scan_docs
 
 
@@ -35,3 +38,18 @@ def test_scan_skips_empty_md_files(docs_dir):
     (docs_dir / "empty.md").write_text("", encoding="utf-8")
     root = scan_docs(docs_dir)
     assert "empty.md" not in [d.name for d in root.docs]
+
+
+def test_scan_sorts_when_listdir_order_is_unordered(monkeypatch, docs_dir):
+    """Same-index docs keep alphabetical order even when the OS enumerates
+    entries in a non-alphabetical order, so nav order is stable across platforms."""
+    d = docs_dir / "nmbot-telegram"
+    for name in ["alpha.md", "mike.md", "zeta.md"]:
+        (d / name).write_text(f"---\ntitle: {name}\n---\n\n# {name}\n", encoding="utf-8")
+
+    real_listdir = os.listdir
+    monkeypatch.setattr(scanner.os, "listdir", lambda p: sorted(real_listdir(p), reverse=True))
+
+    root = scan_docs(docs_dir)
+    nmbot = next(s for s in root.subdirs if s.rel_path == "nmbot-telegram")
+    assert [doc.name for doc in nmbot.docs] == ["alpha.md", "mcp.md", "mike.md", "zeta.md"]

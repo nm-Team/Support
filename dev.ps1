@@ -1,7 +1,4 @@
 # nmTeam Documentation Management PowerShell Script
-# Enable UTF-8 encoding
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-$OutputEncoding = [System.Text.Encoding]::UTF8
 
 param(
     [Parameter(Position=0)]
@@ -9,6 +6,11 @@ param(
     [Parameter(ValueFromRemainingArguments=$true)]
     [string[]]$RemainingArgs
 )
+
+# Enable UTF-8 encoding (must come after the param() block, which PowerShell
+# requires to be the first executable statement of the script)
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
 
 Write-Host "nmTeam Documentation Manager" -ForegroundColor Cyan
 Write-Host ""

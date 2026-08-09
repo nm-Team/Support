@@ -1,5 +1,7 @@
 """Index page generation tests."""
 
+import yaml
+
 from nmteam_support.index import render_index_page
 from nmteam_support.scanner import scan_docs
 
@@ -39,3 +41,14 @@ def test_index_page_default_content_without_index_md(tmp_path):
     page = render_index_page(scan_docs(d))
     assert "# docs2\n" in page
     assert '<div class="docsList">' in page  # empty list div is still emitted
+
+
+def test_index_page_title_with_yaml_special_chars_round_trips(tmp_path):
+    """Titles containing colons or hashes must be emitted as valid YAML so a
+    strict mkdocs build can parse the generated frontmatter."""
+    d = tmp_path / "docs"
+    d.mkdir()
+    (d / "index.md").write_text("---\ntitle: FAQ: 常见问题 #1\n---\n\n# FAQ\n", encoding="utf-8")
+    page = render_index_page(scan_docs(d))
+    frontmatter = page.split("---", 2)[1]
+    assert yaml.safe_load(frontmatter)["title"] == "FAQ: 常见问题 #1"

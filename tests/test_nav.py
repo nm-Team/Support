@@ -3,6 +3,7 @@
 from nmteam_support.models import DocEntry
 from nmteam_support.nav import build_nav_yaml, sort_entries
 from nmteam_support.scanner import scan_docs
+from nmteam_support.template import render_mkdocs_yml
 
 
 def _entry(path, name, index=0, kind="doc"):
@@ -67,3 +68,13 @@ def test_negative_index_doc_precedes_default_index_doc(docs_dir):
         < nav.index("'contact-us/forum.md'")
         < nav.index("'contact-us/support.md'")
     )
+
+
+def test_render_mkdocs_yml_keeps_backslash_digit_nav():
+    """A nav line containing a backslash-digit sequence must be injected literally,
+    not interpreted as a regex group reference."""
+    template = "site_name: Test\nnav:\n# NAV_ARIA_START\n# NAV_ARIA_END\n"
+    nav = "  - Regex \\1 Escape: 'r.md'"
+    out = render_mkdocs_yml(template, nav)
+    assert "Regex \\1 Escape" in out
+    assert "# NAV_ARIA_START\n  - Regex \\1 Escape: 'r.md'\n# NAV_ARIA_END" in out
