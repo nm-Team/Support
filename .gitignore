@@ -132,3 +132,6 @@ dmypy.json
 
 # uv / ruff
 .ruff_cache/
+
+# Local design and implementation artifacts
+/docs/superpowers/

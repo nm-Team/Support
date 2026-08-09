@@ -22,20 +22,5 @@ jobs:
       - name: Sync dependencies (frozen)
         run: uv sync --frozen
 
-      - name: Ruff lint
-        run: uv run ruff check .
-
-      - name: Ruff format check
-        run: uv run ruff format --check .
-
-      - name: Tests
-        run: uv run pytest
-
-      - name: Markdown format check
-        run: uv run mdformat --check docs/
-
-      - name: Generate documentation
-        run: uv run python -m nmteam_support
-
-      - name: Build site (strict)
-        run: uv run mkdocs build --strict
+      - name: Run quality checks
+        run: uv run nmteam check
