@@ -18,23 +18,23 @@ nmBot 管理功能仅在授予 nmBot 必要的管理员权限后可用。
 
 第一步：打开群组信息页面，点击右上角的菜单按钮，然后选择“管理群组”(Manage Group，根据翻译不同可能有所区别，下同)。
 
-![](../img/add_to_admin_step_1.png)
+![](/assets/images/nmbot/add_to_admin_step_1.png)
 
 第二步：选择“管理员”(Admins)选项。
 
-![](../img/add_to_admin_step_2.png)
+![](/assets/images/nmbot/add_to_admin_step_2.png)
 
 第三步：点击“添加管理员”(Add Admin)按钮。
 
-![](../img/add_to_admin_step_3.png)
+![](/assets/images/nmbot/add_to_admin_step_3.png)
 
 第四步：搜索并点击“nmBot”选项。
 
-![](../img/add_to_admin_step_4.png)
+![](/assets/images/nmbot/add_to_admin_step_4.png)
 
 第五步：确保至少选中了“删除消息”(Delete Messages)和“封禁用户”(Ban Users)权限，然后选择保存。
 
-![](../img/add_to_admin_step_5.png)
+![](/assets/images/nmbot/add_to_admin_step_5.png)
 
 ## 将 nmBot 添加为管理员
 
@@ -48,10 +48,10 @@ nmBot 管理功能仅在授予 nmBot 必要的管理员权限后可用。
 
 第一步：打开 nmBot 个人信息页面，在菜单中选择“添加到群组或频道”(Add to Group or Channel，根据翻译不同可能有所区别，下同)。
 
-![](../img/add_as_admin_step_1.png)
+![](/assets/images/nmbot/add_as_admin_step_1.png)
 
 第二步：选择需要添加 nmBot 的群组。
 
 第三步：在弹出的对话框中，确保打开“管理员权限”(Admin Rights)并选中了“删除消息”(Delete Messages)和“封禁用户”(Ban Users)权限，然后选择“添加机器人为管理员”(Add Bot as Admin)。
 
-![](../img/add_as_admin_step_2.png)
+![](/assets/images/nmbot/add_as_admin_step_2.png)

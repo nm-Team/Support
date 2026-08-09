@@ -4,7 +4,7 @@ title: nmBot Telegram 帮助文档
 
 # nmBot Telegram 帮助文档
 
-![欢迎](./img/doc%20cover.png)
+![欢迎](/assets/images/nmbot/doc%20cover.png)
 
 尊敬的用户，您好！
 
@@ -14,13 +14,13 @@ title: nmBot Telegram 帮助文档
 
 <center>
 <a href="https://t.me/nmnmfunbot" target="_blank">
-![开始使用 nmBot](./img/doc%20start%20telegram.png){ width="200" }
+![开始使用 nmBot](/assets/images/nmbot/doc%20start%20telegram.png){ width="200" }
 </a>
 <a href="https://nmbot.nmnm.fun" target="_blank">
-![开始使用 nmBot](./img/doc%20start%20panel.png){ width="200" }
+![开始使用 nmBot](/assets/images/nmbot/doc%20start%20panel.png){ width="200" }
 </a>
 <a href="https://nmteam.xyz/products/overview/nmBot-Telegram" target="_blank">
-![开始使用 nmBot](./img/doc%20start%20intro.png){ width="200" }
+![开始使用 nmBot](/assets/images/nmbot/doc%20start%20intro.png){ width="200" }
 </a>
 </center>
 

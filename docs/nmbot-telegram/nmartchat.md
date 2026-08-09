@@ -26,10 +26,10 @@ nmBot 在收到私信和打开 nmartChat 功能的群组回复的贴纸消息时
 !!! faq "没有在面板中找到您的群聊？"
 
     您必须为此群聊的**管理员**, 且需要在群内发送 `/regadmin@nmnmfunbot` 注册您的群聊。
-    ![regadmin](img/nmartchat_regadmin.png)
+    ![regadmin](/assets/images/nmbot/nmartchat_regadmin.png)
 
 3.在群聊设置中开启 nmartChat 功能。\
-![enablechat](img/nmartchat_panel_enablechat.png)
+![enablechat](/assets/images/nmbot/nmartchat_panel_enablechat.png)
 
 !!! faq "为什么在频道（或在群聊内使用频道身份）发送以 nm 开头的消息，nmBot 不回复我？"
 

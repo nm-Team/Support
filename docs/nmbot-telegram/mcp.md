@@ -29,9 +29,9 @@ description: 创建和管理 nmBot MCP Access Token，并在 VS Code 等外部�
 
 您可以在 nmBot 面板中找到 `MCP 配置` 入口。
 
-![nmBot 面板中的 MCP 配置入口](img/mcp/mcp-entry.png)
+![nmBot 面板中的 MCP 配置入口](/assets/images/nmbot/mcp/mcp-entry.png)
 
-![MCP 配置页面](img/mcp/mcp-config-page.png){ width="360" }
+![MCP 配置页面](/assets/images/nmbot/mcp/mcp-config-page.png){ width="360" }
 
 ## 创建 MCP Access Token
 
@@ -44,13 +44,13 @@ description: 创建和管理 nmBot MCP Access Token，并在 VS Code 等外部�
 1. 创建成功后，系统会弹出提示框并展示完整 Token。
 1. 立即复制该 Token，并保存在安全的位置。
 
-![创建 MCP Access Token](img/mcp/mcp-create-token-dialog.png){ width="360" }
+![创建 MCP Access Token](/assets/images/nmbot/mcp/mcp-create-token-dialog.png){ width="360" }
 
 ## 创建后会看到什么
 
 Token 创建成功后，完整 Token 只会展示这一次。返回列表后，通常只能看到 Token 名称、创建时间，以及经过部分隐藏的 Token 内容。
 
-![Token 创建成功后的提示](img/mcp/mcp-token-created-dialog.png){ width="360" }
+![Token 创建成功后的提示](/assets/images/nmbot/mcp/mcp-token-created-dialog.png){ width="360" }
 
 ## 在 VS Code 中使用 nmBot MCP
 
@@ -65,7 +65,7 @@ Token 创建成功后，完整 Token 只会展示这一次。返回列表后，�
 
 如果这是您个人长期使用的配置，通常更适合放在用户配置中。
 
-![在 VS Code 中打开 MCP 用户配置](img/mcp/mcp-vscode-command-palette.png)
+![在 VS Code 中打开 MCP 用户配置](/assets/images/nmbot/mcp/mcp-vscode-command-palette.png)
 
 ### 2. 添加 nmBot MCP 服务器配置
 
@@ -85,7 +85,7 @@ Token 创建成功后，完整 Token 只会展示这一次。返回列表后，�
 }
 ```
 
-![VS Code 中的 MCP 配置示例](img/mcp/mcp-vscode-user-config.png){ width="720" }
+![VS Code 中的 MCP 配置示例](/assets/images/nmbot/mcp/mcp-vscode-user-config.png){ width="720" }
 
 请注意：
 

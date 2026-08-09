@@ -13,8 +13,11 @@ def _full_options(tmp_path: Path, docs_dir: Path, redirects: str | None = None) 
     )
     if redirects is not None:
         (tmp_path / "redirects.json").write_text(redirects, encoding="utf-8")
+    assets_dir = tmp_path / "assets"
+    assets_dir.mkdir(exist_ok=True)
     return GeneratorOptions(
         docs_dir=docs_dir,
+        assets_dir=assets_dir,
         template_path=tmp_path / "mkdocs-template.yml",
         redirects_path=tmp_path / "redirects.json",
         cache_dir=tmp_path / "cache",
@@ -31,6 +34,19 @@ def test_generate_writes_all_outputs(tmp_path, docs_dir):
     mkdocs_yml = options.mkdocs_yml_path.read_text(encoding="utf-8")
     assert "NAV_ARIA_START" in mkdocs_yml
     assert "nmbot-telegram/mcp.md" in mkdocs_yml
+
+
+def test_generate_stages_centralized_assets(tmp_path, docs_dir):
+    options = _full_options(tmp_path, docs_dir)
+    stylesheet = options.assets_dir / "styles" / "site.css"
+    stylesheet.parent.mkdir(parents=True)
+    stylesheet.write_text("body { color: black; }\n", encoding="utf-8")
+
+    generate(options)
+
+    assert (options.generated_dir / "assets" / "styles" / "site.css").read_text(
+        encoding="utf-8"
+    ) == stylesheet.read_text(encoding="utf-8")
 
 
 def test_generate_injects_contributing_note(tmp_path, docs_dir):
@@ -86,6 +102,7 @@ def test_generate_real_docs_tree(tmp_path):
         pytest.skip("docs/ not present")
     options = GeneratorOptions(
         docs_dir=docs,
+        assets_dir=repo_root / "assets",
         template_path=repo_root / "mkdocs-template.yml",
         redirects_path=repo_root / "redirects.json",
         cache_dir=tmp_path / "cache",

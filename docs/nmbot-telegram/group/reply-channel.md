@@ -10,7 +10,7 @@
 
 !!! success "启用“同频气氛组”功能实例"
 
-    ![](../img/reply-channel_eg.png)
+    ![](/assets/images/nmbot/reply-channel_eg.png)
 
 ## <nmbot-intelligence-icon></nmbot-intelligence-icon> nmBot 智能同频气氛组 (Beta 版)
 

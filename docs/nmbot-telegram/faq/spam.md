@@ -13,7 +13,7 @@ description: 了解 nmBot 骚扰拦截功能常见问题。
 许多 nmBot 功能和其他机器人的功能，甚至群组管理员和 Telegram 本身都可以删除消息和封禁用户。
 因此，您的消息被删除/您被封禁，不一定是 nmBot 的功能导致的。
 
-![关于不同的封禁情况](../../img/spam%20faq.png)
+![关于不同的封禁情况](/assets/images/shared/spam%20faq.png)
 
 ## 如何了解我是不是被识别为了骚扰用户而被封禁的？
 
