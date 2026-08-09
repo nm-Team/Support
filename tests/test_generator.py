@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import pytest
+from PIL import Image
 
 from nmteam_support.generator import GeneratorOptions, generate, render_doc_file
 
@@ -47,6 +48,18 @@ def test_generate_stages_centralized_assets(tmp_path, docs_dir):
     assert (options.generated_dir / "assets" / "styles" / "site.css").read_text(
         encoding="utf-8"
     ) == stylesheet.read_text(encoding="utf-8")
+
+
+def test_generate_emits_optimized_raster_variants(tmp_path, docs_dir):
+    options = _full_options(tmp_path, docs_dir)
+    image_path = options.assets_dir / "images" / "diagram.png"
+    image_path.parent.mkdir(parents=True)
+    Image.new("RGB", (16, 16), "red").save(image_path)
+
+    generate(options)
+
+    assert (options.generated_dir / "assets" / "images" / "diagram.png").exists()
+    assert (options.generated_dir / "assets" / "images" / "diagram.webp").exists()
 
 
 def test_generate_injects_contributing_note(tmp_path, docs_dir):

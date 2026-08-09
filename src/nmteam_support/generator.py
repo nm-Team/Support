@@ -8,6 +8,7 @@ from pathlib import Path
 
 from nmteam_support.contributing import render_contributing_note, should_hide_contributing_note
 from nmteam_support.frontmatter import split_frontmatter
+from nmteam_support.image_pipeline import stage_assets
 from nmteam_support.index import render_index_page
 from nmteam_support.nav import build_nav_yaml
 from nmteam_support.redirects import load_redirects, render_redirects_js
@@ -54,7 +55,7 @@ def generate(options: GeneratorOptions) -> None:
     _write_tree(options.docs_dir, cache_dir, root)
     _write_indexes(cache_dir, root)
     if options.assets_dir.exists():
-        shutil.copytree(options.assets_dir, cache_dir / "assets", dirs_exist_ok=True)
+        stage_assets(options.assets_dir, cache_dir / "assets")
 
     nav_yaml = build_nav_yaml(root)
     template = options.template_path.read_text(encoding="UTF-8", errors="ignore")

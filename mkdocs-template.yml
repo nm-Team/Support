@@ -39,6 +39,7 @@ extra:
 copyright: Copyright 2022-2025 nmTeam. All rights reserved. <br>This website is licensed under the MIT License.
 
 markdown_extensions:
+  - nmteam_support.markdown_images
   - attr_list
   - md_in_html
   - footnotes
