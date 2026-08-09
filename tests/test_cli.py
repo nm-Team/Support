@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+import nmteam_support.cli as cli
 from nmteam_support.cli import cmd_clean
 from nmteam_support.generator import GeneratorOptions
 
@@ -26,3 +27,30 @@ def test_cmd_clean_removes_output_dirs(tmp_path):
     assert not opts.cache_dir.exists()
     assert not opts.generated_dir.exists()
     assert not (tmp_path / "site").exists()
+
+
+def test_watcher_continues_after_generation_error(tmp_path, monkeypatch, capsys):
+    opts = _options(tmp_path)
+    snapshots = iter([(), ((1, 1),), ((2, 2),)])
+    generate_calls = 0
+
+    class StopAfterTwoChanges:
+        waits = 0
+
+        def wait(self, _timeout):
+            self.waits += 1
+            return self.waits > 2
+
+    def generate_once_then_succeed(_options):
+        nonlocal generate_calls
+        generate_calls += 1
+        if generate_calls == 1:
+            raise OSError("temporary failure")
+
+    monkeypatch.setattr(cli, "_snapshot", lambda _options: next(snapshots))
+    monkeypatch.setattr(cli, "generate", generate_once_then_succeed)
+
+    cli._watch_and_regenerate(opts, StopAfterTwoChanges())
+
+    assert generate_calls == 2
+    assert "temporary failure" in capsys.readouterr().err
