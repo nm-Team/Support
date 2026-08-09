@@ -1,7 +1,6 @@
 {#-
   Overrides Material's actions partial: keeps the edit/view source buttons
-  (unused today, no repo_url is configured) and adds the AI tools button
-  group (view as Markdown, open in ChatGPT / Claude).
+  and adds a Fumadocs-style menu for source, Markdown, and AI actions.
 -#}
 {% if page.edit_url %}
   {% if "content.action.edit" in features %}
@@ -23,10 +22,45 @@
   {% endif %}
 {% endif %}
 
+{% macro ai_action(label, icon, kind, href="#") -%}
+  <a
+    class="ai-tools__item"
+    href="{{ href }}"
+    role="menuitem"
+    data-ai="{{ kind }}"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <span class="ai-tools__item-icon">{% include ".icons/" ~ icon %}</span>
+    <span class="ai-tools__label">{{ label }}</span>
+    <span class="ai-tools__external">{% include ".icons/material/open-in-new.svg" %}</span>
+  </a>
+{%- endmacro %}
+
 {% if page %}
-<div class="ai-tools" data-md-url="{{ page.url }}" data-page-title="{{ page.title | e }}">
-  <a class="ai-tools__link" href="#" data-ai="markdown" title="查看本页的 Markdown 版本">Markdown</a>
-  <button class="ai-tools__link" type="button" data-ai="chatgpt" title="在 ChatGPT 中打开本页内容">ChatGPT</button>
-  <button class="ai-tools__link" type="button" data-ai="claude" title="在 Claude 中打开本页内容">Claude</button>
-</div>
+  {% set source_url = "https://github.com/nm-Team/Support/blob/main/docs/" ~ page.file.src_uri %}
+  <div
+    class="ai-tools"
+    data-md-url="{{ page.url }}"
+    data-page-title="{{ page.title | e }}"
+  >
+    <button
+      class="ai-tools__trigger"
+      type="button"
+      aria-haspopup="menu"
+      aria-expanded="false"
+      aria-controls="ai-tools-menu"
+    >
+      <span>Open</span>
+      <span class="ai-tools__chevron">{% include ".icons/material/chevron-down.svg" %}</span>
+    </button>
+    <div class="ai-tools__menu" id="ai-tools-menu" role="menu" hidden>
+      {{ ai_action("Open in GitHub", "fontawesome/brands/github.svg", "github", source_url) }}
+      {{ ai_action("View as Markdown", "material/language-markdown.svg", "markdown") }}
+      {{ ai_action("Open in Scira AI", "material/creation-outline.svg", "scira") }}
+      {{ ai_action("Open in ChatGPT", "fontawesome/brands/openai.svg", "chatgpt") }}
+      {{ ai_action("Open in Claude", "simple/anthropic.svg", "claude") }}
+      {{ ai_action("Open in Cursor", "simple/cursor.svg", "cursor") }}
+    </div>
+  </div>
 {% endif %}
