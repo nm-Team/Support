@@ -67,6 +67,8 @@ def extract_description(metadata_raw: str, body: str) -> str:
         if match:
             return match.group(1).strip()
     for line in body.split("\n"):
+        if line[:1] in (" ", "\t"):
+            continue
         stripped = line.strip()
         if not stripped:
             continue
