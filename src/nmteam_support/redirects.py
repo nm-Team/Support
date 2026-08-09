@@ -7,11 +7,12 @@ from pathlib import Path
 
 
 def load_redirects(path: Path) -> dict[str, str] | None:
-    """Load the redirect map; return None when the file is missing."""
-    if not path.exists():
+    """Load the redirect map; return None when the file is missing or invalid."""
+    try:
+        with path.open(encoding="utf-8") as f:
+            return json.load(f)["redirects"]
+    except (json.JSONDecodeError, KeyError, OSError):
         return None
-    with path.open(encoding="utf-8") as f:
-        return json.load(f)["redirects"]
 
 
 def render_redirects_js(redirects: dict[str, str]) -> str:

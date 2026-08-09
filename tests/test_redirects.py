@@ -25,3 +25,15 @@ def test_load_redirects_reads_map(tmp_path):
     p = tmp_path / "redirects.json"
     p.write_text(json.dumps({"redirects": {"/a/": "/b/"}}), encoding="utf-8")
     assert load_redirects(p) == {"/a/": "/b/"}
+
+
+def test_load_redirects_invalid_json(tmp_path):
+    p = tmp_path / "redirects.json"
+    p.write_text("{ not valid json", encoding="utf-8")
+    assert load_redirects(p) is None
+
+
+def test_load_redirects_missing_key(tmp_path):
+    p = tmp_path / "redirects.json"
+    p.write_text(json.dumps({"foo": 1}), encoding="utf-8")
+    assert load_redirects(p) is None
