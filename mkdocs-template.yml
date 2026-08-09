@@ -1,4 +1,5 @@
 site_name: nmTeam Support
+site_url: https://support.nmteam.xyz
 plugins:
   - search
   - minify:
@@ -33,8 +34,8 @@ theme:
     - navigation.sections
     - toc.integrate
     - navigation.top
-extra_css: [assets/styles/docsList.css, assets/styles/plus.css]
-extra_javascript: [assets/js/redirects.js]
+extra_css: [assets/styles/docsList.css, assets/styles/plus.css, assets/styles/ai-tools.css]
+extra_javascript: [assets/js/redirects.js, assets/js/ai-tools.js]
 docs_dir: generated
 
 extra:

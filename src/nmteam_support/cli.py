@@ -10,7 +10,12 @@ from pathlib import Path
 
 import typer
 
-from nmteam_support.generator import GeneratorOptions, default_options, generate
+from nmteam_support.generator import (
+    GeneratorOptions,
+    default_options,
+    generate,
+    stage_markdown_copies,
+)
 from nmteam_support.redirects import (
     RedirectConfigError,
     read_redirects,
@@ -55,7 +60,13 @@ def cmd_clean(options: GeneratorOptions) -> int:
 def cmd_build(options: GeneratorOptions) -> int:
     """Regenerate and build the static site into site/."""
     generate(options)
-    return subprocess.call([sys.executable, "-m", "mkdocs", "build", "--strict", "--clean"])
+    code = subprocess.call([sys.executable, "-m", "mkdocs", "build", "--strict", "--clean"])
+    if code:
+        return code
+    site_dir = options.mkdocs_yml_path.parent / "site"
+    stage_markdown_copies(options.cache_dir, site_dir)
+    print("Markdown copies staged into site/.")
+    return 0
 
 
 def cmd_dev(options: GeneratorOptions) -> int:
