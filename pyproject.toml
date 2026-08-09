@@ -9,6 +9,9 @@ dependencies = [
     "pyyaml>=6.0.2",
 ]
 
+[project.scripts]
+nmteam = "nmteam_support.cli:main"
+
 [dependency-groups]
 dev = [
     "mdformat>=1.0",
