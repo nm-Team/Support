@@ -45,7 +45,5 @@ def serve_site(directory: Path, port: int = DEFAULT_PORT, bind: str = DEFAULT_BI
     print(f"Serving {directory.resolve()} at http://{host}:{bound_port}")
     try:
         server.serve_forever()
-    except KeyboardInterrupt:
-        pass
     finally:
         server.server_close()
