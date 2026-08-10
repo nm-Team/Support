@@ -223,6 +223,27 @@
     }
 }
 
+@media (max-width: 48em) {
+    .md-content__inner {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .md-content__inner > h1 {
+        order: -1;
+    }
+
+    .md-content__inner > .ai-tools {
+        order: 0;
+        float: none;
+        margin: 0 0 16px;
+    }
+
+    .md-content__inner > :not(h1):not(.ai-tools) {
+        order: 1;
+    }
+}
+
 @media (max-width: 44.984375em) {
     .ai-tools {
         flex-wrap: wrap;
