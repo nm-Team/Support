@@ -2,71 +2,60 @@
 
 ## Project Overview
 
-nmTeam Support 官方支持文档站（https://support.nmteam.xyz）的构建工具链。纯文档 + Python 工具链仓库：内容为简体中文，覆盖 nmBot（Telegram 机器人）及其 Plus / Intelligence 产品线；工具链负责扫描 `docs/` 与 `assets/`，自动生成 mkdocs 目录结构（nav）、各目录 `index.md`、图片 WebP 优化与重定向脚本，再用 `mkdocs-material` 构建静态站。
+nmTeam Support 官方支持文档站（https://support.nmteam.xyz）的构建工具链。纯文档 + Python 工具链仓库：内容为简体中文，覆盖 nmBot（Telegram 机器人）及其 Plus / Intelligence 产品线；自研 MkDocs 插件负责扫描 `docs/` 与 `assets/`，在构建期提供 nav、目录页、贡献提示、图片 WebP 优化与重定向脚本，再用 `mkdocs-material` 构建静态站。
 
 本项目是 main 分支旧版（单文件 `generate.py`/`manage.py`/`redirects_manager.py` + `runtime.txt` 3.7 + pip）的现代化重构：**uv 管理、Python 3.14+、`src/` 包结构、Typer CLI、pytest 测试、ruff/mdformat 检查、三平台 CI**。
 
 ## Architecture & Data Flow
 
-数据流（四输入 → 生成 → 构建）：
+数据流（输入 → 单次构建）：
 
 ```
-docs/ (markdown 源) ─┐
-assets/ (images/icons/styles 母版) ─┤
-mkdocs-template.yml ─┤ generate() → cache/ ─copytree→ generated/ (mkdocs docs_dir) → mkdocs build --strict → site/
-redirects.json ──────┘        (含生成的 assets/js/redirects.js)
+docs/ (Markdown 源) ───────────────┐
+assets/ (images/icons/styles 母版) ├→ nmteam-support MkDocs 插件 → site/
+redirects.json ────────────────────┘
 ```
 
-构建后还有一步：`stage_markdown_copies()` 把 `cache/` 下每个 `.md` 复制到 `site/`
-同路径（如 `site/nmbot-telegram/mcp.md`），作为每页的 Markdown 版本，供
-`/llms.txt` 链接、“复制 Markdown”按钮、View-as-Markdown 菜单项与 AI 打开
-菜单。
+`src/nmteam_support/plugin.py` 编排完整链路：
 
-`generate()`（`src/nmteam_support/generator.py`）编排的完整链路：
+1. `scanner.refresh_catalog()` 递归扫描 `docs/`，按 mtime + size 复用未变页面，只重新读取变更 Markdown。
+1. `nav.py` 直接提供 MkDocs 原生 nav 数据结构，不再生成或解析 YAML。
+1. `index.py` 与 `contributing.py` 在 `on_page_markdown` 阶段转换页面，不写源目录副本。
+1. `redirects.py` 与 `llms.py` 通过 MkDocs 1.6 虚拟文件 API 提供 `redirects.js` 和 `llms.txt`。
+1. 非栅格资源由 MkDocs 直接从 `assets/` 复制；`image_pipeline.py` 并行优化 PNG/JPEG 并直接写入最终 `site/assets/`。dirty build 会跳过目标较新的图片。
+1. 生产 build 的 `on_post_build` 直接把处理后的 Markdown 版本写到 `site/` 同路径，供 `/llms.txt`、“复制 Markdown”和 AI 菜单使用。
 
-1. 清空重建 `cache/`
-1. `scanner.scan_docs()` 递归扫描 `docs/` 得到文档树（`SKIP_DIRS`/`INTERNAL_DIRS` 过滤）
-1. 写入处理后的页面（非 index.md 注入贡献提示，`contributing.py`）
-1. `index.py` 为每目录生成 `index.md`（自动 generated 标记 + docsList 卡片，`docslist.py` 渲染 HTML）
-1. `image_pipeline.py` 用 PIL 为 assets 中每张 PNG/JPEG 生成 `.webp` 兄弟文件（质量 80；PNG 另出 256 色有损 fallback）
-1. `nav.py` 生成 nav YAML，`template.py` 替换 `mkdocs-template.yml` 的 `# NAV_ARIA_START`/`# NAV_ARIA_END` 标记块写入 `mkdocs.yml`
-1. `redirects.py` 读 `redirects.json` 生成 `cache/assets/js/redirects.js`
-1. `llms.py` 用扫描树 + 模板 `site_url` 生成 `cache/llms.txt`（llmstxt.org 规范：H1 + blockquote + H2 分节链接，链接指向 `.md` 版本；非 md 文件会被 mkdocs 原样拷到 `site/llms.txt`）
-1. copytree 到 `generated/`，交给 `mkdocs build --strict`
+开发模式只使用 MkDocs 原生 `--dirtyreload` 与插件生命周期，没有第二套 watcher。`docs_dir` 固定为 `docs`，不允许重新引入 `cache/`、`generated/` 或生成式 `mkdocs.yml`。
 
-**图片双层管线**（关键机制）：生成期 `image_pipeline.py` 产出同名 `.webp` 兄弟文件；渲染期 `markdown_images.py`（mkdocs 扩展，注册在 mkdocs-template.yml 的 markdown_extensions 中）把本地栅格图 `<img>` 改写为 WebP-first `<picture>`，靠同名 `.webp` 约定对接。外部 URL 不下载不镜像。Markdown 中仍写普通图片语法。
-
-`mkdocs.yml`、`cache/`、`generated/`、`site/` 均为生成产物（gitignore），**永远不要手改**；配置改 `mkdocs-template.yml`，nav 由脚本生成。
+**图片管线**：`image_pipeline.py` 直接在最终输出中产出同名 `.webp` 兄弟文件；`markdown_images.py`（注册在 `mkdocs.yml`）把本地栅格图 `<img>` 改写为 WebP-first `<picture>`。外部 URL 不下载不镜像。Markdown 中仍写普通图片语法。
 
 ## Key Directories
 
 | 路径                                          | 用途                                                                                                                                                                                                                                                                       |
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/nmteam_support/`                         | 工具链包（16 个模块，见 Important Files）                                                                                                                                                                                                                                  |
+| `src/nmteam_support/`                         | 工具链包（见 Important Files）                                                                                                                                                                                                                                             |
 | `docs/`                                       | **真实文档源**（唯一需要手工编辑的内容位置）                                                                                                                                                                                                                               |
 | `docs/nmbot-telegram/`                        | 产品中枢：`panel/`、`plus/`、`legal/`、`group/`、`faq/`、`business/`、`tools/`、`nmbot-intelligence/`、`credit/`、`update-log/`（`YYYY-MM.md` 月度日志）、`mcp/`                                                                                                           |
 | `docs/contact-us/`、`docs/nmteam-account/`    | 其他产品线                                                                                                                                                                                                                                                                 |
 | `docs/superpowers/`                           | 本地设计与实现工件（plans/specs），**已 gitignore，勿提交**                                                                                                                                                                                                                |
-| `assets/images/`                              | 图片母版：`shared/`（站级共享）、`nmbot/`（含 `mcp/`、`update-pictures/` 子目录）；`assets/icons/`（SVG）、`assets/styles/`（CSS）、`assets/js/`（AI 工具脚本 `ai-tools.js`，随构建 stage 到生成站）                                                                       |
+| `assets/images/`                              | 图片母版：`shared/`（站级共享）、`nmbot/`（含 `mcp/`、`update-pictures/` 子目录）；`assets/icons/`（SVG）、`assets/styles/`（CSS）、`assets/js/`（AI 工具脚本 `ai-tools.js`）                                                                                           |
 | `overrides/`                                  | mkdocs `custom_dir`：`main.html` 覆写 site_meta 移除主题版本号；`partials/actions.html` 追加 Fumadocs 风格文章操作区（复制 Markdown + GitHub / Markdown / Perplexity / Grok / ChatGPT / Claude Web / Claude Desktop / Claude Code / OpenAI Codex / Cursor 打开菜单）；`.icons/ai/` 存放菜单品牌图标 |
 | `scripts/`                                    | 三平台薄启动器（`nmteam.sh` / `nmteam.ps1` / `nmteam.bat`）                                                                                                                                                                                                                |
-| `tests/`                                      | pytest 测试（17 个文件 + conftest.py）                                                                                                                                                                                                                                     |
-| `cache/`、`generated/`、`site/`、`mkdocs.yml` | 生成产物，勿手改勿提交                                                                                                                                                                                                                                                     |
+| `tests/`                                      | pytest 行为与生命周期测试                                                                                                                                                                                                                                                  |
+| `mkdocs.yml`                                  | 受版本控制的 MkDocs 单一配置源；nav 由插件在内存中设置                                                                                                                                                                                                                     |
+| `site/`                                       | 唯一生成目录，勿手改勿提交                                                                                                                                                                                                                                                 |
 
 ## Development Commands
 
 ```bash
 uv sync                            # 安装依赖（按 .python-version 3.14 自动管理 Python）
-uv run nmteam install              # 同上，CLI 封装
-uv run nmteam dev                  # 生成文档结构 + mkdocs serve http://127.0.0.1:8000，
-                                   # 监听 docs/、assets/、mkdocs-template.yml 变化自动重生成 + 热更新
-uv run nmteam build                # generate() + mkdocs build --strict → site/，
-                                   # 再 stage 每页 .md 副本到 site/
-uv run nmteam generate             # 仅重新生成文档结构
-uv run nmteam clean                # 清理 cache/ generated/ site/
+uv run nmteam dev                  # MkDocs dirty reload，默认 http://127.0.0.1:8000
+uv run nmteam build                # 单次严格构建 → site/
+uv run nmteam preview              # 预览 site/，Markdown 以 text/plain 提供
 uv run nmteam check                # 全部质量检查（见下）
 uv run nmteam redirects list|add "/old/" "/new/"|remove "/old/"
 uv run nmteam --help
+uv run nmteam --verbose build      # 显示详细 MkDocs 日志
 ```
 
 平台启动器（定位仓库根后原样透传参数，无业务逻辑）：`scripts/nmteam.sh dev`、`.\scripts\nmteam.ps1 dev`、`scripts\nmteam.bat dev`。
@@ -87,10 +76,10 @@ Python（`src/nmteam_support/`）：
 
 - Python 3.14+（`pyproject.toml` `requires-python = ">=3.14"`，`.python-version` = 3.14）。
 - CLI 用 **Typer**（`cli.py`，命令树 + `QUALITY_COMMANDS` 编排），不用 argparse。
-- 核心模型用 `frozen dataclass`（`models.py`：`PageMetadata`/`DocEntry`）；类型标注齐全（`typing`）。
+- 核心模型用 dataclass（`models.py`：`PageMetadata`/`DocEntry`；`scanner.py`：`DocumentCatalog`/`SourcePage`）；类型标注齐全。
 - ruff 约束：`line-length = 100`（`E501` ignore）、`target py314`、`select = E,F,I,UP,B,SIM,W,C4,RUF`、`isort known-first-party = nmteam_support`、双引号、空格缩进。
 - 错误处理显式：如 `redirects.py` 对损坏的 `redirects.json` 抛 `RedirectConfigError`（绝不静默清空覆盖，管理命令不写坏文件）。
-- 依赖注入轻量：`GeneratorOptions`/`default_options` 传参，函数式模块（scanner/frontmatter/nav/docslist 等），无重 OOP。
+- 插件类只承载 MkDocs 生命周期状态；scanner/frontmatter/nav/docslist 等领域逻辑保持函数式，不新增 staging 兼容层。
 
 Markdown 文档（`docs/`）：
 
@@ -105,20 +94,20 @@ Markdown 文档（`docs/`）：
 
 | 文件                                                          | 职责                                                                                                                                                   |
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/nmteam_support/cli.py`                                   | Typer 入口 `main`；install/dev/generate/build/clean/check + redirects 子命令                                                                           |
-| `src/nmteam_support/generator.py`                             | `generate()` 端到端编排 + `GeneratorOptions`/`default_options`                                                                                         |
-| `src/nmteam_support/scanner.py`                               | 递归扫描 docs/ 树，SKIP_DIRS/INTERNAL_DIRS 过滤                                                                                                        |
+| `src/nmteam_support/cli.py`                                   | Typer 入口；dev/build/preview/check + redirects 子命令，直接调用 MkDocs Python API                                                                     |
+| `src/nmteam_support/plugin.py`                                | MkDocs 生命周期编排：虚拟文件、页面转换、资源输出和生产 Markdown 副本                                                                                  |
+| `src/nmteam_support/scanner.py`                               | 增量扫描 docs/ 树，按文件戳复用未变页面，过滤内部目录                                                                                                  |
 | `src/nmteam_support/frontmatter.py`                           | frontmatter 解析（title/description/index/flag）                                                                                                       |
-| `src/nmteam_support/index.py` + `docslist.py`                 | 每目录 index.md 生成 + docsList 卡片 HTML                                                                                                              |
-| `src/nmteam_support/nav.py` + `template.py`                   | nav YAML 生成；NAV_ARIA 标记块替换写 mkdocs.yml                                                                                                        |
+| `src/nmteam_support/index.py` + `docslist.py`                 | 构建期目录页 Markdown + docsList 卡片 HTML                                                                                                             |
+| `src/nmteam_support/nav.py`                                  | 生成 MkDocs 原生 nav 数据结构                                                                                                                          |
 | `src/nmteam_support/contributing.py`                          | 非 index.md 注入贡献提示 admonition                                                                                                                    |
 | `src/nmteam_support/redirects.py`                             | redirects.json 管理（损坏保护）+ redirects.js 生成                                                                                                     |
-| `src/nmteam_support/image_pipeline.py` + `markdown_images.py` | PIL 生成 .webp 兄弟文件；mkdocs 扩展包 WebP-first `<picture>`                                                                                          |
+| `src/nmteam_support/image_pipeline.py` + `markdown_images.py` | 并行、增量地直写图片变体；MkDocs 扩展输出 WebP-first `<picture>`                                                                                       |
 | `src/nmteam_support/llms.py`                                  | `render_llms_txt()` 从扫描树生成 `/llms.txt`（llmstxt.org 规范；链接指向各页 `.md` 版本）                                                              |
 | `src/nmteam_support/models.py`                                | `PageMetadata`/`DocEntry` frozen dataclass                                                                                                             |
 | `pyproject.toml`                                              | 包元数据、依赖、入口、pytest/ruff/hatchling 配置                                                                                                       |
 | `uv.lock`                                                     | 锁定依赖（mkdocs 1.6.1、mkdocs-material 9.7.7、mkdocs-minify-plugin 0.8.0、pillow 12.3.0、typer 0.27.1、pytest 9.1.1、ruff 0.16.2、mdformat 1.0.0 等） |
-| `mkdocs-template.yml`                                         | mkdocs 配置模板（material zh 黄色双 palette、minify 插件、custom_dir overrides、`nmteam_support.markdown_images` 扩展、NAV_ARIA 标记）                 |
+| `mkdocs.yml`                                                  | MkDocs 单一配置源（direct docs_dir、nmteam-support、Material、minify、Markdown 扩展）                                                                  |
 | `redirects.json`                                              | 顶层 `redirects` 对象：`{旧路径带斜杠: 新路径}`                                                                                                        |
 | `.github/workflows/ci.yml`                                    | 三 OS 矩阵 CI（push main/dev + PR）：uv sync --frozen → nmteam check → 验证三个启动器                                                                  |
 | `.mdformat.toml`                                              | mdformat 配置（wrap=keep、LF）                                                                                                                         |
@@ -138,9 +127,9 @@ Markdown 文档（`docs/`）：
 ## Testing & QA
 
 - **pytest**（dev 组 `pytest>=9.0`），配置在 pyproject.toml：`testpaths = ["tests"]`、`pythonpath = ["src"]`、`addopts = "-ra"`。
-- 测试约定：`tests/` 单层目录，每个模块一个 `test_<module>.py`（test_cli、test_generator、test_scanner、test_frontmatter、test_nav、test_index、test_docslist、test_contributing、test_redirects、test_image_pipeline、test_markdown_images、test_models、test_scripts、test_build_config 等）。
-- `test_llms.py` 覆盖 llms.txt 生成（标题/摘要/分节/.md 链接/base_url/空树）；`test_generator.py` 覆盖 llms.txt 落盘与 `stage_markdown_copies` 镜像 cache。
-- 输入构造分级：conftest 的 `docs_dir` fixture（tmp_path 构造最小 docs 树，含 index/hide_docs_list/hide frontmatter）→ `tmp_path` 手写单文件 → 全流程 generate 集成。**不依赖真实 docs/ 内容**。
+- 测试约定：`tests/` 单层目录，每个模块一个 `test_<module>.py`；`test_plugin.py` 覆盖插件事件，`test_lifecycle.py` 使用真实 MkDocs 完成端到端构建。
+- `test_llms.py` 覆盖 llms.txt 生成；`test_scanner.py` 验证未变 Markdown 对象被复用且 changed_paths 精确。
+- 输入构造分级：conftest 的 `docs_dir` fixture（tmp_path 构造最小 docs 树）→ 插件事件测试 → 真实 MkDocs 生命周期集成。**不依赖真实 docs/ 内容**。
 - CLI 测试用 `typer.testing.CliRunner` + monkeypatch；启动器测试用 subprocess + 假 uv 脚本。
 - **无覆盖率门槛**（无 pytest-cov、CI 无 coverage 步骤）——新增功能时给模块补 `test_<module>.py` 行为测试即可。
 - CI 在 ubuntu/macos/windows 三平台跑全量 check；提交前本地至少跑 `uv run nmteam check`。

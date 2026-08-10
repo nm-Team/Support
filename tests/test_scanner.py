@@ -53,3 +53,21 @@ def test_scan_sorts_when_listdir_order_is_unordered(monkeypatch, docs_dir):
     root = scan_docs(docs_dir)
     nmbot = next(s for s in root.subdirs if s.rel_path == "nmbot-telegram")
     assert [doc.name for doc in nmbot.docs] == ["alpha.md", "mcp.md", "mike.md", "zeta.md"]
+
+
+def test_refresh_catalog_reuses_unchanged_pages_and_reports_only_changes(docs_dir):
+    assert hasattr(scanner, "refresh_catalog")
+
+    first = scanner.refresh_catalog(docs_dir)
+    unchanged = scanner.refresh_catalog(docs_dir, first)
+
+    assert unchanged.changed_paths == frozenset()
+    assert unchanged.pages["about.md"] is first.pages["about.md"]
+
+    mcp = docs_dir / "nmbot-telegram" / "mcp.md"
+    mcp.write_text(mcp.read_text(encoding="utf-8") + "\n新增内容。\n", encoding="utf-8")
+    changed = scanner.refresh_catalog(docs_dir, unchanged)
+
+    assert changed.changed_paths == frozenset({"nmbot-telegram/mcp.md"})
+    assert changed.pages["about.md"] is first.pages["about.md"]
+    assert changed.pages["nmbot-telegram/mcp.md"] is not first.pages["nmbot-telegram/mcp.md"]

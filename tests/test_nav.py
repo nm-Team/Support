@@ -1,9 +1,8 @@
 """Nav YAML generation tests."""
 
 from nmteam_support.models import DocEntry
-from nmteam_support.nav import build_nav_yaml, sort_entries
+from nmteam_support.nav import build_nav, sort_entries
 from nmteam_support.scanner import scan_docs
-from nmteam_support.template import render_mkdocs_yml
 
 
 def _entry(path, name, index=0, kind="doc"):
@@ -21,38 +20,43 @@ def test_sort_index_ascending_then_folders_first_then_scan_order():
     assert [e.name for e in sort_entries(entries)] == ["doc1", "folder1", "doc2", "doc0", "folder2"]
 
 
-def test_build_nav_yaml_shape(docs_dir):
-    nav = build_nav_yaml(scan_docs(docs_dir))
-    assert nav == (
-        "  - nmTeam 支持: 'index.md'\n"
-        "  - nmBot Telegram:\n"
-        "    - nmBot Telegram: 'nmbot-telegram/index.md'\n"
-        "    - MCP 配置: 'nmbot-telegram/mcp.md'\n"
-        "  - 联系我们:\n"
-        "    - 联系我们: 'contact-us/index.md'\n"
-        "    - 论坛: 'contact-us/forum.md'\n"
-        "  - 关于: 'about.md'"
-    )
+def test_build_nav_shape(docs_dir):
+    assert build_nav(scan_docs(docs_dir)) == [
+        {"nmTeam 支持": "index.md"},
+        {
+            "nmBot Telegram": [
+                {"nmBot Telegram": "nmbot-telegram/index.md"},
+                {"MCP 配置": "nmbot-telegram/mcp.md"},
+            ]
+        },
+        {
+            "联系我们": [
+                {"联系我们": "contact-us/index.md"},
+                {"论坛": "contact-us/forum.md"},
+            ]
+        },
+        {"关于": "about.md"},
+    ]
 
 
 def test_empty_folder_skipped(docs_dir):
     (docs_dir / "nmbot-telegram" / "empty-dir").mkdir()
-    nav = build_nav_yaml(scan_docs(docs_dir))
-    assert "empty-dir" not in nav
+    nav = build_nav(scan_docs(docs_dir))
+    assert "empty-dir" not in str(nav)
 
 
 def test_folder_with_empty_index_skipped(docs_dir):
     d = docs_dir / "nmbot-telegram" / "notes"
     d.mkdir()
     (d / "index.md").write_text("---\n---\n", encoding="utf-8")
-    nav = build_nav_yaml(scan_docs(docs_dir))
-    assert "notes" not in nav
+    nav = build_nav(scan_docs(docs_dir))
+    assert "notes" not in str(nav)
 
 
 def test_folder_index_comes_from_its_index_md(docs_dir):
     # contact-us/index.md has index: 100 -> folder sorts after nmbot-telegram (0)
-    nav = build_nav_yaml(scan_docs(docs_dir))
-    assert nav.index("nmbot-telegram") < nav.index("contact-us")
+    nav = build_nav(scan_docs(docs_dir))
+    assert str(nav).index("nmbot-telegram") < str(nav).index("contact-us")
 
 
 def test_negative_index_doc_precedes_default_index_doc(docs_dir):
@@ -62,19 +66,9 @@ def test_negative_index_doc_precedes_default_index_doc(docs_dir):
         "---\ntitle: 支持文档\nindex: 0\n---\n\n# 支持文档\n",
         encoding="utf-8",
     )
-    nav = build_nav_yaml(scan_docs(docs_dir))
+    nav = str(build_nav(scan_docs(docs_dir)))
     assert (
-        nav.index("'contact-us/index.md'")
-        < nav.index("'contact-us/forum.md'")
-        < nav.index("'contact-us/support.md'")
+        nav.index("contact-us/index.md")
+        < nav.index("contact-us/forum.md")
+        < nav.index("contact-us/support.md")
     )
-
-
-def test_render_mkdocs_yml_keeps_backslash_digit_nav():
-    """A nav line containing a backslash-digit sequence must be injected literally,
-    not interpreted as a regex group reference."""
-    template = "site_name: Test\nnav:\n# NAV_ARIA_START\n# NAV_ARIA_END\n"
-    nav = "  - Regex \\1 Escape: 'r.md'"
-    out = render_mkdocs_yml(template, nav)
-    assert "Regex \\1 Escape" in out
-    assert "# NAV_ARIA_START\n  - Regex \\1 Escape: 'r.md'\n# NAV_ARIA_END" in out

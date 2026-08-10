@@ -125,11 +125,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# nmTeam Doc Generator
-/generated
-/cache
-/mkdocs.yml
-
 # uv / ruff
 .ruff_cache/
 

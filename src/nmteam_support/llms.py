@@ -14,9 +14,10 @@ OPTIONAL_SECTION = "Optional"
 def render_llms_txt(root: ScannedDir, base_url: str) -> str:
     """Render the ``/llms.txt`` file following the llmstxt.org proposal.
 
-    Every link points to the raw Markdown copy staged next to the rendered
+    Every link points to the raw Markdown copy written next to the rendered
     page (same docs-relative path), so LLMs can fetch page bodies directly.
     """
+    normalized_base_url = base_url.rstrip("/")
     lines = [f"# {SITE_TITLE}", ""]
     summary = root.index_meta.description or "nmTeam 官方支持文档站。"
     lines.append(f"> {summary}")
@@ -31,7 +32,7 @@ def render_llms_txt(root: ScannedDir, base_url: str) -> str:
             lines.append(f"## {title}")
             lines.append("")
             for entry in entries:
-                lines.append(_render_entry(entry, base_url))
+                lines.append(_render_entry(entry, normalized_base_url))
             lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 

@@ -35,6 +35,12 @@ def test_llms_txt_links_use_base_url(docs_dir):
     assert "support.nmteam.xyz" not in content
 
 
+def test_llms_txt_normalizes_trailing_base_url_slash(docs_dir):
+    content = render_llms_txt(scan_docs(docs_dir), "https://docs.example.org/sub/")
+    assert "https://docs.example.org/sub/nmbot-telegram/mcp.md" in content
+    assert "https://docs.example.org/sub//" not in content
+
+
 def test_llms_txt_empty_tree(tmp_path):
     (tmp_path / "docs").mkdir()
     content = render_llms_txt(scan_docs(tmp_path / "docs"), BASE_URL)

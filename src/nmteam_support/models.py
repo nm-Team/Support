@@ -1,4 +1,4 @@
-"""Core data models shared across the generator."""
+"""Core data models shared across the documentation pipeline."""
 
 from __future__ import annotations
 

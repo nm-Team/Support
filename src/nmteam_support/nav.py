@@ -5,6 +5,8 @@ from __future__ import annotations
 from nmteam_support.models import DocEntry
 from nmteam_support.scanner import ScannedDir
 
+type NavItem = dict[str, str | list["NavItem"]]
+
 
 def sort_entries(entries: list[DocEntry]) -> list[DocEntry]:
     """Order entries: index ascending, folders before docs, then scan order (stable)."""
@@ -32,24 +34,22 @@ def is_renderable(scan: ScannedDir) -> bool:
     return bool(scan.index_body or scan.docs or any(is_renderable(sub) for sub in scan.subdirs))
 
 
-def build_nav_yaml(root: ScannedDir) -> str:
-    """Render the nav block (without the ``nav:`` key) for the whole tree."""
-    return _render(root, 0)
+def build_nav(root: ScannedDir) -> list[NavItem]:
+    """Build the native MkDocs nav structure without serializing YAML."""
+    return _build(root)
 
 
-def _render(scan: ScannedDir, depth: int) -> str:
-    indent = "  " * (depth + 1)
-    lines: list[str] = []
+def _build(scan: ScannedDir) -> list[NavItem]:
+    items: list[NavItem] = []
     if scan.index_body:
-        link = "" if scan.rel_path == "" else scan.rel_path + "/"
-        lines.append(f"{indent}- {scan.index_meta.title}: '{link}index.md'")
+        path = f"{scan.rel_path}/index.md" if scan.rel_path else "index.md"
+        items.append({scan.index_meta.title: path})
     for entry in sort_entries(scan.docs + folder_entries(scan)):
         if entry.kind == "folder":
-            sub = next(s for s in scan.subdirs if s.rel_path == entry.path)
-            sub_block = _render(sub, depth + 1)
-            if sub_block:  # empty folders are skipped entirely
-                lines.append(f"{indent}- {entry.title}:")
-                lines.append(sub_block)
+            sub = next(child for child in scan.subdirs if child.rel_path == entry.path)
+            children = _build(sub)
+            if children:
+                items.append({entry.title: children})
         else:
-            lines.append(f"{indent}- {entry.title}: '{entry.path}'")
-    return "\n".join(lines)
+            items.append({entry.title: entry.path})
+    return items
