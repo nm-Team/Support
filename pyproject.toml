@@ -16,6 +16,9 @@ dependencies = [
 [project.scripts]
 nmteam = "nmteam_support.cli:main"
 
+[project.entry-points."mkdocs.plugins"]
+nmteam-support = "nmteam_support.plugin:SupportPlugin"
+
 [dependency-groups]
 dev = [
     "mdformat>=1.0",

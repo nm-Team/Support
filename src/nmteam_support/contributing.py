@@ -1,9 +1,10 @@
-"""Contributing-note injection for generated documents."""
+"""Contributing-note injection for rendered documents."""
 
 from __future__ import annotations
 
 import re
 
+from nmteam_support.frontmatter import split_frontmatter
 from nmteam_support.models import DocEntry
 
 GITHUB_EDIT_BASE = "https://github.com/nm-Team/Support/edit/main/docs/"
@@ -40,3 +41,21 @@ def should_hide_contributing_note(entry: DocEntry) -> bool:
     if entry.name == "index.md":
         return True
     return any(re.search(pattern, entry.path) for pattern in EXCLUDED_PATH_PATTERNS)
+
+
+def render_doc_body(markdown: str, doc_path: str) -> str:
+    """Inject the contributing note into a Markdown body."""
+    note = render_contributing_note(doc_path)
+    lines = markdown.split("\n")
+    for index, line in enumerate(lines):
+        if line.strip().startswith("#"):
+            lines.insert(index + 1, note)
+            return "\n".join(lines)
+    return note + markdown
+
+
+def render_doc_file(text: str, doc_path: str) -> str:
+    """Inject the note while preserving the source frontmatter."""
+    metadata, body = split_frontmatter(text)
+    prefix = f"---{metadata}---" if metadata else ""
+    return prefix + render_doc_body(body, doc_path)

@@ -36,9 +36,13 @@ def render_index_page(scan: ScannedDir) -> str:
     head_lines.append("")
     head = "\n".join(head_lines) + "\n"
 
-    content = scan.index_body or f"# {scan.index_meta.title}\n{scan.index_meta.description}\n"
+    return head + render_index_body(scan)
 
-    if not scan.index_meta.hide_docs_list:
-        entries = sort_entries(scan.docs + folder_entries(scan))
-        content += render_docs_list(entries)
-    return head + content
+
+def render_index_body(scan: ScannedDir) -> str:
+    """Render an index body for MkDocs' ``on_page_markdown`` event."""
+    content = scan.index_body or f"# {scan.index_meta.title}\n{scan.index_meta.description}\n"
+    if scan.index_meta.hide_docs_list:
+        return content
+    entries = sort_entries(scan.docs + folder_entries(scan))
+    return content + render_docs_list(entries)

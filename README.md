@@ -1,6 +1,6 @@
 # Support
 
-[**nmTeam 支持**](https://support.nmteam.xyz)官方网站。使用 `mkdocs-material` 构建；项目由 `uv` 初始化并管理依赖，通过 Typer 提供统一的跨平台命令行入口。
+[**nmTeam 支持**](https://support.nmteam.xyz)官方网站。使用 `mkdocs-material` 构建；项目由 `uv` 管理依赖，通过 Typer 提供统一的跨平台命令行入口。
 
 ## 环境要求
 
@@ -15,12 +15,6 @@
 uv sync
 ```
 
-也可以使用统一 CLI：
-
-```bash
-uv run nmteam install
-```
-
 ### 开发模式
 
 ```bash
@@ -29,9 +23,10 @@ uv run nmteam dev
 
 开发模式会：
 
-- 自动生成文档结构（`cache/`、`generated/`、`mkdocs.yml`）
+- 让 MkDocs 直接读取 `docs/`，不创建中间目录
 - 启动 MkDocs 开发服务器（<http://127.0.0.1:8000>）
-- 监听 `docs/`、`assets/` 和 MkDocs 模板变化并自动重新生成，浏览器热更新
+- 使用 MkDocs 原生 dirty reload 监听 `docs/`、`assets/` 和重定向配置
+- 仅重新读取变更的 Markdown，并仅处理变更的图片资源
 
 ### 构建生产版本
 
@@ -40,6 +35,10 @@ uv run nmteam build
 ```
 
 构建结果输出到 `site/` 目录。
+
+MkDocs 插件会在一次构建中完成动态导航、目录页、贡献提示、`llms.txt`、
+重定向脚本和图片优化。图片直接并行写入 `site/`，不会创建 `cache/` 或
+`generated/` 副本。
 
 最终 HTML 会由 `mkdocs-minify-plugin` 压缩；生成器元标签仅保留 MkDocs
 版本，不暴露主题及其版本。
@@ -78,20 +77,20 @@ Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
 （`nmteam dev`）下复制和 View as Markdown 会提示先构建，AI 操作仍可通过
 当前页面 URL 打开。
 
-### 其他命令
+### 预览生产构建
 
 ```bash
-uv run nmteam generate # 仅重新生成文档结构
-uv run nmteam clean    # 清理 cache/、generated/ 和 site/
-uv run nmteam serve    # 预览 site/（.md 以 text/plain; charset=utf-8 提供）
-uv run nmteam --help   # 显示完整命令帮助
+uv run nmteam preview
 ```
 
-`nmteam serve` 默认监听 `127.0.0.1:8124`，可用 `--port` / `--bind`
+`nmteam preview` 默认监听 `127.0.0.1:8124`，可用 `--port` / `--host`
 调整。与裸 `python -m http.server` 不同，它把 `.md` 文件的
 `Content-Type` 显式设为 `text/plain; charset=utf-8`（Python 3.13+ 的
 `mimetypes` 会把 `.md` 判为 `text/markdown`，部分客户端会下载而非内联
 显示），保证每页 Markdown 版本在任何浏览器中都能直接阅读。
+
+默认仅输出生命周期摘要和错误。需要 MkDocs 详细日志时，在子命令前添加
+全局选项 `--verbose`，例如 `uv run nmteam --verbose build`。
 
 ## 平台启动器
 

@@ -1,30 +1,31 @@
-"""Cross-platform command-line interface for the documentation toolchain."""
+"""Typer command line interface for the documentation lifecycle."""
 
 from __future__ import annotations
 
-import shutil
+import logging
 import subprocess
-import sys
-import threading
+import time
+from collections.abc import Callable
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Annotated
 
 import typer
+from mkdocs.commands.build import build as mkdocs_build
+from mkdocs.commands.serve import serve as mkdocs_serve
+from mkdocs.config import load_config
+from mkdocs.exceptions import Abort, ConfigurationError, PluginError
 
-from nmteam_support.generator import (
-    GeneratorOptions,
-    default_options,
-    generate,
-    stage_markdown_copies,
-)
-from nmteam_support.redirects import (
-    RedirectConfigError,
-    read_redirects,
-    write_redirects,
-)
+from nmteam_support.redirects import RedirectConfigError, read_redirects, write_redirects
 from nmteam_support.serve import DEFAULT_BIND, DEFAULT_PORT, serve_site
 
-app = typer.Typer(invoke_without_command=True)
-redirects_app = typer.Typer(no_args_is_help=True)
+app = typer.Typer(
+    no_args_is_help=True,
+    pretty_exceptions_enable=False,
+    rich_markup_mode="markdown",
+    help="Manage the nmTeam Support documentation site.",
+)
+redirects_app = typer.Typer(no_args_is_help=True, help="Manage URL redirects.")
 app.add_typer(redirects_app, name="redirects")
 
 QUALITY_COMMANDS = (
@@ -42,164 +43,171 @@ QUALITY_COMMANDS = (
 )
 
 
-def _rm(path: Path) -> None:
-    if path.exists():
-        if path.is_dir():
-            shutil.rmtree(path)
-        else:
-            path.unlink()
+@dataclass(frozen=True)
+class CliState:
+    """Options shared by all commands."""
+
+    verbose: bool = False
 
 
-def cmd_clean(options: GeneratorOptions) -> int:
-    """Remove cache/, generated/ and site/."""
-    for path in (options.cache_dir, options.generated_dir, options.mkdocs_yml_path.parent / "site"):
-        _rm(path)
-    print("✅ 清理完成")
-    return 0
+class LifecycleError(RuntimeError):
+    """A user-facing lifecycle failure with actionable context."""
 
 
-def cmd_build(options: GeneratorOptions) -> int:
-    """Regenerate and build the static site into site/."""
-    generate(options)
-    code = subprocess.call([sys.executable, "-m", "mkdocs", "build", "--strict", "--clean"])
-    if code:
-        return code
-    site_dir = options.mkdocs_yml_path.parent / "site"
-    stage_markdown_copies(options.cache_dir, site_dir)
-    print("Markdown copies staged into site/.")
-    return 0
+@app.callback()
+def root(
+    context: typer.Context,
+    verbose: Annotated[
+        bool,
+        typer.Option("--verbose", "-v", help="Show detailed MkDocs output."),
+    ] = False,
+) -> None:
+    """Manage the nmTeam Support documentation site."""
+    context.obj = CliState(verbose=verbose)
 
 
-def cmd_dev(options: GeneratorOptions) -> int:
-    """Regenerate, then serve with live-reload and auto-regeneration."""
-    generate(options)
-    stop = threading.Event()
-    watcher = threading.Thread(target=_watch_and_regenerate, args=(options, stop), daemon=True)
-    watcher.start()
+def build_site(config_path: Path, verbose: bool = False) -> None:
+    """Build the site in-process so plugins and errors share one lifecycle."""
+    _configure_logging(verbose)
+    config = None
     try:
-        return subprocess.call(
-            [
-                sys.executable,
-                "-m",
-                "mkdocs",
-                "serve",
-                "--dirtyreload",
-                "--dev-addr",
-                "127.0.0.1:8000",
-            ]
-        )
+        config = load_config(config_file=str(config_path), strict=True)
+        config.plugins.on_startup(command="build", dirty=False)
+        mkdocs_build(config)
+    except (Abort, ConfigurationError, OSError, PluginError) as error:
+        raise LifecycleError(f"构建失败: {error}") from error
     finally:
-        stop.set()
+        if config is not None:
+            config.plugins.on_shutdown()
 
 
-def _watch_and_regenerate(options: GeneratorOptions, stop: threading.Event) -> None:
-    """Regenerate when docs/ or the template changes; mkdocs live-reloads the rest."""
-    last = _snapshot(options)
-    while not stop.wait(1.0):
-        current = _snapshot(options)
-        if current != last:
-            last = current
-            print("🔄 检测到变更，重新生成...")
-            try:
-                generate(options)
-            except Exception as error:
-                print(f"⚠️ 文档生成失败，继续监听: {error}", file=sys.stderr)
+def dev_site(
+    config_path: Path,
+    host: str,
+    port: int,
+    open_browser: bool,
+    verbose: bool,
+) -> None:
+    """Run MkDocs' native dirty-reload lifecycle without an extra watcher."""
+    _configure_logging(verbose)
+    if not verbose:
+        logging.getLogger("mkdocs.commands.build").setLevel(logging.ERROR)
+    typer.echo(f"开发服务器: http://{host}:{port}")
+    try:
+        mkdocs_serve(
+            config_file=str(config_path),
+            build_type="dirty",
+            dev_addr=f"{host}:{port}",
+            open_in_browser=open_browser,
+        )
+    except (Abort, ConfigurationError, OSError, PluginError) as error:
+        raise LifecycleError(f"开发服务器启动失败: {error}") from error
 
 
-def _snapshot(options: GeneratorOptions) -> tuple[tuple[int, int], ...]:
-    stamps: list[tuple[int, int]] = []
-    for root in (options.docs_dir, options.assets_dir, options.template_path):
-        if root.is_file():
-            stamps.append((root.stat().st_mtime_ns, root.stat().st_size))
-        elif root.is_dir():
-            for path in sorted(root.rglob("*")):
-                if path.is_file():
-                    stamps.append((path.stat().st_mtime_ns, path.stat().st_size))
-    return tuple(stamps)
+def preview_site(
+    directory: Path,
+    port: int,
+    host: str,
+    verbose: bool,
+) -> None:
+    """Preview an existing production build."""
+    if not directory.is_dir():
+        raise LifecycleError("site/ 不存在，请先运行 `nmteam build`。")
+    serve_site(directory, port, host, verbose)
 
 
-def cmd_install() -> int:
-    """Install dependencies via uv (equivalent to ``uv sync``)."""
-    return subprocess.call(["uv", "sync"])
-
-
-def cmd_check(options: GeneratorOptions) -> int:
-    """Run repository quality checks and a strict documentation build."""
+def check_site(config_path: Path, verbose: bool = False) -> None:
+    """Run repository checks followed by the production build lifecycle."""
     for command in QUALITY_COMMANDS:
         code = subprocess.call(command)
         if code:
-            return code
-    return cmd_build(options)
+            raise LifecycleError(f"检查失败 ({code}): {' '.join(command)}")
+    build_site(config_path, verbose)
 
 
-def _exit_on_error(code: int) -> None:
-    if code:
-        raise typer.Exit(code=code)
+def _configure_logging(verbose: bool) -> None:
+    level = logging.INFO if verbose else logging.WARNING
+    logging.basicConfig(level=level, format="%(levelname)s - %(message)s", force=True)
+    logging.getLogger("mkdocs.commands.build").setLevel(logging.NOTSET)
+
+
+def _execute(action: Callable[[], None]) -> None:
+    try:
+        action()
+    except LifecycleError as error:
+        typer.echo(str(error), err=True)
+        raise typer.Exit(code=1) from error
+
+
+def _state(context: typer.Context) -> CliState:
+    return context.ensure_object(CliState)
+
+
+def _config_path() -> Path:
+    return Path.cwd() / "mkdocs.yml"
+
+
+@app.command("dev")
+def dev_command(
+    context: typer.Context,
+    host: Annotated[
+        str,
+        typer.Option("--host", help="Address for the development server."),
+    ] = "127.0.0.1",
+    port: Annotated[
+        int,
+        typer.Option("--port", "-p", min=1, max=65535, help="Development server port."),
+    ] = 8000,
+    open_browser: Annotated[
+        bool,
+        typer.Option("--open", help="Open the site in the default browser."),
+    ] = False,
+) -> None:
+    """Run local development with incremental reloads."""
+    state = _state(context)
+    _execute(lambda: dev_site(_config_path(), host, port, open_browser, state.verbose))
+
+
+@app.command("build")
+def build_command(context: typer.Context) -> None:
+    """Build the production site."""
+    state = _state(context)
+    started = time.perf_counter()
+    _execute(lambda: build_site(_config_path(), state.verbose))
+    typer.echo(f"构建完成: site/ ({time.perf_counter() - started:.2f}s)")
+
+
+@app.command("preview")
+def preview_command(
+    context: typer.Context,
+    port: Annotated[
+        int,
+        typer.Option("--port", "-p", min=1, max=65535, help="Preview server port."),
+    ] = DEFAULT_PORT,
+    host: Annotated[
+        str,
+        typer.Option("--host", help="Address for the preview server."),
+    ] = DEFAULT_BIND,
+) -> None:
+    """Preview the built site with browser-friendly Markdown responses."""
+    state = _state(context)
+    _execute(lambda: preview_site(Path.cwd() / "site", port, host, state.verbose))
+
+
+@app.command("check")
+def check_command(context: typer.Context) -> None:
+    """Run linting, tests, formatting checks, and a strict build."""
+    state = _state(context)
+    _execute(lambda: check_site(_config_path(), state.verbose))
 
 
 def _managed_redirects() -> tuple[Path, dict[str, str]]:
-    path = default_options().redirects_path
+    path = Path.cwd() / "redirects.json"
     try:
         return path, read_redirects(path)
     except RedirectConfigError as error:
         typer.echo(str(error), err=True)
         raise typer.Exit(code=1) from error
-
-
-@app.callback()
-def root(context: typer.Context) -> None:
-    """Manage the nmTeam Support documentation site."""
-    if context.invoked_subcommand is None:
-        typer.echo(context.get_help())
-
-
-@app.command("generate")
-def generate_command() -> None:
-    """Generate documentation configuration and derived files."""
-    generate(default_options())
-
-
-@app.command("dev")
-def dev_command() -> None:
-    """Serve the site and regenerate derived files after changes."""
-    _exit_on_error(cmd_dev(default_options()))
-
-
-@app.command("build")
-def build_command() -> None:
-    """Generate and build the production documentation site."""
-    _exit_on_error(cmd_build(default_options()))
-
-
-@app.command("clean")
-def clean_command() -> None:
-    """Remove generated documentation output."""
-    _exit_on_error(cmd_clean(default_options()))
-
-
-@app.command("install")
-def install_command() -> None:
-    """Install project dependencies with uv."""
-    _exit_on_error(cmd_install())
-
-
-@app.command("serve")
-def serve_command(
-    port: int = typer.Option(DEFAULT_PORT, "--port", "-p", help="TCP port to listen on."),
-    bind: str = typer.Option(DEFAULT_BIND, "--bind", "-b", help="Address to bind to."),
-) -> None:
-    """Serve the built site; Markdown is served as text/plain (UTF-8)."""
-    site_dir = default_options().mkdocs_yml_path.parent / "site"
-    if not site_dir.is_dir():
-        typer.echo("site/ 不存在，请先运行 `nmteam build`。", err=True)
-        raise typer.Exit(code=1)
-    serve_site(site_dir, port, bind)
-
-
-@app.command("check")
-def check_command() -> None:
-    """Run linting, tests, formatting checks, and a strict build."""
-    _exit_on_error(cmd_check(default_options()))
 
 
 @redirects_app.command("list")
@@ -224,7 +232,7 @@ def add_redirect_command(old_path: str, new_path: str) -> None:
 
 @redirects_app.command("remove")
 def remove_redirect_command(old_path: str) -> None:
-    """Remove an existing redirect."""
+    """Remove a redirect."""
     path, redirects = _managed_redirects()
     if old_path not in redirects:
         typer.echo(f"未找到重定向: {old_path}", err=True)
@@ -235,4 +243,9 @@ def remove_redirect_command(old_path: str) -> None:
 
 
 def main() -> None:
+    """Run the command-line application."""
     app()
+
+
+if __name__ == "__main__":
+    main()

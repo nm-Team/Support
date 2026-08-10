@@ -1,11 +1,11 @@
 """Static file server that serves Markdown as ``text/plain; charset=utf-8``.
 
-Standard-library only, so ``nmteam serve`` works on every platform without
+Standard-library only, so ``nmteam preview`` works on every platform without
 extra dependencies. The MIME override matters because Python's ``mimetypes``
 module maps ``.md`` to ``text/markdown`` on 3.13+, which some browsers and
 clients download or render inconsistently; ``text/plain`` with an explicit
 UTF-8 charset is the most interoperable way to expose the per-page Markdown
-copies staged into ``site/``.
+copies written into ``site/``.
 """
 
 from __future__ import annotations
@@ -29,23 +29,37 @@ class MarkdownPlainHandler(SimpleHTTPRequestHandler):
     }
 
 
+class QuietMarkdownPlainHandler(MarkdownPlainHandler):
+    """Serve files without emitting one stderr line per request."""
+
+    def log_message(self, format: str, *args: object) -> None:
+        del format, args
+
+
 def create_server(
-    directory: Path, port: int = DEFAULT_PORT, bind: str = DEFAULT_BIND
+    directory: Path,
+    port: int = DEFAULT_PORT,
+    bind: str = DEFAULT_BIND,
+    verbose: bool = False,
 ) -> ThreadingHTTPServer:
     """Build a threaded HTTP server rooted at ``directory``."""
     resolved = directory.resolve()
-    handler = partial(MarkdownPlainHandler, directory=str(resolved))
+    handler_type = MarkdownPlainHandler if verbose else QuietMarkdownPlainHandler
+    handler = partial(handler_type, directory=str(resolved))
     return ThreadingHTTPServer((bind, port), handler)
 
 
-def serve_site(directory: Path, port: int = DEFAULT_PORT, bind: str = DEFAULT_BIND) -> None:
+def serve_site(
+    directory: Path,
+    port: int = DEFAULT_PORT,
+    bind: str = DEFAULT_BIND,
+    verbose: bool = False,
+) -> None:
     """Serve ``directory`` statically until interrupted."""
-    server = create_server(directory, port, bind)
+    server = create_server(directory, port, bind, verbose)
     host, bound_port = server.server_address
-    print(f"Serving {directory.resolve()} at http://{host}:{bound_port}")
+    print(f"预览服务器: http://{host}:{bound_port}", flush=True)
     try:
         server.serve_forever()
-    except KeyboardInterrupt:
-        pass
     finally:
         server.server_close()

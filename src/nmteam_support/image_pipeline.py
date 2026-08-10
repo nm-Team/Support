@@ -1,32 +1,45 @@
-"""Documentation asset staging and raster optimization."""
+"""Direct-to-site raster optimization."""
 
 from __future__ import annotations
 
-import shutil
+import os
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from PIL import Image
 
 RASTER_QUALITY = 80
-_RASTER_SUFFIXES = {".jpg", ".jpeg", ".png"}
+RASTER_SUFFIXES = frozenset({".jpg", ".jpeg", ".png"})
+MAX_IMAGE_WORKERS = 4
 
 
-def stage_assets(source_dir: Path, target_dir: Path) -> None:
-    """Stage assets, emitting optimized fallbacks and WebP raster variants."""
-    for source in sorted(source_dir.rglob("*")):
-        relative = source.relative_to(source_dir)
-        target = target_dir / relative
-        if source.is_dir():
-            target.mkdir(parents=True, exist_ok=True)
-        elif source.suffix.lower() in _RASTER_SUFFIXES:
-            target.parent.mkdir(parents=True, exist_ok=True)
-            _optimize_raster(source, target)
-        else:
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source, target)
+def optimize_assets(source_dir: Path, target_dir: Path, *, incremental: bool = False) -> int:
+    """Write raster variants directly to ``target_dir`` and return the processed count."""
+    tasks = [
+        (source, target_dir / source.relative_to(source_dir))
+        for source in sorted(source_dir.rglob("*"))
+        if source.is_file() and source.suffix.lower() in RASTER_SUFFIXES
+    ]
+    if incremental:
+        tasks = [(source, target) for source, target in tasks if _is_stale(source, target)]
+    if not tasks:
+        return 0
+    worker_count = min(MAX_IMAGE_WORKERS, len(tasks), os.cpu_count() or 1)
+    with ThreadPoolExecutor(max_workers=worker_count) as executor:
+        list(executor.map(lambda paths: _optimize_raster(*paths), tasks))
+    return len(tasks)
+
+
+def _is_stale(source: Path, fallback: Path) -> bool:
+    webp = fallback.with_suffix(".webp")
+    if not fallback.exists() or not webp.exists():
+        return True
+    source_mtime = source.stat().st_mtime_ns
+    return fallback.stat().st_mtime_ns < source_mtime or webp.stat().st_mtime_ns < source_mtime
 
 
 def _optimize_raster(source: Path, fallback: Path) -> None:
+    fallback.parent.mkdir(parents=True, exist_ok=True)
     with Image.open(source) as image:
         image.load()
         webp = fallback.with_suffix(".webp")
