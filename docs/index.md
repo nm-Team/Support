@@ -68,7 +68,7 @@ nmTeam 帮助文档由 nmTeam 成员和社区志愿者共同编辑。您可以�
         width: 100%;
         height: 100%;
         background-color: var(--md-default-bg-color);
-        background-image: url(../img/nmteam-support-background.jpg);
+        background-image: url(/assets/images/shared/nmteam-support-background.jpg);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;

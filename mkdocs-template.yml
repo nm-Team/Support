@@ -1,6 +1,15 @@
 site_name: nmTeam Support
+plugins:
+  - search
+  - minify:
+      minify_html: true
+      htmlmin_opts:
+        remove_comments: true
+        remove_optional_attribute_quotes: false
+        reduce_empty_attributes: false
 theme:
   name: material
+  custom_dir: overrides
   logo: https://websiteres.nmteam.xyz/producticon/nmTeam/logo@128.png
   favicon: https://websiteres.nmteam.xyz/producticon/nmTeam/logo@128.png
   language: zh
@@ -24,7 +33,7 @@ theme:
     - navigation.sections
     - toc.integrate
     - navigation.top
-extra_css: [docsList.css, plus.css]
+extra_css: [assets/styles/docsList.css, assets/styles/plus.css]
 extra_javascript: [assets/js/redirects.js]
 docs_dir: generated
 
@@ -39,6 +48,7 @@ extra:
 copyright: Copyright 2022-2025 nmTeam. All rights reserved. <br>This website is licensed under the MIT License.
 
 markdown_extensions:
+  - nmteam_support.markdown_images
   - attr_list
   - md_in_html
   - footnotes
