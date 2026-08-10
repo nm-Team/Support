@@ -69,8 +69,8 @@ Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
     每个链接指向页面的 Markdown 版本。
 - 每页 Markdown 版本：`nmteam build` 时在每个页面旁生成同路径的 `.md` 文件
     （如 `/nmbot-telegram/mcp.md`）。
-- 页面顶部的文章操作区：**复制本文 Markdown** 直接复制当前页面原文；
-    **使用［品牌图标］打开本文章** 菜单提供 GitHub 源文件、Markdown 版本，
+- 页面顶部的文章操作区（首页不显示）：**复制 Markdown** 直接复制当前页面
+    原文；**使用［品牌图标］打开** 菜单提供 GitHub 源文件、Markdown 版本，
     以及 Perplexity、Grok、ChatGPT、Claude Web、Claude Desktop、
     Claude Code、OpenAI Codex、Cursor 八种 AI 打开方式。
 
@@ -83,8 +83,15 @@ Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
 ```bash
 uv run nmteam generate # 仅重新生成文档结构
 uv run nmteam clean    # 清理 cache/、generated/ 和 site/
+uv run nmteam serve    # 预览 site/（.md 以 text/plain; charset=utf-8 提供）
 uv run nmteam --help   # 显示完整命令帮助
 ```
+
+`nmteam serve` 默认监听 `127.0.0.1:8124`，可用 `--port` / `--bind`
+调整。与裸 `python -m http.server` 不同，它把 `.md` 文件的
+`Content-Type` 显式设为 `text/plain; charset=utf-8`（Python 3.13+ 的
+`mimetypes` 会把 `.md` 判为 `text/markdown`，部分客户端会下载而非内联
+显示），保证每页 Markdown 版本在任何浏览器中都能直接阅读。
 
 ## 平台启动器
 

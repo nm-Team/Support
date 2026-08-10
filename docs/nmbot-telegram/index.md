@@ -12,17 +12,11 @@ title: nmBot Telegram 帮助文档
 
 欢迎查阅由 nmTeam 官方和 nmBot 社区志愿者编写的 nmBot 官方帮助文档，请从页面导航中或通过搜索框查找您需要的内容。
 
-<center>
-<a href="https://t.me/nmnmfunbot" target="_blank">
-![开始使用 nmBot](/assets/images/nmbot/doc%20start%20telegram.png){ width="200" }
-</a>
-<a href="https://nmbot.nmnm.fun" target="_blank">
-![开始使用 nmBot](/assets/images/nmbot/doc%20start%20panel.png){ width="200" }
-</a>
-<a href="https://nmteam.xyz/products/overview/nmBot-Telegram" target="_blank">
-![开始使用 nmBot](/assets/images/nmbot/doc%20start%20intro.png){ width="200" }
-</a>
-</center>
+<div align="center" markdown="1">
+
+[![开始使用 nmBot](/assets/images/nmbot/doc%20start%20telegram.png){ width="200" }](https://t.me/nmnmfunbot) [![开始使用 nmBot](/assets/images/nmbot/doc%20start%20panel.png){ width="200" }](https://nmbot.nmnm.fun) [![开始使用 nmBot](/assets/images/nmbot/doc%20start%20intro.png){ width="200" }](https://nmteam.xyz/products/overview/nmBot-Telegram)
+
+</div>
 
 ## 了解 nmBot 最新动态
 

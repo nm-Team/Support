@@ -1,7 +1,7 @@
 /* Fumadocs-style page actions menu. */
 .ai-tools {
     position: relative;
-    z-index: 4;
+    z-index: 1;
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
@@ -210,9 +210,40 @@
     height: 100%;
 }
 
+@media (max-width: 48em) {
+    .md-content__inner {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .md-content__inner > h1 {
+        order: -1;
+    }
+
+    .md-content__inner > .ai-tools {
+        order: 0;
+        float: none;
+        flex-wrap: nowrap;
+        width: 100%;
+        justify-content: flex-start;
+        margin: 0 0 16px;
+    }
+
+    .ai-tools__copy,
+    .ai-tools__trigger {
+        flex: 0 1 auto;
+        background: transparent;
+        border-color: var(--md-default-fg-color--light);
+    }
+
+    .md-content__inner > :not(h1):not(.ai-tools) {
+        order: 1;
+    }
+}
+
 @media (max-width: 44.984375em) {
     .ai-tools {
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         gap: 6px;
         margin-right: 4px;
     }

@@ -105,7 +105,7 @@
         button.querySelector(".ai-tools__copy-icon--success").hidden = !copied;
         button.querySelector(".ai-tools__copy-label").textContent = copied
             ? "已复制"
-            : "复制本文 Markdown";
+            : "复制 Markdown";
     }
 
     function wireCopy(button, md, availability) {

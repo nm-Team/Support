@@ -34,7 +34,7 @@ theme:
     - navigation.sections
     - toc.integrate
     - navigation.top
-extra_css: [assets/styles/docsList.css, assets/styles/plus.css, assets/styles/ai-tools.css]
+extra_css: [assets/styles/base.css, assets/styles/docsList.css, assets/styles/plus.css, assets/styles/ai-tools.css]
 extra_javascript: [assets/js/redirects.js, assets/js/ai-tools.js]
 docs_dir: generated
 
