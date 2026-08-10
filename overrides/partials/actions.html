@@ -37,7 +37,7 @@
   </a>
 {%- endmacro %}
 
-{% if page %}
+{% if page and page.url %}
   {% set source_url = "https://github.com/nm-Team/Support/blob/main/docs/" ~ page.file.src_uri %}
   <div
     class="ai-tools"
@@ -47,7 +47,7 @@
     <button class="ai-tools__copy" type="button">
       <span class="ai-tools__copy-icon ai-tools__copy-icon--idle" aria-hidden="true">{% include ".icons/material/content-copy.svg" %}</span>
       <span class="ai-tools__copy-icon ai-tools__copy-icon--success" aria-hidden="true" hidden>{% include ".icons/material/check.svg" %}</span>
-      <span class="ai-tools__copy-label" aria-live="polite">复制本文 Markdown</span>
+      <span class="ai-tools__copy-label" aria-live="polite">复制 Markdown</span>
     </button>
     <button
       class="ai-tools__trigger"
@@ -62,7 +62,7 @@
         <span class="ai-tools__provider-icon">{% include ".icons/ai/claude.svg" %}</span>
         <span class="ai-tools__provider-icon">{% include ".icons/ai/codex.svg" %}</span>
       </span>
-      <span>打开本文</span>
+      <span>打开</span>
       <span class="ai-tools__chevron">{% include ".icons/material/chevron-down.svg" %}</span>
     </button>
     <div class="ai-tools__menu" id="ai-tools-menu" role="menu" hidden>
