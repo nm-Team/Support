@@ -210,9 +210,22 @@
     height: 100%;
 }
 
+@media (max-width: 55.625em) {
+    .ai-tools {
+        flex-wrap: wrap;
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .ai-tools__copy,
+    .ai-tools__trigger {
+        flex: 1 1 100%;
+    }
+}
+
 @media (max-width: 44.984375em) {
     .ai-tools {
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         gap: 6px;
         margin-right: 4px;
     }
