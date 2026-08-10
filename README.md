@@ -70,7 +70,7 @@ Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
 - 每页 Markdown 版本：`nmteam build` 时在每个页面旁生成同路径的 `.md` 文件
     （如 `/nmbot-telegram/mcp.md`）。
 - 页面顶部的文章操作区：**复制本文 Markdown** 直接复制当前页面原文；
-    **使用［品牌图标］打开本文章** 菜单提供 GitHub 源文件、Markdown 版本，
+    **使用［品牌图标］打开本文** 菜单提供 GitHub 源文件、Markdown 版本，
     以及 Perplexity、Grok、ChatGPT、Claude Web、Claude Desktop、
     Claude Code、OpenAI Codex、Cursor 八种 AI 打开方式。
 
