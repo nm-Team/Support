@@ -5,13 +5,11 @@ index: 200
 ---
 
 ## nmTeam 帮助文档
-
 nmTeam 帮助文档由 nmTeam 成员和社区志愿者共同编辑。
 
 您可以在 [GitHub](https://github.com/nm-Team/Support) 上参与贡献此文档。
 
 ## 贡献者
-
 <style>
     #contributors {
         display: flex;
@@ -34,7 +32,6 @@ nmTeam 帮助文档由 nmTeam 成员和社区志愿者共同编辑。
         color: #000;
     }
 </style>
-
 <div id="contributors"></div>
 <script>
     var xmlhttp = new XMLHttpRequest();

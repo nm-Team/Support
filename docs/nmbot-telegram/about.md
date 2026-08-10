@@ -10,7 +10,7 @@ title: 关于 nmBot
 </center>
 nmBot 是由 nmTeam 出品的 Telegram 机器人，兼具扎实可靠的群组管理功能和温暖搞笑的互动娱乐功能。  
 
-nmBot 高效安全、保障隐私。欢迎在您的群组免费使用 nmBot。
+nmBot 高效安全、保障隐私。欢迎在您的群组免费使用 nmBot。  
 
 ## 关于 nmBot 帮助文档
 
