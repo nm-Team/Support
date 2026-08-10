@@ -1,126 +1,67 @@
 # Support
+[**nmTeam 支持**](https://support.nmteam.xyz)官方网站。使用 `mkdocs-material` 进行构建。
 
-[**nmTeam 支持**](https://support.nmteam.xyz)官方网站。使用 `mkdocs-material` 构建；项目由 `uv` 初始化并管理依赖，通过 Typer 提供统一的跨平台命令行入口。
+# 快速开始
 
-## 环境要求
-
-- Python 3.14+（由 `uv` 按 `.python-version` 自动管理）
-- [uv](https://docs.astral.sh/uv/)（`curl -LsSf https://astral.sh/uv/install.sh | sh`）
-
-## 快速开始
-
-### 安装依赖
-
+## 安装依赖
 ```bash
-uv sync
+# 方式1: 使用管理脚本自动安装
+python manage.py install
+
+# 方式2: 手动安装
+pip install -r requirements.txt
 ```
 
-也可以使用统一 CLI：
-
+## 开发模式 (推荐)
 ```bash
-uv run nmteam install
-```
+# 启动开发服务器 (支持热更新)
+python manage.py dev
 
-### 开发模式
+# 或使用便捷脚本 (Windows)
+.\dev.ps1 dev
+dev.bat dev
 
-```bash
-uv run nmteam dev
+# 或使用便捷脚本 (Linux/macOS)
+./dev.sh dev
 ```
 
 开发模式会：
+- 自动生成文档结构
+- 启动 MkDocs 开发服务器 (http://127.0.0.1:8000)
+- 监听 `docs/` 目录文件变化并自动重新生成
+- 支持热更新，修改后自动刷新页面
 
-- 自动生成文档结构（`cache/`、`generated/`、`mkdocs.yml`）
-- 启动 MkDocs 开发服务器（<http://127.0.0.1:8000>）
-- 监听 `docs/`、`assets/` 和 MkDocs 模板变化并自动重新生成，浏览器热更新
-
-### 构建生产版本
-
+## 构建生产版本
 ```bash
-uv run nmteam build
+# 构建静态站点
+python manage.py build
+
+# 或使用便捷脚本
+.\dev.ps1 build
 ```
 
-构建结果输出到 `site/` 目录。
+构建过程会：
+1. 运行 `generate.py` 生成文档结构
+2. 执行 `mkdocs build` 生成静态站点到 `site/` 目录
 
-最终 HTML 会由 `mkdocs-minify-plugin` 压缩；生成器元标签仅保留 MkDocs
-版本，不暴露主题及其版本。
-
-## 静态资源
-
-仓库内资源统一存放在：
-
-- `assets/images/`：PNG、JPEG 图片母版
-- `assets/icons/`：SVG 图标
-- `assets/styles/`：站点样式
-
-文档使用 `/assets/...` 引用这些资源。生成文档时，每张 PNG 或 JPEG
-图片会同时产生：
-
-- WebP 优先版本：质量 80
-- 原格式 fallback：JPEG 使用质量 80；PNG 使用 256 色有损量化
-
-Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
-优先的 `<picture>` 元素。外部 URL 不会被下载或镜像。
-
-### 其他命令
-
+## 其他命令
 ```bash
-uv run nmteam generate # 仅重新生成文档结构
-uv run nmteam clean    # 清理 cache/、generated/ 和 site/
-uv run nmteam --help   # 显示完整命令帮助
+# 清理生成的文件
+python manage.py clean
+
+# 查看帮助
+python manage.py help
 ```
 
-## 平台启动器
+# 传统部署方式
 
-直接运行 `uv run nmteam` 是推荐方式。`scripts/` 也提供不包含业务逻辑的薄启动器；它们会自动定位仓库根目录并原样传递参数。
+如果你更喜欢传统的分步操作：
 
-=== "Linux / macOS"
+- 安装依赖 `pip install -r requirements.txt`
+- 启动本地服务器 `python -m mkdocs serve`
+- 构建生成目录 `python generate.py`
+- 构建静态界面 `python -m mkdocs build`
 
-    ```bash
-    scripts/nmteam.sh dev
-    ```
-
-=== "PowerShell"
-
-    ```powershell
-    .\scripts\nmteam.ps1 dev
-    ```
-
-=== "Windows Batch"
-
-    ```batch
-    scripts\nmteam.bat dev
-    ```
-
-## 质量检查
-
-一条命令运行 Ruff lint、Ruff format check、pytest、mdformat 和 MkDocs strict build：
-
-```bash
-uv run nmteam check
-```
-
-也可以单独运行：
-
-```bash
-uv run ruff check .
-uv run ruff format --check .
-uv run pytest
-uv run mdformat --check README.md docs/
-uv run nmteam build
-```
-
-以上检查由 CI（`.github/workflows/ci.yml`）自动执行。
-
-## 重定向管理
-
-```bash
-uv run nmteam redirects list
-uv run nmteam redirects add "/old-path/" "/new-path/"
-uv run nmteam redirects remove "/old-path/"
-```
-
-管理命令不会用空配置覆盖损坏的 `redirects.json`；修复配置后再重试即可。
-
-## 贡献
+# 贡献
 
 欢迎您在 GitHub 上提出问题并贡献文档。

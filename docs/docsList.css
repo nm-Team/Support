@@ -40,11 +40,11 @@
 }
 
 .docsList .docsItem .icon.doc {
-    background-image: url(/assets/icons/doc.svg);
+    background-image: url(img/icons/doc.svg);
 }
 
 .docsList .docsItem .icon.folder {
-    background-image: url(/assets/icons/folder.svg);
+    background-image: url(img/icons/folder.svg);
 }
 
 .docsList .docsItem .text .description {
