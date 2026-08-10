@@ -7,7 +7,6 @@ import pytest
 from typer.testing import CliRunner
 
 import nmteam_support.cli as cli
-from nmteam_support.cli import cmd_clean
 from nmteam_support.generator import GeneratorOptions
 
 runner = CliRunner()
@@ -30,7 +29,7 @@ def test_cmd_clean_removes_output_dirs(tmp_path):
     opts.cache_dir.mkdir()
     opts.generated_dir.mkdir()
     (tmp_path / "site").mkdir()
-    assert cmd_clean(opts) == 0
+    assert cli.cmd_clean(opts) == 0
     assert not opts.cache_dir.exists()
     assert not opts.generated_dir.exists()
     assert not (tmp_path / "site").exists()
