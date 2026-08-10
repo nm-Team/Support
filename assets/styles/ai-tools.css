@@ -223,14 +223,16 @@
     .md-content__inner > .ai-tools {
         order: 0;
         float: none;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         width: 100%;
         margin: 0 0 16px;
     }
 
     .ai-tools__copy,
     .ai-tools__trigger {
-        flex: 1 1 100%;
+        flex: 0 1 auto;
+        background: transparent;
+        border-color: var(--md-default-fg-color--light);
     }
 
     .md-content__inner > :not(h1):not(.ai-tools) {
