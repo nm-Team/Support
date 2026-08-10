@@ -1,7 +1,7 @@
 /* Fumadocs-style page actions menu. */
 .ai-tools {
     position: relative;
-    z-index: 4;
+    z-index: 1;
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
@@ -225,6 +225,7 @@
         float: none;
         flex-wrap: nowrap;
         width: 100%;
+        justify-content: flex-start;
         margin: 0 0 16px;
     }
 
