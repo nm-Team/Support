@@ -14,20 +14,20 @@ nmTeam 账号是 nmTeam 服务的统一身份认证系统。通过 nmTeam 账号
 ## 快速链接
 
 - [nmTeam 账号中心](https://accounts.nmteam.xyz/)
-- [注册 nmTeam 账号](https://accounts.nmteam.xyz/#/register)
-- [启用双重验证](https://accounts.nmteam.xyz/#/manage/two-factor-authentication-setup)
+- [注册 nmTeam 账号](register.md)
+- [启用双重验证](two_factor_authentication.md)
 - [已知问题](issues.md)
 
 ## 帮助主题
 
 ### 账号注册与登录
 
-- **[注册 nmTeam 账号](https://accounts.nmteam.xyz/#/register)**：了解如何创建新的 nmTeam 账号。
+- **[注册 nmTeam 账号](register.md)**：了解如何创建新的 nmTeam 账号。
 - **登录问题**：如果您在登录时遇到问题，请检查您的用户名和密码是否正确，或尝试重置密码。
 
 ### 账号安全
 
-- **[启用双重验证](https://accounts.nmteam.xyz/#/manage/two-factor-authentication-setup)**：了解如何通过双重验证来增强账号安全性。
+- **[启用双重验证](two_factor_authentication.md)**：了解如何通过双重验证来增强账号安全性。
 - **密码管理**：建议定期更新您的密码，并使用强密码来保护您的账号。
 
 ### 问题与支持

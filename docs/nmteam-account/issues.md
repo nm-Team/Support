@@ -25,7 +25,7 @@ index: -1
 对于"通行密钥"功能的问题，您可以暂时使用以下替代方案：
 
 - 使用支持的实体安全密钥（如 YubiKey）
-- 使用[双重验证（2FA）](https://accounts.nmteam.xyz/#/manage/two-factor-authentication-setup)作为替代的安全措施
+- 使用[双重验证（2FA）](two_factor_authentication.md)作为替代的安全措施
 
 ## 已解决的问题
 
