@@ -61,13 +61,37 @@ uv run nmteam build
 Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
 优先的 `<picture>` 元素。外部 URL 不会被下载或镜像。
 
+## AI 支持
+
+站点面向语言模型提供以下能力：
+
+- `/llms.txt`：按 [llmstxt.org](https://llmstxt.org/) 规范生成的站点索引，
+    每个链接指向页面的 Markdown 版本。
+- 每页 Markdown 版本：`nmteam build` 时在每个页面旁生成同路径的 `.md` 文件
+    （如 `/nmbot-telegram/mcp.md`）。
+- 页面顶部的文章操作区（首页不显示）：**复制 Markdown** 直接复制当前页面
+    原文；**使用［品牌图标］打开** 菜单提供 GitHub 源文件、Markdown 版本，
+    以及 Perplexity、Grok、ChatGPT、Claude Web、Claude Desktop、
+    Claude Code、OpenAI Codex、Cursor 八种 AI 打开方式。
+
+注意：`llms.txt` 与 `.md` 版本由 `nmteam build` 输出到 `site/`；开发模式
+（`nmteam dev`）下复制和 View as Markdown 会提示先构建，AI 操作仍可通过
+当前页面 URL 打开。
+
 ### 其他命令
 
 ```bash
 uv run nmteam generate # 仅重新生成文档结构
 uv run nmteam clean    # 清理 cache/、generated/ 和 site/
+uv run nmteam serve    # 预览 site/（.md 以 text/plain; charset=utf-8 提供）
 uv run nmteam --help   # 显示完整命令帮助
 ```
+
+`nmteam serve` 默认监听 `127.0.0.1:8124`，可用 `--port` / `--bind`
+调整。与裸 `python -m http.server` 不同，它把 `.md` 文件的
+`Content-Type` 显式设为 `text/plain; charset=utf-8`（Python 3.13+ 的
+`mimetypes` 会把 `.md` 判为 `text/markdown`，部分客户端会下载而非内联
+显示），保证每页 Markdown 版本在任何浏览器中都能直接阅读。
 
 ## 平台启动器
 

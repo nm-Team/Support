@@ -1,0 +1,81 @@
+{#-
+  Overrides Material's actions partial: keeps the edit/view source buttons
+  and adds a Fumadocs-style menu for source, Markdown, and AI actions.
+-#}
+{% if page.edit_url %}
+  {% if "content.action.edit" in features %}
+    <a href="{{ page.edit_url }}" title="{{ lang.t('action.edit') }}" class="md-content__button md-icon" rel="edit">
+      {% set icon = config.theme.icon.edit or "material/file-edit-outline" %}
+      {% include ".icons/" ~ icon ~ ".svg" %}
+    </a>
+  {% endif %}
+  {% if "content.action.view" in features %}
+    {% if "/blob/" in page.edit_url %}
+      {% set part = "blob" %}
+    {% else %}
+      {% set part = "edit" %}
+    {% endif %}
+    <a href="{{ page.edit_url | replace(part, 'raw') }}" title="{{ lang.t('action.view') }}" class="md-content__button md-icon">
+      {% set icon = config.theme.icon.view or "material/file-eye-outline" %}
+      {% include ".icons/" ~ icon ~ ".svg" %}
+    </a>
+  {% endif %}
+{% endif %}
+
+{% macro ai_action(label, icon, kind, href="#", group_start=false, brand=false) -%}
+  <a
+    class="ai-tools__item{% if group_start %} ai-tools__item--group-start{% endif %}"
+    href="{{ href }}"
+    role="menuitem"
+    data-ai="{{ kind }}"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <span class="ai-tools__item-icon{% if brand %} ai-tools__item-icon--brand{% endif %}">{% include ".icons/" ~ icon %}</span>
+    <span class="ai-tools__label">{{ label }}</span>
+    <span class="ai-tools__external">{% include ".icons/material/open-in-new.svg" %}</span>
+  </a>
+{%- endmacro %}
+
+{% if page and page.url %}
+  {% set source_url = "https://github.com/nm-Team/Support/blob/main/docs/" ~ page.file.src_uri %}
+  <div
+    class="ai-tools"
+    data-md-url="{{ page.url }}"
+    data-page-title="{{ page.title | e }}"
+  >
+    <button class="ai-tools__copy" type="button">
+      <span class="ai-tools__copy-icon ai-tools__copy-icon--idle" aria-hidden="true">{% include ".icons/material/content-copy.svg" %}</span>
+      <span class="ai-tools__copy-icon ai-tools__copy-icon--success" aria-hidden="true" hidden>{% include ".icons/material/check.svg" %}</span>
+      <span class="ai-tools__copy-label" aria-live="polite">复制 Markdown</span>
+    </button>
+    <button
+      class="ai-tools__trigger"
+      type="button"
+      aria-haspopup="menu"
+      aria-expanded="false"
+      aria-controls="ai-tools-menu"
+    >
+      <span>使用</span>
+      <span class="ai-tools__provider-icons" aria-hidden="true">
+        <span class="ai-tools__provider-icon ai-tools__provider-icon--github">{% include ".icons/fontawesome/brands/github.svg" %}</span>
+        <span class="ai-tools__provider-icon">{% include ".icons/ai/claude.svg" %}</span>
+        <span class="ai-tools__provider-icon">{% include ".icons/ai/codex.svg" %}</span>
+      </span>
+      <span>打开</span>
+      <span class="ai-tools__chevron">{% include ".icons/material/chevron-down.svg" %}</span>
+    </button>
+    <div class="ai-tools__menu" id="ai-tools-menu" role="menu" hidden>
+      {{ ai_action("Open in GitHub", "fontawesome/brands/github.svg", "github", source_url) }}
+      {{ ai_action("View as Markdown", "material/language-markdown.svg", "markdown") }}
+      {{ ai_action("Open in Perplexity", "ai/perplexity.svg", "perplexity", group_start=true, brand=true) }}
+      {{ ai_action("Open in Grok", "simple/grok.svg", "grok") }}
+      {{ ai_action("Open in ChatGPT", "ai/openai.svg", "chatgpt", brand=true) }}
+      {{ ai_action("Open in Claude Web", "ai/claude.svg", "claude", brand=true) }}
+      {{ ai_action("Open in Claude Desktop", "ai/claude.svg", "claude-desktop", group_start=true, brand=true) }}
+      {{ ai_action("Open in Claude Code", "ai/claude-code.svg", "claude-code", brand=true) }}
+      {{ ai_action("Open in OpenAI Codex", "ai/codex.svg", "codex", brand=true) }}
+      {{ ai_action("Open in Cursor", "simple/cursor.svg", "cursor") }}
+    </div>
+  </div>
+{% endif %}

@@ -10,10 +10,11 @@ from nmteam_support.contributing import render_contributing_note, should_hide_co
 from nmteam_support.frontmatter import split_frontmatter
 from nmteam_support.image_pipeline import stage_assets
 from nmteam_support.index import render_index_page
+from nmteam_support.llms import render_llms_txt
 from nmteam_support.nav import build_nav_yaml
 from nmteam_support.redirects import load_redirects, render_redirects_js
 from nmteam_support.scanner import ScannedDir, scan_docs
-from nmteam_support.template import render_mkdocs_yml
+from nmteam_support.template import extract_site_url, render_mkdocs_yml
 
 
 @dataclass(frozen=True)
@@ -61,6 +62,10 @@ def generate(options: GeneratorOptions) -> None:
     template = options.template_path.read_text(encoding="UTF-8", errors="ignore")
     options.mkdocs_yml_path.write_text(render_mkdocs_yml(template, nav_yaml), encoding="UTF-8")
 
+    base_url = extract_site_url(template)
+    (cache_dir / "llms.txt").write_text(render_llms_txt(root, base_url), encoding="UTF-8")
+    print("llms.txt generated.")
+
     redirects = load_redirects(options.redirects_path)
     if redirects is None:
         print("Warning: redirects.json not found. Skipping redirects generation.")
@@ -74,6 +79,20 @@ def generate(options: GeneratorOptions) -> None:
         shutil.rmtree(options.generated_dir)
     shutil.copytree(cache_dir, options.generated_dir)
     print("Documentation generated.")
+
+
+def stage_markdown_copies(cache_dir: Path, site_dir: Path) -> None:
+    """Copy every staged ``.md`` into ``site/`` so each page has a raw Markdown twin.
+
+    The copies land at the same docs-relative path (e.g. ``nmbot-telegram/mcp.md``),
+    which is the URL served for ``/nmbot-telegram/mcp.md``. MkDocs copies ``llms.txt``
+    verbatim but would re-render any ``.md`` placed inside the docs dir, so the twins
+    are staged only after the build, directly into the site output.
+    """
+    for source in cache_dir.rglob("*.md"):
+        target = site_dir / source.relative_to(cache_dir)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
 
 
 def _write_tree(docs_dir: Path, cache_dir: Path, scan: ScannedDir) -> None:

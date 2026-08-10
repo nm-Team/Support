@@ -5,7 +5,12 @@ from pathlib import Path
 import pytest
 from PIL import Image
 
-from nmteam_support.generator import GeneratorOptions, generate, render_doc_file
+from nmteam_support.generator import (
+    GeneratorOptions,
+    generate,
+    render_doc_file,
+    stage_markdown_copies,
+)
 
 
 def _full_options(tmp_path: Path, docs_dir: Path, redirects: str | None = None) -> GeneratorOptions:
@@ -90,6 +95,29 @@ def test_generate_writes_redirects_before_copy(tmp_path, docs_dir):
     js = options.generated_dir / "assets" / "js" / "redirects.js"
     assert js.exists()
     assert "/a/" in js.read_text(encoding="utf-8")
+
+
+def test_generate_writes_llms_txt(tmp_path, docs_dir):
+    options = _full_options(tmp_path, docs_dir)
+    generate(options)
+    llms = options.generated_dir / "llms.txt"
+    assert llms.exists()
+    content = llms.read_text(encoding="utf-8")
+    assert content.startswith("# nmTeam Support\n")
+    assert "nmbot-telegram/mcp.md" in content
+    assert "https://support.nmteam.xyz/nmbot-telegram/mcp.md" in content
+
+
+def test_stage_markdown_copies_mirrors_cache(tmp_path, docs_dir):
+    options = _full_options(tmp_path, docs_dir)
+    generate(options)
+    site_dir = tmp_path / "site"
+    stage_markdown_copies(options.cache_dir, site_dir)
+    twin = site_dir / "nmbot-telegram" / "mcp.md"
+    assert twin.exists()
+    cached = options.cache_dir / "nmbot-telegram" / "mcp.md"
+    assert twin.read_text(encoding="utf-8") == cached.read_text(encoding="utf-8")
+    assert (site_dir / "index.md").exists()
 
 
 def test_generate_skips_superpowers_in_output(tmp_path, docs_dir):

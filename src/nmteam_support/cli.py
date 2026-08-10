@@ -10,12 +10,18 @@ from pathlib import Path
 
 import typer
 
-from nmteam_support.generator import GeneratorOptions, default_options, generate
+from nmteam_support.generator import (
+    GeneratorOptions,
+    default_options,
+    generate,
+    stage_markdown_copies,
+)
 from nmteam_support.redirects import (
     RedirectConfigError,
     read_redirects,
     write_redirects,
 )
+from nmteam_support.serve import DEFAULT_BIND, DEFAULT_PORT, serve_site
 
 app = typer.Typer(invoke_without_command=True)
 redirects_app = typer.Typer(no_args_is_help=True)
@@ -55,7 +61,13 @@ def cmd_clean(options: GeneratorOptions) -> int:
 def cmd_build(options: GeneratorOptions) -> int:
     """Regenerate and build the static site into site/."""
     generate(options)
-    return subprocess.call([sys.executable, "-m", "mkdocs", "build", "--strict", "--clean"])
+    code = subprocess.call([sys.executable, "-m", "mkdocs", "build", "--strict", "--clean"])
+    if code:
+        return code
+    site_dir = options.mkdocs_yml_path.parent / "site"
+    stage_markdown_copies(options.cache_dir, site_dir)
+    print("Markdown copies staged into site/.")
+    return 0
 
 
 def cmd_dev(options: GeneratorOptions) -> int:
@@ -169,6 +181,19 @@ def clean_command() -> None:
 def install_command() -> None:
     """Install project dependencies with uv."""
     _exit_on_error(cmd_install())
+
+
+@app.command("serve")
+def serve_command(
+    port: int = typer.Option(DEFAULT_PORT, "--port", "-p", help="TCP port to listen on."),
+    bind: str = typer.Option(DEFAULT_BIND, "--bind", "-b", help="Address to bind to."),
+) -> None:
+    """Serve the built site; Markdown is served as text/plain (UTF-8)."""
+    site_dir = default_options().mkdocs_yml_path.parent / "site"
+    if not site_dir.is_dir():
+        typer.echo("site/ 不存在，请先运行 `nmteam build`。", err=True)
+        raise typer.Exit(code=1)
+    serve_site(site_dir, port, bind)
 
 
 @app.command("check")
