@@ -12,7 +12,7 @@ def _base_url(server) -> str:
 
 
 def test_markdown_served_as_text_plain_utf8(tmp_path):
-    (tmp_path / "page.md").write_text("# 标题\n", encoding="utf-8")
+    (tmp_path / "page.md").write_text("# 标题\n", encoding="utf-8", newline="\n")
     (tmp_path / "index.html").write_text("<h1>hi</h1>", encoding="utf-8")
 
     server = create_server(tmp_path, port=0)
