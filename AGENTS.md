@@ -19,8 +19,8 @@ redirects.json ──────┘        (含生成的 assets/js/redirects.js
 
 构建后还有一步：`stage_markdown_copies()` 把 `cache/` 下每个 `.md` 复制到 `site/`
 同路径（如 `site/nmbot-telegram/mcp.md`），作为每页的 Markdown 版本，供
-`/llms.txt` 链接、“复制本文 Markdown”按钮、View-as-Markdown 菜单项与 AI
-打开菜单。
+`/llms.txt` 链接、“复制 Markdown”按钮、View-as-Markdown 菜单项与 AI 打开
+菜单。
 
 `generate()`（`src/nmteam_support/generator.py`）编排的完整链路：
 
