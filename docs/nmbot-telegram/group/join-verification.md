@@ -50,4 +50,5 @@ nmBot 支持设置自动通过 Telegram Premium 用户入群或拒绝非 Telegra
 订阅 nmBot+ 的群组可在 nmBot 面板中查看入群验证历史记录，可查看 15 天内的历史记录。
 
 ## 疑难解答
+
 - [如果“频道验证”在您的群组中不工作](../faq/channel-verification-not-working.md)
