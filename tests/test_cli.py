@@ -84,6 +84,33 @@ def test_redirects_list_displays_existing_rules(tmp_path, monkeypatch):
     assert "/old/ -> /new/" in result.stdout
 
 
+def test_serve_command_serves_site_with_defaults(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "site").mkdir()
+    captured = {}
+    monkeypatch.setattr(
+        cli,
+        "serve_site",
+        lambda directory, port, bind: captured.update(directory=directory, port=port, bind=bind),
+    )
+
+    result = runner.invoke(cli.app, ["serve"])
+
+    assert result.exit_code == 0
+    assert captured["directory"] == tmp_path / "site"
+    assert captured["port"] == 8124
+    assert captured["bind"] == "127.0.0.1"
+
+
+def test_serve_command_rejects_missing_site(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+
+    result = runner.invoke(cli.app, ["serve"])
+
+    assert result.exit_code != 0
+    assert "site/ 不存在" in result.stderr
+
+
 def test_redirects_remove_deletes_existing_rule(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "redirects.json").write_text(
