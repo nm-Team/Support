@@ -28,7 +28,11 @@
     }
 
     function providerPrompt(url) {
-        return "Read " + url + ", I want to ask questions about it.";
+        return (
+            "请阅读以下 nmTeam 帮助文档，并依据原文回答我接下来的问题；" +
+            "若文档未提及，请如实说明：\n\n" +
+            url
+        );
     }
 
     function providerUrl(provider, prompt) {
