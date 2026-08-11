@@ -12,11 +12,11 @@ hide:
     <p>在此获取 nmTeam 旗下产品的支持。</p>
 </div>
 
-<center>
+<div class="homepage-section" markdown="1">
 
 ## 产品和服务
 
-</center>
+</div>
 <div class="productsTable">
     <a class="product" href="nmbot-telegram">
         <img src="https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png" alt="nmBot logo" />
@@ -32,7 +32,7 @@ hide:
     </a>
 </div>
 
-<center>
+<div class="homepage-section" markdown="1">
 
 ## 关于帮助文档
 
@@ -48,9 +48,12 @@ nmTeam 帮助文档由 nmTeam 成员和社区志愿者共同编辑。您可以�
 
 访问 [nmTeam 官网](https://nmteam.xyz)了解 nmTeam 的最新动态和产品信息。
 
-</center>
+</div>
 
 <style>
+    .homepage-section {
+        text-align: center;
+    }
     .headerBackground {
         position: relative;
         width: 120%;
@@ -68,7 +71,7 @@ nmTeam 帮助文档由 nmTeam 成员和社区志愿者共同编辑。您可以�
         width: 100%;
         height: 100%;
         background-color: var(--md-default-bg-color);
-        background-image: url(../img/nmteam-support-background.jpg);
+        background-image: url(/assets/images/shared/nmteam-support-background.jpg);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
