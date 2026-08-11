@@ -2,6 +2,8 @@
 
 import os
 
+import pytest
+
 from nmteam_support import scanner
 from nmteam_support.scanner import scan_docs
 
@@ -71,3 +73,11 @@ def test_refresh_catalog_reuses_unchanged_pages_and_reports_only_changes(docs_di
     assert changed.changed_paths == frozenset({"nmbot-telegram/mcp.md"})
     assert changed.pages["about.md"] is first.pages["about.md"]
     assert changed.pages["nmbot-telegram/mcp.md"] is not first.pages["nmbot-telegram/mcp.md"]
+
+
+def test_refresh_catalog_rejects_invalid_utf8_with_source_path(docs_dir):
+    broken = docs_dir / "broken.md"
+    broken.write_bytes(b"# Visible\nkept\xffdropped\n")
+
+    with pytest.raises(UnicodeError, match=r"broken\.md"):
+        scanner.refresh_catalog(docs_dir)

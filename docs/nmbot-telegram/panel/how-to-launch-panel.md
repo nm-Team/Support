@@ -7,7 +7,7 @@ description: 本文将指导您如何启动 nmBot 面板以管理您的机器人
 
 nmBot 面板提供了多种方式启动。
 
-## 在迷你 App 中打开 (推荐)
+## 在迷你 App 中打开 (推荐) { #mini-app }
 
 通过如下方式可在 Telegram 迷你 App 中打开 nmBot 面板：
 
@@ -16,7 +16,7 @@ nmBot 面板提供了多种方式启动。
 - Telegram 应用中，和 nmBot 的对话中发送 /panel 指令后，返回消息中的链接预览。
 - Telegram 应用中，nmBot 资料卡中的“打开 App”按钮。
 
-## 在浏览器中打开
+## 在浏览器中打开 { #browser }
 
 在浏览器中访问 https://nmbot.nmnm.fun 即可打开 nmBot 面板。
 
@@ -24,4 +24,4 @@ nmBot 面板提供了多种方式启动。
 
 您可以向 nmBot 发送 /panel 指令来获取面板链接。
 
-您可以根据返回消息中的说明，在[浏览器](#%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E6%89%93%E5%BC%80)或[迷你 App](#%E5%9C%A8%E8%BF%B7%E4%BD%A0-App-%E4%B8%AD%E6%89%93%E5%BC%80-%E6%8E%A8%E8%8D%90)中打开面板。
+您可以根据返回消息中的说明，在[浏览器](#browser)或[迷你 App](#mini-app)中打开面板。

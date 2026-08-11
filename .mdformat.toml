@@ -1,6 +1,6 @@
 # mdformat 配置：仓库根目录，适用于 docs/ 下所有 .md 文件
-# 插件（mdformat-mkdocs、mdformat-front-matters）通过 entry point 自动启用，
-# 因此 admonition、content tabs、YAML frontmatter 均受保护，无需 extensions 列表。
+# 插件（mdformat-mkdocs、mdformat-front-matters、mdformat-footnote）通过 entry point 自动启用，
+# 因此 admonition、content tabs、YAML frontmatter 与脚注均受保护，无需 extensions 列表。
 wrap = "keep"
 number = false
 end_of_line = "lf"

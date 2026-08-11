@@ -22,6 +22,7 @@ nmteam-support = "nmteam_support.plugin:SupportPlugin"
 [dependency-groups]
 dev = [
     "mdformat>=1.0",
+    "mdformat-footnote>=0.1.3",
     "mdformat-front-matters>=2.0",
     "mdformat-mkdocs>=5.2.2",
     "pytest>=9.0",

@@ -97,7 +97,10 @@ def _scan(
             stamp = (stat.st_mtime_ns, stat.st_size)
             source = previous_pages.get(child_rel)
             if source is None or source.stamp != stamp:
-                text = entry.read_text(encoding="utf-8", errors="ignore")
+                try:
+                    text = entry.read_text(encoding="utf-8")
+                except UnicodeDecodeError as error:
+                    raise UnicodeError(f"Markdown source is not valid UTF-8: {entry}") from error
                 changed.add(child_rel)
                 if not text:
                     continue

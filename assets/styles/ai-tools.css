@@ -224,7 +224,9 @@
         order: 0;
         float: none;
         flex-wrap: nowrap;
-        width: 100%;
+        width: auto;
+        max-width: 100%;
+        align-self: flex-start;
         justify-content: flex-start;
         margin: 0 0 16px;
     }

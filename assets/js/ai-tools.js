@@ -17,14 +17,8 @@
     var CLAUDE_CODE_BRANCH = "main";
 
     function mdUrl(raw) {
-        if (!raw) {
-            return "/index.md";
-        }
-        return "/" + raw.replace(/\/+$/, "") + ".md";
-    }
-
-    function pageUrl(raw) {
-        return location.origin + "/" + (raw || "");
+        var path = raw ? "/" + raw.replace(/\/+$/, "") + ".md" : "/index.md";
+        return new URL(path, location.href).href;
     }
 
     function providerPrompt(url) {
@@ -108,42 +102,41 @@
             : "复制 Markdown";
     }
 
-    function wireCopy(button, md, availability) {
+    function loadMarkdown(md) {
+        return fetch(md)
+            .then(function (response) {
+                var contentType = response.headers.get("Content-Type") || "";
+                if (!response.ok || contentType.indexOf("html") !== -1) {
+                    return null;
+                }
+                return response.text();
+            })
+            .catch(function () {
+                return null;
+            });
+    }
+
+    function wireCopy(button, md) {
         var resetTimer;
 
         button.addEventListener("click", function () {
             button.disabled = true;
-            availability
-                .then(function (available) {
-                    if (!available) {
-                        showMarkdownUnavailable();
-                        return null;
-                    }
-                    return fetch(md);
-                })
-                .then(function (response) {
-                    if (!response) {
-                        return null;
-                    }
-                    var contentType = response.headers.get("Content-Type") || "";
-                    if (!response.ok || contentType.indexOf("html") !== -1) {
-                        throw new Error("Markdown is unavailable");
-                    }
-                    return response.text();
-                })
+            loadMarkdown(md)
                 .then(function (markdown) {
                     if (markdown === null) {
+                        showMarkdownUnavailable();
                         return;
                     }
-                    return copyText(markdown).then(function () {
-                        window.clearTimeout(resetTimer);
-                        setCopyState(button, true);
-                        resetTimer = window.setTimeout(function () {
-                            setCopyState(button, false);
-                        }, 1800);
-                    });
+                    return copyText(markdown)
+                        .then(function () {
+                            window.clearTimeout(resetTimer);
+                            setCopyState(button, true);
+                            resetTimer = window.setTimeout(function () {
+                                setCopyState(button, false);
+                            }, 1800);
+                        })
+                        .catch(showCopyFailed);
                 })
-                .catch(showCopyFailed)
                 .then(function () {
                     button.disabled = false;
                 });
@@ -151,36 +144,30 @@
     }
 
     function wireMarkdown(link, md) {
-        var availability = fetch(md, { method: "HEAD" })
-            .then(function (response) {
-                var contentType = response.headers.get("Content-Type") || "";
-                return response.ok && contentType.indexOf("html") === -1;
-            })
-            .catch(function () {
-                return false;
-            })
-            .then(function (available) {
-                link.dataset.rawAvailable = String(available);
-                return available;
-            });
+        var availability;
+
+        function checkAvailability() {
+            if (!availability) {
+                availability = fetch(md, { method: "HEAD" })
+                    .then(function (response) {
+                        var contentType = response.headers.get("Content-Type") || "";
+                        return response.ok && contentType.indexOf("html") === -1;
+                    })
+                    .catch(function () {
+                        return false;
+                    });
+            }
+            return availability;
+        }
 
         link.href = md;
         link.addEventListener("click", function (event) {
-            if (link.dataset.rawAvailable === "true") {
-                return;
-            }
-
             event.preventDefault();
-            if (link.dataset.rawAvailable === "false") {
-                showMarkdownUnavailable();
-                return;
-            }
-
             var target = window.open("about:blank", "_blank");
             if (target) {
                 target.opener = null;
             }
-            availability.then(function (available) {
+            checkAvailability().then(function (available) {
                 if (available && target) {
                     target.location.replace(md);
                     return;
@@ -191,8 +178,6 @@
                 showMarkdownUnavailable();
             });
         });
-
-        return availability;
     }
 
     function wireMenu(box) {
@@ -202,10 +187,10 @@
         var raw = box.getAttribute("data-md-url") || "";
         var markdown = menu.querySelector('[data-ai="markdown"]');
         var md = mdUrl(raw);
-        var prompt = providerPrompt(pageUrl(raw));
-        var availability = wireMarkdown(markdown, md);
+        var prompt = providerPrompt(md);
 
-        wireCopy(copy, md, availability);
+        wireCopy(copy, md);
+        wireMarkdown(markdown, md);
         [
             "perplexity",
             "grok",
