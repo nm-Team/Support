@@ -3,3 +3,8 @@
 {% block site_meta %}
   {{ super() | replace(", mkdocs-material-9.7.7", "") }}
 {% endblock %}
+
+{% block extrahead %}
+  {{ super() }}
+  <script defer src="https://a.nmteam.top/script.js" data-website-id="481dc51a-eb7c-4528-b5c2-32a559e85342"></script>
+{% endblock %}
