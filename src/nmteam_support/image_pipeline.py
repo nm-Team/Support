@@ -17,11 +17,12 @@ RASTER_SUFFIXES = frozenset({".jpg", ".jpeg", ".png"})
 PNG_COLORS = 256
 
 # Pillow's WebP ``method`` trades encoding effort for a few percent of bytes. Measured on
-# this repository's assets, moving off the previous ``method=6`` costs 1.7% more bytes and
-# encodes about 7x faster; ``method=4`` saves no further time and doubles that penalty.
+# this repository's rasters, dropping from ``6`` to ``5`` costs 1.7% more bytes and takes
+# roughly a quarter of the encode time — see ``benchmarks/test_bench_image_pipeline.py``.
 WEBP_METHOD = 5
 
 # Encoding runs in Pillow's C encoder, which releases the GIL, so threads scale with cores.
+# The same benchmark measures the full pass at 2.7s / 1.0s / 0.7s for 1 / 4 / 8 workers.
 MAX_IMAGE_WORKERS = 8
 
 # Bump when the encoder pipeline changes in a way ``_ENCODER`` cannot express, otherwise

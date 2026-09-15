@@ -46,6 +46,7 @@ redirects.json ────────────────────┘
 | `overrides/`                                  | mkdocs `custom_dir`：`main.html` 覆写 site_meta 移除主题版本号；`partials/actions.html` 追加 Fumadocs 风格文章操作区（复制 Markdown + GitHub / Markdown / Perplexity / Grok / ChatGPT / Claude Web / Claude Desktop / Claude Code / OpenAI Codex / Cursor 打开菜单）；`.icons/ai/` 存放菜单品牌图标 |
 | `scripts/`                                    | 三平台薄启动器（`nmteam.sh` / `nmteam.ps1` / `nmteam.bat`）                                                                                                                                                                                                                |
 | `tests/`                                      | pytest 行为与生命周期测试                                                                                                                                                                                                                                                  |
+| `benchmarks/`                                 | `pytest-benchmark` 性能基准（编码参数、缓存命中、压缩开销、整构建冷/热）；显式运行，**不计入** `nmteam check`                                                                                                |
 | `mkdocs.yml`                                  | 受版本控制的 MkDocs 单一配置源；nav 由插件在内存中设置                                                                                                                                                                                                                     |
 | `site/`                                       | 唯一生成目录，勿手改勿提交                                                                                                                                                                                                                                                 |
 
@@ -60,6 +61,7 @@ uv run nmteam check                # 全部质量检查（见下）
 uv run nmteam redirects list|add "/old/" "/new/"|remove "/old/"
 uv run nmteam --help
 uv run nmteam --verbose build      # 显示详细 MkDocs 日志
+uv run pytest benchmarks/          # 性能基准（不计入 nmteam check）
 ```
 
 平台启动器（定位仓库根后原样透传参数，无业务逻辑）：`scripts/nmteam.sh dev`、`.\scripts\nmteam.ps1 dev`、`scripts\nmteam.bat dev`。
@@ -138,4 +140,5 @@ Markdown 文档（`docs/`）：
 - 输入构造分级：conftest 的 `docs_dir` fixture（tmp_path 构造最小 docs 树）→ 插件事件测试 → 真实 MkDocs 生命周期集成。**不依赖真实 docs/ 内容**。
 - CLI 测试用 `typer.testing.CliRunner` + monkeypatch；启动器测试用 subprocess + 假 uv 脚本。
 - **无覆盖率门槛**（无 pytest-cov、CI 无 coverage 步骤）——新增功能时给模块补 `test_<module>.py` 行为测试即可。
+- **性能基准**在 `benchmarks/`（`pytest-benchmark`），**不进入** `nmteam check`：`testpaths = ["tests"]` 将它隔离，只有显式 `uv run pytest benchmarks/` 才跑。基准必须针对仓库真实资源而非合成输入；新增可调参数时同时补一个 `benchmark.pedantic(setup=...)` 场景——测试体只会执行一次，需要每轮重置的状态必须放 `setup`。
 - CI 在 ubuntu/macos/windows 三平台跑全量 check；提交前本地至少跑 `uv run nmteam check`。

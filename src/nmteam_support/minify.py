@@ -25,8 +25,9 @@ _MINIFIER = f"v{_CACHE_VERSION}|htmlmin2|{sorted(_OPTIONS.items())}".encode()
 def render_minified_html(html: str, *, cache_dir: Path) -> str:
     """Minify one rendered page, reusing the cached result of an identical input.
 
-    Minification is pure Python and dominates the build, while the pages it receives
-    repeat byte for byte across builds whenever the documentation tree is unchanged.
+    htmlmin is pure Python and costs about 0.7s for the whole site, while the pages it
+    receives repeat byte for byte across builds whenever the documentation tree is
+    unchanged — see ``benchmarks/test_bench_minify.py``.
     """
     digest = content_digest(_MINIFIER, html.encode("utf-8"))
     cached = cache_dir / digest
