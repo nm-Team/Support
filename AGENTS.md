@@ -142,4 +142,5 @@ Markdown 文档（`docs/`）：
 - **无覆盖率门槛**（无 pytest-cov、CI 无 coverage 步骤）——新增功能时给模块补 `test_<module>.py` 行为测试即可。
 - **性能基准**在 `benchmarks/`（`pytest-benchmark`），**不进入** `nmteam check`：`testpaths = ["tests"]` 将它隔离，只有显式 `uv run pytest benchmarks/` 才跑。基准必须针对仓库真实资源而非合成输入；新增可调参数时同时补一个 `benchmark.pedantic(setup=...)` 场景——测试体只会执行一次，需要每轮重置的状态必须放 `setup`。
 - **改动构建产物时先做字节级回归**：拿 `main` 开一个干净 worktree，两边各构建一次，逐文件比 SHA-256；除有意变更（例如 WebP 档位）外应当全等。这类对比能揭出测试覆盖不到的「某类产物被漏处理」；`404.html` 漏压缩就是这么发现的。
+- **基准表里写倍率，不写含糊的百分比**：`旧 ÷ 新` 得到的是「是原来的 X%」，不是「提升 X%」（4.41 s → 2.33 s 是**快 1.89 倍 / 耗时 -47.2%**，写成「提升 189%」会被当成算错）。min 只对 min、mean 只对 mean；数字要注明测量方式，因为跑真实 CLI 与进程内测量能差出解释器启动那 0.2s。
 - CI 在 ubuntu/macos/windows 三平台跑全量 check；提交前本地至少跑 `uv run nmteam check`。
