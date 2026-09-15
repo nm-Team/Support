@@ -16,12 +16,12 @@
     var CLAUDE_CODE_REPOSITORY = "nm-Team/Support";
     var CLAUDE_CODE_BRANCH = "main";
 
-    function mdUrl(raw) {
-        var path = raw ? "/" + raw : "/index.md";
-        if (/\/$/.test(path)) {
-            path += "index.md";
-        }
-        return new URL(path, location.href).href;
+    // The page's own Markdown copy sits at its docs-relative source path.
+    // Anything that resolves away from this origin (a tampered data attribute,
+    // say) is refused instead of being opened or fetched.
+    function mdUrl(sourcePath) {
+        var url = new URL("/" + sourcePath.replace(/^\/+/, ""), location.href);
+        return url.origin === location.origin ? url : null;
     }
 
     function providerPrompt(url) {
@@ -106,6 +106,9 @@
     }
 
     function loadMarkdown(md) {
+        if (!md) {
+            return Promise.resolve(null);
+        }
         return fetch(md)
             .then(function (response) {
                 var contentType = response.headers.get("Content-Type") || "";
@@ -146,40 +149,29 @@
         });
     }
 
-    function wireMarkdown(link, md) {
-        var availability;
-
-        function checkAvailability() {
-            if (!availability) {
-                availability = fetch(md, { method: "HEAD" })
-                    .then(function (response) {
-                        var contentType = response.headers.get("Content-Type") || "";
-                        return response.ok && contentType.indexOf("html") === -1;
-                    })
-                    .catch(function () {
-                        return false;
-                    });
-            }
-            return availability;
+    // Whether the Markdown copy is really served next to the rendered page.
+    function markdownAvailability(md) {
+        if (!md) {
+            return Promise.resolve(false);
         }
+        return fetch(md, { method: "HEAD" })
+            .then(function (response) {
+                var contentType = response.headers.get("Content-Type") || "";
+                return response.ok && contentType.indexOf("html") === -1;
+            })
+            .catch(function () {
+                return false;
+            });
+    }
 
+    function wireMarkdown(link, md, isAvailable) {
         link.href = md;
         link.addEventListener("click", function (event) {
-            event.preventDefault();
-            var target = window.open("about:blank", "_blank");
-            if (target) {
-                target.opener = null;
+            if (isAvailable()) {
+                return;
             }
-            checkAvailability().then(function (available) {
-                if (available && target) {
-                    target.location.replace(md);
-                    return;
-                }
-                if (target) {
-                    target.close();
-                }
-                showMarkdownUnavailable();
-            });
+            event.preventDefault();
+            showMarkdownUnavailable();
         });
     }
 
@@ -187,13 +179,20 @@
         var trigger = box.querySelector(".ai-tools__trigger");
         var copy = box.querySelector(".ai-tools__copy");
         var menu = box.querySelector(".ai-tools__menu");
-        var raw = box.getAttribute("data-md-url") || "";
+        var sourcePath = box.getAttribute("data-md-path") || "";
         var markdown = menu.querySelector('[data-ai="markdown"]');
-        var md = mdUrl(raw);
-        var prompt = providerPrompt(md);
+        var md = mdUrl(sourcePath);
+        var mdHref = md ? md.href : "";
+        var markdownAvailable = false;
+        var prompt = providerPrompt(mdHref);
 
-        wireCopy(copy, md);
-        wireMarkdown(markdown, md);
+        markdownAvailability(mdHref).then(function (available) {
+            markdownAvailable = available;
+        });
+        wireCopy(copy, mdHref);
+        wireMarkdown(markdown, mdHref, function () {
+            return markdownAvailable;
+        });
         [
             "perplexity",
             "grok",

@@ -167,18 +167,28 @@ def _write_markdown_copies(
     entries: dict[str, DocEntry],
     config: MkDocsConfig,
 ) -> None:
-    site_dir = Path(config.site_dir)
+    """Write one Markdown copy per rendered page, at its docs-relative path.
+
+    Every page the site renders gets a copy so the article actions can point at
+    ``page.file.src_uri`` without any URL-to-file guessing.
+    """
+    copies = {
+        path: render_index_page(directory)
+        for path, directory in directories.items()
+        if path in catalog.pages or is_renderable(directory)
+    }
     for path, source in catalog.pages.items():
-        directory = directories.get(path)
-        if directory is not None:
-            content = render_index_page(directory)
-        else:
-            entry = entries[path]
-            content = (
-                source.text
-                if should_hide_contributing_note(entry)
-                else render_doc_file(source.text, path)
-            )
+        if path in directories:
+            continue
+        entry = entries[path]
+        copies[path] = (
+            source.text
+            if should_hide_contributing_note(entry)
+            else render_doc_file(source.text, path)
+        )
+
+    site_dir = Path(config.site_dir)
+    for path, content in copies.items():
         target = site_dir / path
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(content, encoding="utf-8")
+        target.write_text(content, encoding="utf-8", newline="\n")
