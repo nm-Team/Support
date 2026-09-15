@@ -27,7 +27,7 @@ redirects.json ────────────────────┘
 
 开发模式只使用 MkDocs 原生 `--dirtyreload` 与插件生命周期，没有第二套 watcher。`docs_dir` 固定为 `docs`，不允许重新引入 `cache/`、`generated/` 或生成式 `mkdocs.yml`。
 
-**构建缓存**：`.cache/`（已 gitignore）存放 `cache.py` 约定的内容寻址产物——`images/` 放栅格编码结果，`html/` 放压缩后的页面。缓存必须位于 `site/` 之外：MkDocs 在每次非 dirty 构建前清空 `site/`，放在其中的缓存永远不可能命中。
+**构建缓存**：`.cache/`（已 gitignore）存放 `cache.py` 约定的内容寻址产物——`images/` 放栅格编码结果，`html/` 放压缩后的页面。缓存必须位于 `site/` 之外：MkDocs 在每次非 dirty 构建前清空 `site/`，放在其中的缓存永远不可能命中。缓存目录**不能**加进 `config.watch`，否则 `dev` 每次写缓存都会触发重建。
 
 **HTML 压缩**：`minify.py` 在 `on_post_page` 与 `on_post_template`（覆盖 `404.html`）上压缩并缓存结果。**不得换成会丢弃空属性的压缩器**（如 `minify-html`）：MkDocs Material 的导航依赖 `label[tabindex]` 选择器，而主题对可折叠区块渲染的正是 `tabindex=""`，属性一旦消失，`aria-expanded` 就不再更新。
 
@@ -141,4 +141,5 @@ Markdown 文档（`docs/`）：
 - CLI 测试用 `typer.testing.CliRunner` + monkeypatch；启动器测试用 subprocess + 假 uv 脚本。
 - **无覆盖率门槛**（无 pytest-cov、CI 无 coverage 步骤）——新增功能时给模块补 `test_<module>.py` 行为测试即可。
 - **性能基准**在 `benchmarks/`（`pytest-benchmark`），**不进入** `nmteam check`：`testpaths = ["tests"]` 将它隔离，只有显式 `uv run pytest benchmarks/` 才跑。基准必须针对仓库真实资源而非合成输入；新增可调参数时同时补一个 `benchmark.pedantic(setup=...)` 场景——测试体只会执行一次，需要每轮重置的状态必须放 `setup`。
+- **改动构建产物时先做字节级回归**：拿 `main` 开一个干净 worktree，两边各构建一次，逐文件比 SHA-256；除有意变更（例如 WebP 档位）外应当全等。这类对比能揭出测试覆盖不到的「某类产物被漏处理」；`404.html` 漏压缩就是这么发现的。
 - CI 在 ubuntu/macos/windows 三平台跑全量 check；提交前本地至少跑 `uv run nmteam check`。
