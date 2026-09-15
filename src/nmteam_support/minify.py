@@ -36,7 +36,7 @@ def render_minified_html(html: str, *, cache_dir: Path) -> str:
     minified = _minify(html)
     cache_dir.mkdir(parents=True, exist_ok=True)
     staged = staged_path(cached)
-    staged.write_text(minified, encoding="utf-8")
+    staged.write_text(minified, encoding="utf-8", newline="\n")
     staged.replace(cached)
     return minified
 
