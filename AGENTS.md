@@ -22,10 +22,14 @@ redirects.json ────────────────────┘
 1. `nav.py` 直接提供 MkDocs 原生 nav 数据结构，不再生成或解析 YAML。
 1. `index.py` 与 `contributing.py` 在 `on_page_markdown` 阶段转换页面，不写源目录副本。
 1. `redirects.py` 与 `llms.py` 通过 MkDocs 1.6 虚拟文件 API 提供 `redirects.js` 和 `llms.txt`。
-1. 非栅格资源由 MkDocs 直接从 `assets/` 复制；`image_pipeline.py` 并行优化 PNG/JPEG 并直接写入最终 `site/assets/`。dirty build 会跳过目标较新的图片。
+1. 非栅格资源由 MkDocs 直接从 `assets/` 复制；`image_pipeline.py` 并行优化 PNG/JPEG 并直接写入最终 `site/assets/`。编码结果按内容哈希缓存在 `.cache/images/`，只有源图或编码参数变化时才重新编码。
 1. 生产 build 的 `on_post_build` 直接把处理后的 Markdown 版本写到 `site/` 同路径，供 `/llms.txt`、“复制 Markdown”和 AI 菜单使用。
 
 开发模式只使用 MkDocs 原生 `--dirtyreload` 与插件生命周期，没有第二套 watcher。`docs_dir` 固定为 `docs`，不允许重新引入 `cache/`、`generated/` 或生成式 `mkdocs.yml`。
+
+**构建缓存**：`.cache/`（已 gitignore）存放 `cache.py` 约定的内容寻址产物——`images/` 放栅格编码结果，`html/` 放压缩后的页面。缓存必须位于 `site/` 之外：MkDocs 在每次非 dirty 构建前清空 `site/`，放在其中的缓存永远不可能命中。
+
+**HTML 压缩**：`minify.py` 在 `on_post_page` 与 `on_post_template`（覆盖 `404.html`）上压缩并缓存结果。**不得换成会丢弃空属性的压缩器**（如 `minify-html`）：MkDocs Material 的导航依赖 `label[tabindex]` 选择器，而主题对可折叠区块渲染的正是 `tabindex=""`，属性一旦消失，`aria-expanded` 就不再更新。
 
 **图片管线**：`image_pipeline.py` 直接在最终输出中产出同名 `.webp` 兄弟文件；`markdown_images.py`（注册在 `mkdocs.yml`）把本地栅格图 `<img>` 改写为 WebP-first `<picture>`。外部 URL 不下载不镜像。Markdown 中仍写普通图片语法。
 
@@ -102,12 +106,14 @@ Markdown 文档（`docs/`）：
 | `src/nmteam_support/nav.py`                                  | 生成 MkDocs 原生 nav 数据结构                                                                                                                          |
 | `src/nmteam_support/contributing.py`                          | 非 index.md 注入贡献提示 admonition                                                                                                                    |
 | `src/nmteam_support/redirects.py`                             | redirects.json 管理（损坏保护）+ redirects.js 生成                                                                                                     |
-| `src/nmteam_support/image_pipeline.py` + `markdown_images.py` | 并行、增量地直写图片变体；MkDocs 扩展输出 WebP-first `<picture>`                                                                                       |
+| `src/nmteam_support/cache.py`                                 | 内容寻址缓存的公共约定：`.cache/` 位置、`content_digest()`（含长度前缀）、`staged_path()` 原子写入辅助                                  |
+| `src/nmteam_support/minify.py`                                | `render_minified_html()`：htmlmin2 压缩页面与 HTML 模板，并按输入内容缓存；**选项必须保留属性引号与空属性** |
+| `src/nmteam_support/image_pipeline.py` + `markdown_images.py` | 内容寻址地并行产出图片变体（`.cache/images/` 命中则直接复制）；MkDocs 扩展输出 WebP-first `<picture>`                                                                                       |
 | `src/nmteam_support/llms.py`                                  | `render_llms_txt()` 从扫描树生成 `/llms.txt`（llmstxt.org 规范；链接指向各页 `.md` 版本）                                                              |
 | `src/nmteam_support/models.py`                                | `PageMetadata`/`DocEntry` frozen dataclass                                                                                                             |
 | `pyproject.toml`                                              | 包元数据、依赖、入口、pytest/ruff/hatchling 配置                                                                                                       |
-| `uv.lock`                                                     | 锁定依赖（mkdocs 1.6.1、mkdocs-material 9.7.7、mkdocs-minify-plugin 0.8.0、pillow 12.3.0、typer 0.27.1、pytest 9.1.1、ruff 0.16.2、mdformat 1.0.0、mdformat-footnote 0.1.3 等） |
-| `mkdocs.yml`                                                  | MkDocs 单一配置源（direct docs_dir、nmteam-support、Material、minify、Markdown 扩展）                                                                  |
+| `uv.lock`                                                     | 锁定依赖（mkdocs 1.6.1、mkdocs-material 9.7.7、htmlmin2 0.1.13、pillow 12.3.0、typer 0.27.1、pytest 9.1.1、ruff 0.16.2、mdformat 1.0.0、mdformat-footnote 0.1.3 等） |
+| `mkdocs.yml`                                                  | MkDocs 单一配置源（direct docs_dir、nmteam-support、Material、Markdown 扩展）                                                                  |
 | `redirects.json`                                              | 顶层 `redirects` 对象：`{旧路径带斜杠: 新路径}`                                                                                                        |
 | `.github/workflows/ci.yml`                                    | 三 OS 矩阵 CI（push main/dev + PR）：uv sync --frozen → nmteam check → 验证三个启动器                                                                  |
 | `.mdformat.toml`                                              | mdformat 配置（wrap=keep、LF）                                                                                                                         |

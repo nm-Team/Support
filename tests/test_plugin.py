@@ -112,3 +112,32 @@ def test_plugin_writes_final_images_and_markdown_copies_without_staging(tmp_path
     assert "帮助我们改进此文档" in markdown_copy.read_text(encoding="utf-8")
     assert not (tmp_path / "cache").exists()
     assert not (tmp_path / "generated").exists()
+
+
+def test_cache_lives_outside_the_site_directory(tmp_path, docs_dir):
+    """MkDocs wipes ``site/`` every build, so a cache kept there could never be reused."""
+    image_path = tmp_path / "assets" / "images" / "diagram.png"
+    image_path.parent.mkdir(parents=True)
+    Image.new("RGB", (16, 16), "red").save(image_path)
+    plugin, config, _files = _context(tmp_path, docs_dir)
+    Path(config.site_dir).mkdir()
+
+    plugin.on_post_build(config=config)
+
+    assert (tmp_path / ".cache" / "images").is_dir()
+    assert not (Path(config.site_dir) / ".cache").exists()
+
+
+def test_pages_and_html_templates_are_minified_with_the_same_options(tmp_path, docs_dir):
+    plugin, config, files = _context(tmp_path, docs_dir)
+    markup = '<div class="a" data-empty=""><!-- comment --><span>body</span></div>'
+    page = Page("MCP", files.get_file_from_path("nmbot-telegram/mcp.md"), config)
+
+    rendered = plugin.on_post_page(markup, page=page, config=config)
+    template = plugin.on_post_template(markup, template_name="404.html", config=config)
+    ignored = plugin.on_post_template("<xml/>", template_name="sitemap.xml", config=config)
+
+    assert rendered == template
+    assert "comment" not in rendered
+    assert 'data-empty=""' in rendered
+    assert ignored == "<xml/>"

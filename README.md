@@ -37,10 +37,11 @@ uv run nmteam build
 构建结果输出到 `site/` 目录。
 
 MkDocs 插件会在一次构建中完成动态导航、目录页、贡献提示、`llms.txt`、
-重定向脚本和图片优化。图片直接并行写入 `site/`，不会创建 `cache/` 或
-`generated/` 副本。
+重定向脚本、HTML 压缩和图片优化。图片与压缩后的 HTML 存放在 `.cache/`
+（可随时删除，仅会多付一次冷构建），不会创建 `cache/` 或 `generated/`
+副本。
 
-最终 HTML 会由 `mkdocs-minify-plugin` 压缩；生成器元标签仅保留 MkDocs
+最终 HTML 由插件自行压缩并缓存；生成器元标签仅保留 MkDocs
 版本，不暴露主题及其版本。
 
 ## 静态资源
@@ -54,7 +55,7 @@ MkDocs 插件会在一次构建中完成动态导航、目录页、贡献提示�
 文档使用 `/assets/...` 引用这些资源。生成文档时，每张 PNG 或 JPEG
 图片会同时产生：
 
-- WebP 优先版本：质量 80
+- WebP 优先版本：质量 80，编码 effort 5
 - 原格式 fallback：JPEG 使用质量 80；PNG 使用 256 色有损量化
 
 Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
