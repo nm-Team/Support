@@ -17,7 +17,10 @@
     var CLAUDE_CODE_BRANCH = "main";
 
     function mdUrl(raw) {
-        var path = raw ? "/" + raw.replace(/\/+$/, "") + ".md" : "/index.md";
+        var path = raw ? "/" + raw : "/index.md";
+        if (/\/$/.test(path)) {
+            path += "index.md";
+        }
         return new URL(path, location.href).href;
     }
 
