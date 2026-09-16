@@ -22,10 +22,14 @@ redirects.json ────────────────────┘
 1. `nav.py` 直接提供 MkDocs 原生 nav 数据结构，不再生成或解析 YAML。
 1. `index.py` 与 `contributing.py` 在 `on_page_markdown` 阶段转换页面，不写源目录副本。
 1. `redirects.py` 与 `llms.py` 通过 MkDocs 1.6 虚拟文件 API 提供 `redirects.js` 和 `llms.txt`。
-1. 非栅格资源由 MkDocs 直接从 `assets/` 复制；`image_pipeline.py` 并行优化 PNG/JPEG 并直接写入最终 `site/assets/`。dirty build 会跳过目标较新的图片。
+1. 非栅格资源由 MkDocs 直接从 `assets/` 复制；`image_pipeline.py` 并行优化 PNG/JPEG 并直接写入最终 `site/assets/`。编码结果按内容哈希缓存在 `.cache/images/`，只有源图或编码参数变化时才重新编码。
 1. 生产 build 的 `on_post_build` 直接把处理后的 Markdown 版本写到 `site/` 同路径，供 `/llms.txt`、“复制 Markdown”和 AI 菜单使用。
 
 开发模式只使用 MkDocs 原生 `--dirtyreload` 与插件生命周期，没有第二套 watcher。`docs_dir` 固定为 `docs`，不允许重新引入 `cache/`、`generated/` 或生成式 `mkdocs.yml`。
+
+**构建缓存**：`.cache/`（已 gitignore）存放 `cache.py` 约定的内容寻址产物——`images/` 放栅格编码结果，`html/` 放压缩后的页面。缓存必须位于 `site/` 之外：MkDocs 在每次非 dirty 构建前清空 `site/`，放在其中的缓存永远不可能命中。缓存目录**不能**加进 `config.watch`，否则 `dev` 每次写缓存都会触发重建。
+
+**HTML 压缩**：`minify.py` 在 `on_post_page` 与 `on_post_template`（覆盖 `404.html`）上压缩并缓存结果。**不得换成会丢弃空属性的压缩器**（如 `minify-html`）：MkDocs Material 的导航依赖 `label[tabindex]` 选择器，而主题对可折叠区块渲染的正是 `tabindex=""`，属性一旦消失，`aria-expanded` 就不再更新。
 
 **图片管线**：`image_pipeline.py` 直接在最终输出中产出同名 `.webp` 兄弟文件；`markdown_images.py`（注册在 `mkdocs.yml`）把本地栅格图 `<img>` 改写为 WebP-first `<picture>`。外部 URL 不下载不镜像。Markdown 中仍写普通图片语法。
 
@@ -42,6 +46,7 @@ redirects.json ────────────────────┘
 | `overrides/`                                  | mkdocs `custom_dir`：`main.html` 覆写 site_meta 移除主题版本号；`partials/actions.html` 追加 Fumadocs 风格文章操作区（复制 Markdown + GitHub / Markdown / Perplexity / Grok / ChatGPT / Claude Web / Claude Desktop / Claude Code / OpenAI Codex / Cursor 打开菜单）；`.icons/ai/` 存放菜单品牌图标 |
 | `scripts/`                                    | 三平台薄启动器（`nmteam.sh` / `nmteam.ps1` / `nmteam.bat`）                                                                                                                                                                                                                |
 | `tests/`                                      | pytest 行为与生命周期测试                                                                                                                                                                                                                                                  |
+| `benchmarks/`                                 | `pytest-benchmark` 性能基准（编码参数、缓存命中、压缩开销、整构建冷/热）；显式运行，**不计入** `nmteam check`                                                                                                |
 | `mkdocs.yml`                                  | 受版本控制的 MkDocs 单一配置源；nav 由插件在内存中设置                                                                                                                                                                                                                     |
 | `site/`                                       | 唯一生成目录，勿手改勿提交                                                                                                                                                                                                                                                 |
 
@@ -56,6 +61,7 @@ uv run nmteam check                # 全部质量检查（见下）
 uv run nmteam redirects list|add "/old/" "/new/"|remove "/old/"
 uv run nmteam --help
 uv run nmteam --verbose build      # 显示详细 MkDocs 日志
+uv run pytest benchmarks/          # 性能基准（不计入 nmteam check）
 ```
 
 平台启动器（定位仓库根后原样透传参数，无业务逻辑）：`scripts/nmteam.sh dev`、`.\scripts\nmteam.ps1 dev`、`scripts\nmteam.bat dev`。
@@ -102,12 +108,14 @@ Markdown 文档（`docs/`）：
 | `src/nmteam_support/nav.py`                                  | 生成 MkDocs 原生 nav 数据结构                                                                                                                          |
 | `src/nmteam_support/contributing.py`                          | 非 index.md 注入贡献提示 admonition                                                                                                                    |
 | `src/nmteam_support/redirects.py`                             | redirects.json 管理（损坏保护）+ redirects.js 生成                                                                                                     |
-| `src/nmteam_support/image_pipeline.py` + `markdown_images.py` | 并行、增量地直写图片变体；MkDocs 扩展输出 WebP-first `<picture>`                                                                                       |
+| `src/nmteam_support/cache.py`                                 | 内容寻址缓存的公共约定：`.cache/` 位置、`content_digest()`（含长度前缀）、`staged_path()` 原子写入辅助                                  |
+| `src/nmteam_support/minify.py`                                | `render_minified_html()`：htmlmin2 压缩页面与 HTML 模板，并按输入内容缓存；**选项必须保留属性引号与空属性** |
+| `src/nmteam_support/image_pipeline.py` + `markdown_images.py` | 内容寻址地并行产出图片变体（`.cache/images/` 命中则直接复制）；MkDocs 扩展输出 WebP-first `<picture>`                                                                                       |
 | `src/nmteam_support/llms.py`                                  | `render_llms_txt()` 从扫描树生成 `/llms.txt`（llmstxt.org 规范；链接指向各页 `.md` 版本）                                                              |
 | `src/nmteam_support/models.py`                                | `PageMetadata`/`DocEntry` frozen dataclass                                                                                                             |
 | `pyproject.toml`                                              | 包元数据、依赖、入口、pytest/ruff/hatchling 配置                                                                                                       |
-| `uv.lock`                                                     | 锁定依赖（mkdocs 1.6.1、mkdocs-material 9.7.7、mkdocs-minify-plugin 0.8.0、pillow 12.3.0、typer 0.27.1、pytest 9.1.1、ruff 0.16.2、mdformat 1.0.0、mdformat-footnote 0.1.3 等） |
-| `mkdocs.yml`                                                  | MkDocs 单一配置源（direct docs_dir、nmteam-support、Material、minify、Markdown 扩展）                                                                  |
+| `uv.lock`                                                     | 锁定依赖（mkdocs 1.6.1、mkdocs-material 9.7.7、htmlmin2 0.1.13、pillow 12.3.0、typer 0.27.1、pytest 9.1.1、ruff 0.16.2、mdformat 1.0.0、mdformat-footnote 0.1.3 等） |
+| `mkdocs.yml`                                                  | MkDocs 单一配置源（direct docs_dir、nmteam-support、Material、Markdown 扩展）                                                                  |
 | `redirects.json`                                              | 顶层 `redirects` 对象：`{旧路径带斜杠: 新路径}`                                                                                                        |
 | `.github/workflows/ci.yml`                                    | 三 OS 矩阵 CI（push main/dev + PR）：uv sync --frozen → nmteam check → 验证三个启动器                                                                  |
 | `.mdformat.toml`                                              | mdformat 配置（wrap=keep、LF）                                                                                                                         |
@@ -132,4 +140,7 @@ Markdown 文档（`docs/`）：
 - 输入构造分级：conftest 的 `docs_dir` fixture（tmp_path 构造最小 docs 树）→ 插件事件测试 → 真实 MkDocs 生命周期集成。**不依赖真实 docs/ 内容**。
 - CLI 测试用 `typer.testing.CliRunner` + monkeypatch；启动器测试用 subprocess + 假 uv 脚本。
 - **无覆盖率门槛**（无 pytest-cov、CI 无 coverage 步骤）——新增功能时给模块补 `test_<module>.py` 行为测试即可。
+- **性能基准**在 `benchmarks/`（`pytest-benchmark`），**不进入** `nmteam check`：`testpaths = ["tests"]` 将它隔离，只有显式 `uv run pytest benchmarks/` 才跑。基准必须针对仓库真实资源而非合成输入；新增可调参数时同时补一个 `benchmark.pedantic(setup=...)` 场景——测试体只会执行一次，需要每轮重置的状态必须放 `setup`。
+- **改动构建产物时先做字节级回归**：拿 `main` 开一个干净 worktree，两边各构建一次，逐文件比 SHA-256；除有意变更（例如 WebP 档位）外应当全等。这类对比能揭出测试覆盖不到的「某类产物被漏处理」；`404.html` 漏压缩就是这么发现的。
+- **基准表里写倍率，不写含糊的百分比**：`旧 ÷ 新` 得到的是「是原来的 X%」，不是「提升 X%」（4.41 s → 2.33 s 是**快 1.89 倍 / 耗时 -47.2%**，写成「提升 189%」会被当成算错）。min 只对 min、mean 只对 mean；数字要注明测量方式，因为跑真实 CLI 与进程内测量能差出解释器启动那 0.2s。
 - CI 在 ubuntu/macos/windows 三平台跑全量 check；提交前本地至少跑 `uv run nmteam check`。

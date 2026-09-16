@@ -11,6 +11,7 @@ from mkdocs.plugins import BasePlugin
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
 
+from nmteam_support.cache import CACHE_DIR_NAME
 from nmteam_support.contributing import (
     render_doc_body,
     render_doc_file,
@@ -19,6 +20,7 @@ from nmteam_support.contributing import (
 from nmteam_support.image_pipeline import RASTER_SUFFIXES, optimize_assets
 from nmteam_support.index import render_index_body, render_index_page
 from nmteam_support.llms import render_llms_txt
+from nmteam_support.minify import render_minified_html
 from nmteam_support.models import DocEntry
 from nmteam_support.nav import build_nav, is_renderable
 from nmteam_support.redirects import read_redirects, render_redirects_js
@@ -37,11 +39,10 @@ class SupportPlugin(BasePlugin[SupportPluginConfig]):
         self._directories: dict[str, ScannedDir] = {}
         self._entries: dict[str, DocEntry] = {}
         self._command: Literal["build", "gh-deploy", "serve"] = "build"
-        self._dirty = False
 
     def on_startup(self, *, command: Literal["build", "gh-deploy", "serve"], dirty: bool) -> None:
+        del dirty
         self._command = command
-        self._dirty = dirty
 
     def on_config(self, config: MkDocsConfig) -> MkDocsConfig:
         root = _project_root(config)
@@ -122,6 +123,17 @@ class SupportPlugin(BasePlugin[SupportPluginConfig]):
             return markdown
         return render_doc_body(markdown, path)
 
+    def on_post_page(self, output: str, /, *, page: Page, config: MkDocsConfig) -> str:
+        del page
+        return render_minified_html(output, cache_dir=_cache_dir(config, "html"))
+
+    def on_post_template(
+        self, output_content: str, /, *, template_name: str, config: MkDocsConfig
+    ) -> str:
+        if not template_name.endswith(".html"):
+            return output_content
+        return render_minified_html(output_content, cache_dir=_cache_dir(config, "html"))
+
     def on_post_build(self, *, config: MkDocsConfig) -> None:
         root = _project_root(config)
         assets_dir = root / "assets"
@@ -129,7 +141,7 @@ class SupportPlugin(BasePlugin[SupportPluginConfig]):
             optimize_assets(
                 assets_dir,
                 Path(config.site_dir) / "assets",
-                incremental=self._dirty,
+                cache_dir=_cache_dir(config, "images"),
             )
         if self._command != "serve" and self._catalog is not None:
             _write_markdown_copies(self._catalog, self._directories, self._entries, config)
@@ -139,6 +151,10 @@ def _project_root(config: MkDocsConfig) -> Path:
     if config.config_file_path:
         return Path(config.config_file_path).resolve().parent
     return Path.cwd()
+
+
+def _cache_dir(config: MkDocsConfig, namespace: str) -> Path:
+    return _project_root(config) / CACHE_DIR_NAME / namespace
 
 
 def _directory_map(root: ScannedDir) -> dict[str, ScannedDir]:

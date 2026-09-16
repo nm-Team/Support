@@ -37,10 +37,11 @@ uv run nmteam build
 构建结果输出到 `site/` 目录。
 
 MkDocs 插件会在一次构建中完成动态导航、目录页、贡献提示、`llms.txt`、
-重定向脚本和图片优化。图片直接并行写入 `site/`，不会创建 `cache/` 或
-`generated/` 副本。
+重定向脚本、HTML 压缩和图片优化。图片与压缩后的 HTML 存放在 `.cache/`
+（可随时删除，仅会多付一次冷构建），不会创建 `cache/` 或 `generated/`
+副本。
 
-最终 HTML 会由 `mkdocs-minify-plugin` 压缩；生成器元标签仅保留 MkDocs
+最终 HTML 由插件自行压缩并缓存；生成器元标签仅保留 MkDocs
 版本，不暴露主题及其版本。
 
 ## 静态资源
@@ -54,7 +55,7 @@ MkDocs 插件会在一次构建中完成动态导航、目录页、贡献提示�
 文档使用 `/assets/...` 引用这些资源。生成文档时，每张 PNG 或 JPEG
 图片会同时产生：
 
-- WebP 优先版本：质量 80
+- WebP 优先版本：质量 80，编码 effort 5
 - 原格式 fallback：JPEG 使用质量 80；PNG 使用 256 色有损量化
 
 Markdown 中仍使用普通图片语法，构建工具会自动输出 WebP
@@ -133,6 +134,29 @@ uv run nmteam build
 ```
 
 以上检查由 CI（`.github/workflows/ci.yml`）自动执行。
+
+## 性能基准
+
+构建性能的测量在 `benchmarks/`，使用 `pytest-benchmark`。它们不计入
+`pytest` 与 `nmteam check`（后者只看 `tests/`），需要显式运行：
+
+```bash
+uv run pytest benchmarks/
+uv run pytest benchmarks/ --benchmark-sort=name
+uv run pytest benchmarks/test_bench_image_pipeline.py -k method
+```
+
+与保存的基线对比，用于判断一次改动是否真的更快：
+
+```bash
+uv run pytest benchmarks/ --benchmark-json=/tmp/base.json
+# 改动之后
+uv run pytest benchmarks/ --benchmark-compare=/tmp/base.json --benchmark-compare-fail=min:5%
+```
+
+`test_bench_build.py` 在独立进程中运行真实的 `nmteam build`，因此也把
+解释器启动计入结果；其余文件在进程内测量编码参数、缓存命中路径与
+压缩开销。所有基准都针对仓库自身的真实资源，而不是合成输入。
 
 ## 重定向管理
 

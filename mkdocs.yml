@@ -3,12 +3,6 @@ site_url: https://support.nmteam.xyz
 plugins:
   - nmteam-support
   - search
-  - minify:
-      minify_html: true
-      htmlmin_opts:
-        remove_comments: true
-        remove_optional_attribute_quotes: false
-        reduce_empty_attributes: false
 theme:
   name: material
   custom_dir: overrides

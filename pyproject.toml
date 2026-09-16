@@ -4,10 +4,10 @@ version = "0.1.0"
 description = "nmTeam Support 文档站构建工具链"
 requires-python = ">=3.14"
 dependencies = [
+    "htmlmin2>=0.1.13",
     "markdown>=3.10",
     "mkdocs==1.6.1",
     "mkdocs-material==9.7.7",
-    "mkdocs-minify-plugin>=0.8.0",
     "pillow>=12.1.0",
     "pyyaml>=6.0.2",
     "typer>=0.21.1",
@@ -26,6 +26,7 @@ dev = [
     "mdformat-front-matters>=2.0",
     "mdformat-mkdocs>=5.2.2",
     "pytest>=9.0",
+    "pytest-benchmark>=5.3.0",
     "ruff>=0.16",
 ]
 
