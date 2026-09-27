@@ -52,3 +52,17 @@ def test_index_page_title_with_yaml_special_chars_round_trips(tmp_path):
     page = render_index_page(scan_docs(d))
     frontmatter = page.split("---", 2)[1]
     assert yaml.safe_load(frontmatter)["title"] == "FAQ: 常见问题 #1"
+
+
+def test_index_page_docs_list_renders_product_icon_titles(docs_dir):
+    (docs_dir / "nmbot-telegram" / "mcp.md").write_text(
+        "---\ntitle: <nmbot-plus-icon></nmbot-plus-icon> MCP 配置\n---\n\n# MCP 配置\n",
+        encoding="utf-8",
+    )
+    root = scan_docs(docs_dir)
+    nmbot = next(s for s in root.subdirs if s.rel_path == "nmbot-telegram")
+
+    page = render_index_page(nmbot)
+
+    assert '<img class="nmbot-product-icon"' in page
+    assert "&lt;nmbot-plus-icon&gt;" not in page

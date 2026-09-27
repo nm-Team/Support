@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import html
 
+from nmteam_support.icon_elements import render_icon_elements_html
 from nmteam_support.models import DocEntry
 
 
@@ -20,7 +21,7 @@ def render_docs_list(entries: list[DocEntry]) -> str:
             "        </div>\n"
             "    </div>".format(
                 path=html.escape("/" + entry.path.replace(".md", "")),
-                title=html.escape(entry.title),
+                title=render_icon_elements_html(entry.title),
                 description=html.escape(entry.description),
                 type=entry.kind,
             )

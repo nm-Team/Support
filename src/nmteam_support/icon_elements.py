@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import html
 import re
 from dataclasses import dataclass
 
@@ -58,6 +59,19 @@ def render_portable_markdown(markdown: str) -> str:
 
     metadata_raw = _TITLE_LINE.sub(_render_plain_title, metadata_raw)
     return f"---{metadata_raw}---{_replace_icons(body)}"
+
+
+def render_icon_elements_html(text: str) -> str:
+    """Escape a title while rendering known icon elements as inline images."""
+    rendered = html.escape(text)
+    for icon in ICON_ELEMENTS:
+        image = (
+            '<img class="nmbot-product-icon" '
+            f'src="{html.escape(icon.url, quote=True)}" '
+            f'alt="{html.escape(icon.alt, quote=True)}">'
+        )
+        rendered = rendered.replace(html.escape(icon.element), image)
+    return rendered
 
 
 def _replace_icons(text: str) -> str:

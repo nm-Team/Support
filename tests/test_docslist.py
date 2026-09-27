@@ -26,3 +26,21 @@ def test_render_docs_list_strips_md_and_escapes():
 def test_render_docs_list_folder_icon():
     entries = [DocEntry(title="F", description="", path="nm", name="nm", kind="folder")]
     assert '<i class="icon folder" aria-hidden="true"></i>' in render_docs_list(entries)
+
+
+def test_render_docs_list_displays_product_icon_in_title():
+    entries = [
+        DocEntry(
+            title="<nmbot-plus-icon></nmbot-plus-icon> nmBot+",
+            description="",
+            path="plus",
+            name="plus",
+            kind="folder",
+        )
+    ]
+
+    output = render_docs_list(entries)
+
+    assert '<img class="nmbot-product-icon"' in output
+    assert 'alt="nmBot+ Logo"' in output
+    assert "&lt;nmbot-plus-icon&gt;" not in output

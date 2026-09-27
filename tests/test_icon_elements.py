@@ -3,7 +3,7 @@
 import yaml
 
 from nmteam_support.frontmatter import split_frontmatter
-from nmteam_support.icon_elements import render_portable_markdown
+from nmteam_support.icon_elements import render_icon_elements_html, render_portable_markdown
 
 
 def test_render_portable_markdown_replaces_both_icon_elements():
@@ -31,3 +31,19 @@ def test_render_portable_markdown_leaves_unknown_elements_unchanged():
     source = "# <product-icon></product-icon> Product\n"
 
     assert render_portable_markdown(source) == source
+
+
+def test_render_icon_elements_html_only_allows_known_icons():
+    source = (
+        "<nmbot-plus-icon></nmbot-plus-icon> Plus & "
+        "<nmbot-intelligence-icon></nmbot-intelligence-icon> Intelligence "
+        "<script>alert(1)</script>"
+    )
+
+    output = render_icon_elements_html(source)
+
+    assert output.count('class="nmbot-product-icon"') == 2
+    assert 'alt="nmBot+ Logo"' in output
+    assert 'alt="nmBot Intelligence Logo"' in output
+    assert "Plus &amp;" in output
+    assert "&lt;script&gt;alert(1)&lt;/script&gt;" in output

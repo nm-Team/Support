@@ -19,3 +19,11 @@ nmbot-intelligence-icon {
     background-position: center;
     background-repeat: no-repeat;
 }
+
+.nmbot-product-icon {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    margin-bottom: -0.2em;
+    object-fit: contain;
+}
