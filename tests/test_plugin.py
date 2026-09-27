@@ -98,6 +98,12 @@ def test_plugin_transforms_only_page_markdown_at_render_time(tmp_path, docs_dir)
 
 
 def test_plugin_writes_final_images_and_markdown_copies_without_staging(tmp_path, docs_dir):
+    (docs_dir / "nmbot-telegram" / "mcp.md").write_text(
+        "---\ntitle: <nmbot-plus-icon></nmbot-plus-icon> MCP 配置\n---\n\n"
+        "# <nmbot-plus-icon></nmbot-plus-icon> MCP 配置\n\n"
+        "<nmbot-intelligence-icon></nmbot-intelligence-icon> 智能功能。\n",
+        encoding="utf-8",
+    )
     image_path = tmp_path / "assets" / "images" / "diagram.png"
     image_path.parent.mkdir(parents=True)
     Image.new("RGB", (16, 16), "red").save(image_path)
@@ -109,7 +115,12 @@ def test_plugin_writes_final_images_and_markdown_copies_without_staging(tmp_path
     assert (Path(config.site_dir) / "assets" / "images" / "diagram.png").exists()
     assert (Path(config.site_dir) / "assets" / "images" / "diagram.webp").exists()
     markdown_copy = Path(config.site_dir) / "nmbot-telegram" / "mcp.md"
-    assert "帮助我们改进此文档" in markdown_copy.read_text(encoding="utf-8")
+    markdown = markdown_copy.read_text(encoding="utf-8")
+    assert "帮助我们改进此文档" in markdown
+    assert "title: MCP 配置" in markdown
+    assert "![nmBot+ Logo](https://websiteres.nmteam.xyz/nmBot/plus.svg)" in markdown
+    assert "![nmBot Intelligence Logo]" in markdown
+    assert "<nmbot-" not in markdown
     assert not (tmp_path / "cache").exists()
     assert not (tmp_path / "generated").exists()
 

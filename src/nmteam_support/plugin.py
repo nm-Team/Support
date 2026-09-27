@@ -17,6 +17,7 @@ from nmteam_support.contributing import (
     render_doc_file,
     should_hide_contributing_note,
 )
+from nmteam_support.icon_elements import render_portable_markdown
 from nmteam_support.image_pipeline import RASTER_SUFFIXES, optimize_assets
 from nmteam_support.index import render_index_body, render_index_page
 from nmteam_support.llms import render_llms_txt
@@ -207,4 +208,4 @@ def _write_markdown_copies(
     for path, content in copies.items():
         target = site_dir / path
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(content, encoding="utf-8", newline="\n")
+        target.write_text(render_portable_markdown(content), encoding="utf-8", newline="\n")
