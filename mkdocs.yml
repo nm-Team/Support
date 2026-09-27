@@ -41,7 +41,7 @@ extra:
   analytics:
     provider: google
     property: G-KF37QRD9LN
-copyright: Copyright 2022-2025 nmTeam. All rights reserved. <br>This website is licensed under the MIT License.
+copyright: Copyright 2022-2026 nmTeam. All rights reserved. <br>This website is licensed under the MIT License.
 
 markdown_extensions:
   - nmteam_support.markdown_images
