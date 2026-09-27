@@ -3,10 +3,7 @@
 from __future__ import annotations
 
 import html
-import re
 from dataclasses import dataclass
-
-import yaml
 
 from nmteam_support.frontmatter import split_frontmatter
 
@@ -41,24 +38,12 @@ ICON_ELEMENTS = (
     ),
 )
 
-_TITLE_LINE = re.compile(r"^(?P<prefix>title:\s*)(?P<value>.*)$", re.MULTILINE)
-
-
-def strip_icon_elements(text: str) -> str:
-    """Remove known icon elements from a plain-text value."""
-    for icon in ICON_ELEMENTS:
-        text = text.replace(icon.element, "")
-    return " ".join(text.split())
-
 
 def render_portable_markdown(markdown: str) -> str:
-    """Replace site-only icon elements while preserving valid front matter."""
+    """Remove build metadata and replace site-only icon elements."""
     metadata_raw, body = split_frontmatter(markdown)
-    if not metadata_raw:
-        return _replace_icons(markdown)
-
-    metadata_raw = _TITLE_LINE.sub(_render_plain_title, metadata_raw)
-    return f"---{metadata_raw}---{_replace_icons(body)}"
+    content = body.lstrip("\n") if metadata_raw else markdown
+    return _replace_icons(content)
 
 
 def render_icon_elements_html(text: str) -> str:
@@ -78,19 +63,3 @@ def _replace_icons(text: str) -> str:
     for icon in ICON_ELEMENTS:
         text = text.replace(icon.element, icon.markdown)
     return text
-
-
-def _render_plain_title(match: re.Match[str]) -> str:
-    raw_value = match.group("value")
-    try:
-        value = yaml.safe_load(raw_value)
-    except yaml.YAMLError:
-        value = raw_value
-    if not isinstance(value, str):
-        return match.group(0)
-
-    title = strip_icon_elements(value)
-    scalar = yaml.safe_dump(title, allow_unicode=True, default_flow_style=True).strip()
-    if scalar.endswith("\n..."):
-        scalar = scalar[: -len("\n...")]
-    return f"{match.group('prefix')}{scalar}"

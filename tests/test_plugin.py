@@ -117,10 +117,18 @@ def test_plugin_writes_final_images_and_markdown_copies_without_staging(tmp_path
     markdown_copy = Path(config.site_dir) / "nmbot-telegram" / "mcp.md"
     markdown = markdown_copy.read_text(encoding="utf-8")
     assert "帮助我们改进此文档" in markdown
-    assert "title: MCP 配置" in markdown
+    assert markdown.startswith("# ![nmBot+ Logo]")
+    assert "title: MCP 配置" not in markdown
     assert "![nmBot+ Logo](https://websiteres.nmteam.xyz/nmBot/plus.svg)" in markdown
     assert "![nmBot Intelligence Logo]" in markdown
     assert "<nmbot-" not in markdown
+
+    index_markdown = (Path(config.site_dir) / "nmbot-telegram" / "index.md").read_text(
+        encoding="utf-8"
+    )
+    assert index_markdown.startswith("# nmBot")
+    assert "automatically_generated:" not in index_markdown
+    assert '<div class="docsList">' in index_markdown
     assert not (tmp_path / "cache").exists()
     assert not (tmp_path / "generated").exists()
 

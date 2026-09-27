@@ -1,8 +1,5 @@
 """Portable product icon rendering tests."""
 
-import yaml
-
-from nmteam_support.frontmatter import split_frontmatter
 from nmteam_support.icon_elements import render_icon_elements_html, render_portable_markdown
 
 
@@ -17,14 +14,29 @@ def test_render_portable_markdown_replaces_both_icon_elements():
 
     output = render_portable_markdown(source)
 
-    metadata_raw, _body = split_frontmatter(output)
-    assert yaml.safe_load(metadata_raw)["title"] == "nmBot+"
+    assert output.startswith("# ![nmBot+ Logo]")
+    assert "title:" not in output
     assert "![nmBot+ Logo](https://websiteres.nmteam.xyz/nmBot/plus.svg) nmBot+" in output
     assert (
         "![nmBot Intelligence Logo](https://websiteres.nmteam.xyz/"
         "pintroimg/nmBot-Telegram/v2/nmbot-intelligence.svg) 智能功能" in output
     )
     assert "<nmbot-" not in output
+
+
+def test_render_portable_markdown_strips_generated_frontmatter():
+    source = (
+        "---\n"
+        "automatically_generated: Don't edit this file directly.\n"
+        "title: Product\n"
+        "\n"
+        "hide:\n"
+        "  - toc\n"
+        "---\n\n"
+        "# Product\n"
+    )
+
+    assert render_portable_markdown(source) == "# Product\n"
 
 
 def test_render_portable_markdown_leaves_unknown_elements_unchanged():
