@@ -119,3 +119,33 @@ def test_every_rendered_page_advertises_a_served_markdown_copy(tmp_path, docs_di
     finally:
         server.shutdown()
         server.server_close()
+
+
+def test_browser_title_strips_markup_without_changing_rendered_navigation(tmp_path, docs_dir):
+    plus = docs_dir / "nmbot-telegram" / "plus.md"
+    plus.write_text(
+        "---\ntitle: <nmbot-plus-icon></nmbot-plus-icon> nmBot+\n---\n\n"
+        "# <nmbot-plus-icon></nmbot-plus-icon> nmBot+\n",
+        encoding="utf-8",
+    )
+    config = tmp_path / "mkdocs.yml"
+    config.write_text(
+        "site_name: Test\n"
+        "docs_dir: docs\n"
+        "site_dir: site\n"
+        "theme:\n"
+        "  name: material\n"
+        f"  custom_dir: {REPO_ROOT / 'overrides'}\n"
+        "plugins:\n"
+        "  - nmteam-support\n",
+        encoding="utf-8",
+    )
+
+    build_site(config)
+
+    output = (tmp_path / "site" / "nmbot-telegram" / "plus" / "index.html").read_text(
+        encoding="utf-8"
+    )
+    assert "<title>nmBot+ - Test</title>" in output
+    assert "<title><nmbot-plus-icon>" not in output
+    assert "<nmbot-plus-icon></nmbot-plus-icon> nmBot+" in output
