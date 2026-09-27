@@ -28,3 +28,18 @@ def render_docs_list(entries: list[DocEntry]) -> str:
         )
     html_parts.append("\n</div>")
     return "".join(html_parts)
+
+
+def render_markdown_docs_list(entries: list[DocEntry]) -> str:
+    """Render directory entries as a portable Markdown section."""
+    if not entries:
+        return ""
+
+    lines = ["", "", "## 相关文档", ""]
+    for entry in entries:
+        path = "/" + entry.path.removesuffix(".md")
+        line = f"- [{entry.title}]({path})"
+        if entry.description:
+            line += f"：{entry.description}"
+        lines.append(line)
+    return "\n".join(lines) + "\n"

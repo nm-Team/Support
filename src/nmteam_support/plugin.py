@@ -19,7 +19,7 @@ from nmteam_support.contributing import (
 )
 from nmteam_support.icon_elements import render_portable_markdown
 from nmteam_support.image_pipeline import RASTER_SUFFIXES, optimize_assets
-from nmteam_support.index import render_index_body, render_index_page
+from nmteam_support.index import render_index_body, render_index_page, render_portable_index_page
 from nmteam_support.llms import render_llms_txt
 from nmteam_support.minify import render_minified_html
 from nmteam_support.models import DocEntry
@@ -190,7 +190,7 @@ def _write_markdown_copies(
     ``page.file.src_uri`` without any URL-to-file guessing.
     """
     copies = {
-        path: render_index_page(directory)
+        path: render_portable_index_page(directory)
         for path, directory in directories.items()
         if path in catalog.pages or is_renderable(directory)
     }

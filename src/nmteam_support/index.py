@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import yaml
 
-from nmteam_support.docslist import render_docs_list
+from nmteam_support.docslist import render_docs_list, render_markdown_docs_list
 from nmteam_support.nav import folder_entries, sort_entries
 from nmteam_support.scanner import ScannedDir
 
@@ -46,3 +46,15 @@ def render_index_body(scan: ScannedDir) -> str:
         return content
     entries = sort_entries(scan.docs + folder_entries(scan))
     return content + render_docs_list(entries)
+
+
+def render_portable_index_page(scan: ScannedDir) -> str:
+    """Render a directory page without build metadata or site-only HTML."""
+    content = (
+        scan.index_body or f"# {scan.index_meta.title}\n{scan.index_meta.description}\n"
+    ).lstrip("\n")
+    if scan.index_meta.hide_docs_list:
+        return content
+    entries = sort_entries(scan.docs + folder_entries(scan))
+    docs_list = render_markdown_docs_list(entries)
+    return content.rstrip() + docs_list if docs_list else content

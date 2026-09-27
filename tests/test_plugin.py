@@ -128,7 +128,10 @@ def test_plugin_writes_final_images_and_markdown_copies_without_staging(tmp_path
     )
     assert index_markdown.startswith("# nmBot")
     assert "automatically_generated:" not in index_markdown
-    assert '<div class="docsList">' in index_markdown
+    assert "## 相关文档" in index_markdown
+    assert "[![nmBot+ Logo]" in index_markdown
+    assert "](/nmbot-telegram/mcp)" in index_markdown
+    assert '<div class="docsList">' not in index_markdown
     assert not (tmp_path / "cache").exists()
     assert not (tmp_path / "generated").exists()
 

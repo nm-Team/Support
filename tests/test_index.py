@@ -2,7 +2,7 @@
 
 import yaml
 
-from nmteam_support.index import render_index_page
+from nmteam_support.index import render_index_page, render_portable_index_page
 from nmteam_support.scanner import scan_docs
 
 
@@ -24,6 +24,18 @@ def test_index_page_docs_list_for_subdir(docs_dir):
     page = render_index_page(nmbot)
     assert '<div class="docsList">' in page
     assert 'href="/nmbot-telegram/mcp"' in page
+
+
+def test_portable_index_page_uses_markdown_links(docs_dir):
+    root = scan_docs(docs_dir)
+    nmbot = next(s for s in root.subdirs if s.rel_path == "nmbot-telegram")
+
+    page = render_portable_index_page(nmbot)
+
+    assert page.startswith("# nmBot\n")
+    assert "## 相关文档" in page
+    assert "- [MCP 配置](/nmbot-telegram/mcp)：配置 MCP。" in page
+    assert '<div class="docsList">' not in page
 
 
 def test_index_page_navigation_hide(docs_dir):
