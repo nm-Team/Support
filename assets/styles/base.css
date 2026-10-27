@@ -8,6 +8,12 @@ html {
     position: relative;
 }
 
+.md-typeset .legacy-heading-anchor {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+}
+
 .md-typeset [id] > .headerlink {
     position: absolute;
     inset-inline-start: -1.25em;

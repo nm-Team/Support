@@ -149,3 +149,41 @@ def test_browser_title_strips_markup_without_changing_rendered_navigation(tmp_pa
     assert "<title>nmBot+ - Test</title>" in output
     assert "<title><nmbot-plus-icon>" not in output
     assert "<nmbot-plus-icon></nmbot-plus-icon> nmBot+" in output
+
+
+def test_unicode_heading_links_and_legacy_aliases_survive_the_production_build(tmp_path, docs_dir):
+    (docs_dir / "about.md").write_text(
+        "# 关于\n\n## 使用说明\n\n[旧链接](#_2) [新链接](#使用说明)\n",
+        encoding="utf-8",
+    )
+    config = tmp_path / "mkdocs.yml"
+    config.write_text(
+        "site_name: Test\n"
+        "docs_dir: docs\n"
+        "site_dir: site\n"
+        "theme:\n"
+        "  name: material\n"
+        "plugins:\n"
+        "  - nmteam-support\n"
+        "markdown_extensions:\n"
+        "  - toc:\n"
+        "      permalink: '#'\n"
+        "  - nmteam_support.heading_anchors\n"
+        "validation:\n"
+        "  links:\n"
+        "    anchors: warn\n",
+        encoding="utf-8",
+    )
+
+    build_site(config)
+
+    output = (tmp_path / "site/about/index.html").read_text(encoding="utf-8")
+    assert '<h2 id="使用说明">' in output
+    assert 'class="legacy-heading-anchor" id="_2"' in output
+    assert 'class="headerlink" href="#使用说明"' in output
+    assert 'class="md-nav__link"' in output
+    assert 'href="#使用说明"' in output
+    markdown = (tmp_path / "site/about.md").read_text(encoding="utf-8")
+    assert markdown.startswith("# 关于\n")
+    assert "## 使用说明\n" in markdown
+    assert "legacy-heading-anchor" not in markdown

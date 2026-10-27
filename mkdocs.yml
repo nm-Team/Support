@@ -47,6 +47,7 @@ markdown_extensions:
   - toc:
       permalink: 复制章节链接
       permalink_title: 复制章节链接
+  - nmteam_support.heading_anchors
   - nmteam_support.markdown_images
   - attr_list
   - md_in_html
