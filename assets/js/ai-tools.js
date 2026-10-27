@@ -149,6 +149,30 @@
         });
     }
 
+    function wireHeadingLink(link) {
+        var resetTimer;
+        var label = link.title;
+
+        link.addEventListener("click", function (event) {
+            if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+                return;
+            }
+            copyText(link.href)
+                .then(function () {
+                    window.clearTimeout(resetTimer);
+                    link.title = "已复制链接";
+                    link.setAttribute("aria-label", "已复制链接");
+                    resetTimer = window.setTimeout(function () {
+                        link.title = label;
+                        link.removeAttribute("aria-label");
+                    }, 1800);
+                })
+                .catch(function () {
+                    window.alert("无法复制链接，请右键选择“复制链接地址”。");
+                });
+        });
+    }
+
     // Whether the Markdown copy is really served next to the rendered page.
     function markdownAvailability(md) {
         if (!md) {
@@ -233,5 +257,6 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".ai-tools").forEach(wireMenu);
+        document.querySelectorAll(".md-typeset .headerlink").forEach(wireHeadingLink);
     });
 })();

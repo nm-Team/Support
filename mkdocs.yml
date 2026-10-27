@@ -44,6 +44,9 @@ extra:
 copyright: Copyright 2022-2026 nmTeam. All rights reserved. <br>This website is licensed under the MIT License.
 
 markdown_extensions:
+  - toc:
+      permalink: 复制章节链接
+      permalink_title: 复制章节链接
   - nmteam_support.markdown_images
   - attr_list
   - md_in_html

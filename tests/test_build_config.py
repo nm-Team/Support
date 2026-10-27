@@ -1,10 +1,32 @@
 """Production build configuration tests."""
 
 from pathlib import Path
+from xml.etree import ElementTree
 
 import yaml
 from markdown import markdown
 from mkdocs.config import load_config
+
+
+def test_every_heading_level_has_a_copyable_permalink():
+    repo_root = Path(__file__).resolve().parents[1]
+    config = load_config(config_file=str(repo_root / "mkdocs.yml"))
+    source = "\n\n".join(f"{'#' * level} Section {level}" for level in range(1, 7))
+
+    output = markdown(
+        source,
+        extensions=config.markdown_extensions,
+        extension_configs=config.mdx_configs,
+    )
+
+    headings = list(ElementTree.fromstring(f"<div>{output}</div>"))
+    assert [heading.tag for heading in headings] == [f"h{level}" for level in range(1, 7)]
+    for heading in headings:
+        link = heading.find("a[@class='headerlink']")
+        assert link is not None
+        assert link.get("href") == f"#{heading.attrib['id']}"
+        assert link.get("title") == "复制章节链接"
+        assert heading.text.startswith("Section ")
 
 
 def test_mkdocs_reads_sources_directly_through_support_plugin():
