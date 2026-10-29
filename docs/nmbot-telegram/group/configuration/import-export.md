@@ -52,7 +52,7 @@ Rose 与 nmBot 的功能和可选值并不完全一致。部分设置会转换�
 
 ## 检查迁移后的功能
 
-导入完成后，检查目标群组的[“关键词回复”](../automation/keyword-replies.md)、[“消息模板”](../automation/message-templates.md)和[“定时任务”](../scheduled-task.md)，再用普通成员消息确认处理效果。
+导入完成后，检查目标群组的[“关键词回复”](../automation/keyword-replies.md)、[“消息模板”](../automation/message-templates.md)和[“定时任务”](../automation/scheduled-tasks.md)，再用普通成员消息确认处理效果。
 
 如果你在不同的 nmBot 机器人之间迁移，原有文件 ID 可能无法继续使用，需要用目标机器人重新获取并填写。拷贝消息模板也仍然需要目标机器人能访问原消息。
 
