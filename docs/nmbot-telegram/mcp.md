@@ -251,5 +251,4 @@ nmBot MCP 请求存在速率限制，请按您的账号类型留意使用频率�
 
 如果您需要继续了解 nmBot 面板的使用方式，也可以参阅相关文档：
 
-- [如何启动 nmBot 面板](panel/how-to-launch-panel.md)
-- [启动 nmBot 面板](launch-panel.md)
+- [打开并登录 nmBot 面板](panel/launch.md)

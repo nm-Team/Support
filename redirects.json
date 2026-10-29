@@ -3,6 +3,16 @@
     "/old-path/": "/new-path/",
     "/nmbot-telegram/old-feature/": "/nmbot-telegram/new-feature/",
     "/contact/": "/contact-us/",
-    "/help/": "/contact-us/forum/"
+    "/help/": "/contact-us/forum/",
+    "/nmbot-telegram/launch-panel/": "/nmbot-telegram/panel/launch/",
+    "/nmbot-telegram/panel/how-to-launch-panel/": "/nmbot-telegram/panel/launch/",
+    "/nmbot-telegram/group/group-setup/": "/nmbot-telegram/group/setup/",
+    "/nmbot-telegram/group/anti-spam/": "/nmbot-telegram/group/moderation/anti-spam/",
+    "/nmbot-telegram/group/unban-users-banned-by-anti-spam/": "/nmbot-telegram/group/moderation/anti-spam/#处理误封",
+    "/nmbot-telegram/group/join-verification/": "/nmbot-telegram/group/moderation/join-verification/",
+    "/nmbot-telegram/group/delete-message-by-type/": "/nmbot-telegram/group/moderation/auto-delete-messages/",
+    "/nmbot-telegram/group/key-word-reply/": "/nmbot-telegram/group/automation/keyword-replies/",
+    "/nmbot-telegram/message-template/": "/nmbot-telegram/group/automation/message-templates/",
+    "/nmbot-telegram/nmbot-intelligence/nmbot-intelligence-chat/": "/nmbot-telegram/nmbot-intelligence/copilot/"
   }
 }

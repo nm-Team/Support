@@ -29,7 +29,11 @@ class _FragmentGraph(HTMLParser):
 
 def _render(relative_path: str) -> str:
     source = (DOCS_ROOT / relative_path).read_text(encoding="utf-8")
-    _metadata, body = parse_page(source, Path(relative_path).name)
+    return _render_source(source)
+
+
+def _render_source(source: str) -> str:
+    _metadata, body = parse_page(source, "example.md")
     return markdown(
         body,
         extensions=MKDOCS_CONFIG.markdown_extensions,
@@ -37,8 +41,11 @@ def _render(relative_path: str) -> str:
     )
 
 
-def test_message_template_renders_all_footnotes():
-    output = _render("nmbot-telegram/message-template.md")
+def test_all_footnotes_render_after_article_content():
+    output = _render_source(
+        "# Formatting\n\nTerms[^1], user IDs[^2], and availability[^3].\n\n"
+        "[^1]: Message formatting.\n\n[^2]: Telegram user ID.\n\n[^3]: 目前可用的功能。\n"
+    )
 
     assert 'id="fn:1"' in output
     assert 'id="fn:2"' in output
@@ -46,8 +53,8 @@ def test_message_template_renders_all_footnotes():
     assert "%E7%9B%AE%E5%89%8D" not in output
 
 
-def test_message_template_preserves_literal_telegram_syntax():
-    output = _render("nmbot-telegram/message-template.md")
+def test_literal_telegram_syntax_is_not_interpreted_as_markup():
+    output = _render_source(r"`\~` `\=` `\|` `&lt;` `&gt;` `&amp;`")
 
     for spelling in (r"\~", r"\=", r"\|"):
         assert f"<code>{spelling}</code>" in output
@@ -84,7 +91,7 @@ def test_panel_troubleshooting_lists_render_bold_labels():
 def test_same_page_links_target_rendered_heading_ids():
     paths = (
         "nmbot-telegram/faq/why-my-message-deleted.md",
-        "nmbot-telegram/panel/how-to-launch-panel.md",
+        "nmbot-telegram/panel/launch.md",
     )
 
     for path in paths:

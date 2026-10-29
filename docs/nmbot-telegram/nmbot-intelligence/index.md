@@ -13,9 +13,9 @@ nmBot 智能是内置于 nmBot 和 nmBot 面板的一系列智能功能。利用
 
 ### nmBot Copilot
 
-[nmBot Copilot](./nmbot-intelligence-chat.md)（原 nmBot 智能聊天）是内置于 nmBot 和 nmBot 面板的个人助理，使管理 nmBot 群组和个人配置变得史无前例地简单。
+[nmBot Copilot](copilot.md) 可以回答 nmBot 使用问题，并帮助你管理群组、频道和个人配置。
 
-您只需要用自然语言描述目的，nmBot Copilot 便可以为您配置好相应的功能。
+你可以用自然语言描述目标，检查它提出的配置或操作，并按提示确认。
 
 ### nmartChat+
 
@@ -23,7 +23,7 @@ nmartChat+ 是 nmartChat 的增强版本，在保留一贯聊天风格的基础�
 
 ### 骚扰拦截 2.0
 
-nmBot 智能现可驱动[骚扰拦截功能](../group/anti-spam.md)，将骚扰拦截效果提升约 5 倍。群组管理员可以设置 nmBot 智能骚扰拦截的灵敏度，还可启用“智能操作”功能，通过消息的骚扰程度自动决定是仅删除消息还是封禁用户。
+你可以在[“骚扰消息拦截”](../group/moderation/anti-spam.md)中启用 nmBot 智能识别，调整灵敏度和处理方式。开启“nmBot 智能智能操作”后，即使基础处理方式为“删除”，也可能根据识别结果封禁发送者。
 
 ### 同频气氛组
 
@@ -31,7 +31,7 @@ nmBot 智能现可驱动[骚扰拦截功能](../group/anti-spam.md)，将骚扰�
 
 ### 关键词回复情绪识别
 
-得益于 nmBot 智能，[关键词回复](../group/key-word-reply.md)功能现在支持识别消息文本的情绪，包括仇视言论、侮辱性言论、脏话、暴力言论等。
+订阅 nmBot+ 的群组可以在[“关键词回复”](../group/automation/keyword-replies.md)中识别消息文本的情绪，包括仇视言论、侮辱性言论、脏话、暴力言论等。
 
 ### 欢乐复读保护
 

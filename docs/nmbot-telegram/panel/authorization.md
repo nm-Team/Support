@@ -1,35 +1,45 @@
 ---
-title: 管理对 nmBot 面板的授权
-description: 了解在使用 nmBot 面板时的 Telegram 授权与 nmTeam 账号绑定。
+title: 管理面板登录和账号绑定
+description: 了解 Telegram 登录授权、退出面板账号，以及绑定或取消绑定 nmTeam 账号的方法。
 index: 2
 ---
 
-# 管理对 nmBot 面板的授权
+<span id="nmbot"></span>
 
-在使用 nmBot 和 nmBot 面板时，您或许会授权 nmBot 访问您的 Telegram 账号。
+# 管理面板登录和账号绑定 { #管理对-nmbot-面板的授权 }
 
-本文介绍了授权的类型，授权范围以及如何查看并解除授权。
+您可以使用 Telegram 账号登录 nmBot 面板，也可以在绑定 nmTeam 账号后使用它登录。登录面板与授予机器人群组管理员权限是两项独立操作；能登录面板，不代表能修改任意群组的设置。
 
-## 在通过 Telegram 迷你 App 使用或通过网页登录 nmBot 面板时授权
+<span id="telegram-app-nmbot"></span>
 
-在通过 Telegram 迷你 App 使用或通过网页登录 nmBot 面板时，您需要授权 nmBot 获取您的 Telegram 账号信息，以便 nmBot 确认确实是您在登录。
-根据登录方式的不同，nmBot 获取的信息可能包括您的账号名称、用户名、用户 ID、头像等，同时还可能获得向您发送私信的权限。技术细节可在 [Telegram 迷你 App](https://core.telegram.org/bots/webapps#webappinitdata) 和 [Telegram Login Widget](https://core.telegram.org/widgets/login-legacy#receiving-authorization-data) 网站查看。
-此授权仅用于身份验证，并将不会允许 nmBot 访问您的个人账号或收取、修改或发送您的消息。
-Telegram 会在首次请求时向您显示弹窗来要求您确认授权。只有您在 Telegram 应用中点击确认或 Telegram 网站上授权并在 Telegram 应用中验证，这些信息才会发送给 nmBot。
+## 确认 Telegram 登录授权 { #在通过-telegram-迷你-app-使用或通过网页登录-nmbot-面板时授权 }
 
-![Telegram 登录授权弹窗](https://github.com/user-attachments/assets/487aff88-1ef4-4806-9b67-cb1e90b8c8c1)
+在浏览器中选择“通过 Telegram 登录”后，请检查 Telegram 授权窗口显示的账号和服务，再按提示确认。面板用 Telegram 提供的身份信息识别您的账号；请求范围可能包括基本个人资料和允许机器人给您发送私信。
 
-当通过网页上的 Telegram Login Widget 登录 nmBot 面板时，请求权限的机器人可能来自 @nmpanelbot 而不是 @nmnmfunbot。这是我们向新版 nmBot 面板过渡时的备用机器人。
+这些登录权限不允许机器人代替您的个人账号读取其他聊天或发送消息。您可以按 [Telegram 登录说明](https://core.telegram.org/bots/telegram-login)了解授权范围，并在授权窗口中确认实际请求的信息。
 
-### 管理您的 Telegram 授权
+<span id="telegram"></span>
 
-您可以在设置 (Settings) - 隐私和安全 (Privacy and Security) - 活跃网站 (Active Websites) 查看现有授权。
+## 退出面板账号 { #管理您的-telegram-授权 }
 
-![Telegram 活跃网站授权列表](https://github.com/user-attachments/assets/3e684ede-e7e0-45d1-862b-13c8ef633001)
+如果您通过浏览器会话登录，打开“设置”中的“账号与会话”，在“当前会话”中选择“注销”。退出后，您仍可以通过 Telegram 或已绑定的 nmTeam 账号重新登录。
 
-若不再需要授权，可以向右滑动并选择“注销 (Log out)”来取消授权。
+“其他会话”列出此设备上保存的其他登录账号，您可以切换账号、在新页面中登录，或注销相应登录。在 Telegram 迷你 App 中打开面板时，账号来自 Telegram 提供的身份，页面中的会话选项可能与浏览器不同。
 
-## 绑定 nmTeam 账号
+退出面板会话不会自动取消 nmTeam 账号绑定。如果您需要撤销 Telegram 对网站的登录授权，还需要在 Telegram 中管理相应的网站授权。
 
-您可以将 nmTeam 账号绑定到您 Telegram 账号的 nmBot 中，方法是登录 nmBot 面板，转到设置并点选 nmTeam 账号设置项。
-nmBot 将获取您的 nmTeam 账号 ID、头像、昵称、邮箱等基本信息，这些信息可在授权页面查看。
+<span id="nmteam"></span>
+
+## 绑定 nmTeam 账号 { #绑定-nmteam-账号 }
+
+绑定后，您可以在面板登录页面选择“通过 nmTeam 账号登录”。首次绑定前，需要先用 Telegram 登录。
+
+1. 打开面板的[“绑定 nmTeam 账号”页面](https://nmbot.nmnm.fun/#/settings/account/bind-nmteam-account)。页面会显示当前绑定状态。
+1. 选择“绑定 nmTeam 账号”，在 nmTeam 账号授权页面检查账号和请求的信息后确认。
+1. 返回面板，看到“绑定成功！”后检查显示的账号。
+
+每个 nmTeam 账号只能绑定 1 个 Telegram 账号，每个 Telegram 账号也只能绑定 1 个 nmTeam 账号。将已与其他账号绑定的 nmTeam 账号用于新绑定时，原有绑定会解除。
+
+## 取消 nmTeam 账号绑定 {#取消-nmteam-账号绑定}
+
+在“绑定 nmTeam 账号”页面选择“取消绑定”。看到“取消绑定成功！”后，该 nmTeam 账号不再用于这项面板登录绑定。您仍可以使用 Telegram 登录面板。
