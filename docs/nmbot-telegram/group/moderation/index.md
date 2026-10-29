@@ -13,3 +13,5 @@ index: 2
 清理单条消息时，可以[发送 `/d`](delete-messages.md)。你也可以[管理置顶消息](pin-messages.md)、维护[“群组成员白名单”](whitelist.md)，或设置[“指令限制”](command-restrictions.md)。
 
 需要查找管理员操作时，可以启用[“操作记录”](action-log.md)。多个群组共用封禁名单时，可以使用[“联防联控机制”](joint-prevention.md)。
+
+你可以允许成员[“呼叫群组管理员”](call-administrators.md)，为退群成员设置[“自动封禁”](departing-members.md)，或用[“紧急模式”](emergency-mode.md)临时暂停 nmBot 的群组行为。

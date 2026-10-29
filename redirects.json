@@ -20,6 +20,8 @@
     "/nmbot-telegram/group/scheduled-task/": "/nmbot-telegram/group/automation/scheduled-tasks/",
     "/nmbot-telegram/group/action-log/": "/nmbot-telegram/group/moderation/action-log/",
     "/nmbot-telegram/group/joint-ban/": "/nmbot-telegram/group/moderation/joint-prevention/",
-    "/nmbot-telegram/group/channel-perspective-eye/": "/nmbot-telegram/channel/channel-perspective-eye/"
+    "/nmbot-telegram/group/channel-perspective-eye/": "/nmbot-telegram/channel/channel-perspective-eye/",
+    "/nmbot-telegram/group/reg-panel/": "/nmbot-telegram/panel/managed-chats/",
+    "/nmbot-telegram/group/emergency-mode/": "/nmbot-telegram/group/moderation/emergency-mode/"
   }
 }
