@@ -13,7 +13,7 @@ description: 创建 MCP Access Token，让外部工具在您的权限内读取�
 
 ## 创建 MCP Access Token {#创建-mcp-access-token}
 
-您需要先[登录 nmBot 面板](panel/launch.md)。普通账号最多保留 1 个有效令牌；个人账号订阅[“nmBot+”](plus/index.md)后，最多保留 5 个。
+您需要先[登录 nmBot 面板](panel/launch.md)。普通账号最多保留 1 个有效令牌；个人账号订阅 [nmBot+](plus/index.md) 后，最多保留 5 个。
 
 1. 在 nmBot 面板的“设置”中打开“MCP 配置”。
 1. 点按“创建 Token”。页面会说明令牌允许外部工具读取和修改数据。
@@ -94,7 +94,7 @@ description: 创建 MCP Access Token，让外部工具在您的权限内读取�
 您需要控制客户端的请求频率，以下是已经公布的限制：
 
 - 普通账号：每分钟 5 次，每小时 50 次。
-- 个人账号订阅“nmBot+”后：每分钟 20 次，每小时 500 次。
+- 个人账号订阅 nmBot+ 后：每分钟 20 次，每小时 500 次。
 
 请求过于频繁时，客户端会暂时无法继续请求，您可以稍后重试。
 

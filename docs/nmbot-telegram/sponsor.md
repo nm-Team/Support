@@ -5,7 +5,7 @@ description: 在 Telegram 迷你 App 中选择赞助金额，查看付款状态�
 
 # 使用星币赞助 nmBot
 
-你可以在 nmBot 面板中用 Telegram 星币赞助 nmBot，付款成功后会获得积分。赞助用于支持运营；需要订阅高级功能时，可以打开[“nmBot+”](plus/payment-methods.md)。
+你可以在 nmBot 面板中用 Telegram 星币赞助 nmBot，付款成功后会获得积分。赞助用于支持运营；需要订阅高级功能时，可以[购买或续期 nmBot+](plus/payment-methods.md)。
 
 ## 打开“赞助 nmBot”
 

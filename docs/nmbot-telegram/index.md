@@ -23,7 +23,7 @@ description: 打开 nmBot 面板，配置群组和频道，查找工具、指令
 
 [实用工具](tools/index.md)包含消息信息、贴纸、表情和链接预览等操作。[“指令列表”](commands.md)说明了如何在聊天中获取指令帮助。
 
-需要用自然语言配置功能时，您可以打开[“nmBot Copilot”](nmbot-intelligence/copilot.md)。[“nmBot+”](plus/index.md)页面介绍了订阅范围和高级功能。
+需要用自然语言配置功能时，您可以打开[“nmBot Copilot”](nmbot-intelligence/copilot.md)。[nmBot+](plus/index.md) 页面介绍了订阅范围和高级功能。
 
 <span id="nmbot"></span><span id="nmbot_1"></span><span id="nmbot_2"></span><span id="了解-nmbot-最新动态"></span><span id="nmbot-已知问题"></span><span id="nmbot-官方介绍"></span>
 
