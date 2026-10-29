@@ -74,4 +74,4 @@ Copilot 会按你在 nmBot 或面板中选择的语言回复。你可以在面�
 
 ## 相关文档 {#相关文档}
 
-要手动核对 Copilot 提出的设置，可以打开[“入群验证”](../group/moderation/join-verification.md)、[“关键词回复”](../group/automation/keyword-replies.md)或[“定时任务”](../group/automation/scheduled-tasks.md)。如果你要配置群组中的日常聊天行为，查看 [nmartChat](../nmartchat.md)。
+要手动核对 Copilot 提出的设置，可以打开[“入群验证”](../group/moderation/join-verification.md)、[“关键词回复”](../group/automation/keyword-replies.md)或[“定时任务”](../group/automation/scheduled-tasks.md)。你可以用[“nmartChat”](nmartchat.md)配置群组中的日常聊天行为。

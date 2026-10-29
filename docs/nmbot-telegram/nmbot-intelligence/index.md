@@ -1,46 +1,51 @@
 ---
-title: nmBot 智能
-description: nmBot 智能是内置于 nmBot 和 nmBot 面板的一系列智能功能。利用机器学习技术，nmBot 智能可以帮助用户更好地管理和使用 nmBot。
+title: 使用“nmBot 智能”
+description: 选择聊天、频道评论、骚扰识别或群组配置助手。
 ---
 
-# nmBot 智能
+# 使用“nmBot 智能” {#nmbot-智能}
 
-![nmBot 智能](https://newsroom.nmteam.xyz/usr/uploads/2025/03/1351332983.png)
+您可以用“nmBot 智能”获得使用帮助、配置建议、聊天回复或频道评论。自动生成的内容可能出现错误，具体功能的授权范围和处理方式取决于您开启的设置。
 
-nmBot 智能是内置于 nmBot 和 nmBot 面板的一系列智能功能。利用机器学习技术，nmBot 智能可以帮助用户更好地管理和使用 nmBot。
+<span id="nmbot"></span>
+<span id="nmbot_1"></span>
+<span id="_1"></span>
+<span id="_2"></span>
+<span id="_3"></span>
+<span id="_4"></span>
+<span id="_5"></span>
+<span id="20"></span>
 
-## nmBot 智能功能
+## 选择“nmBot 智能”功能 {#nmbot-智能功能}
 
-### nmBot Copilot
+### 使用“nmBot Copilot” {#nmbot-copilot}
 
-[nmBot Copilot](copilot.md) 可以回答 nmBot 使用问题，并帮助你管理群组、频道和个人配置。
+您可以用[“nmBot Copilot”](copilot.md)询问 nmBot 使用问题，或描述需要修改的群组、频道和个人设置。它提出配置或操作后，您可以检查内容并按提示确认。
 
-你可以用自然语言描述目标，检查它提出的配置或操作，并按提示确认。
+### 使用“nmartChat+” {#nmartchat}
 
-### nmartChat+
+<nmbot-plus-icon></nmbot-plus-icon> 订阅 nmBot+ 的群组可以启用[“nmartChat+”](nmartchat.md)，在回复中继续之前的对话。
 
-nmartChat+ 是 nmartChat 的增强版本，在保留一贯聊天风格的基础上，带来了对对话上下文的增强理解。nmartChat+ 目前为 Beta 版本，面向 nmBot+ 订阅用户提供。
+### 启用智能“骚扰消息拦截” {#骚扰拦截-20}
 
-### 骚扰拦截 2.0
+您可以在[“骚扰消息拦截”](../group/moderation/anti-spam.md)中启用 nmBot 智能识别，调整灵敏度和处理方式。开启“nmBot 智能智能操作”后，即使基础处理方式为“删除”，也可能根据识别结果封禁发送者。
 
-你可以在[“骚扰消息拦截”](../group/moderation/anti-spam.md)中启用 nmBot 智能识别，调整灵敏度和处理方式。开启“nmBot 智能智能操作”后，即使基础处理方式为“删除”，也可能根据识别结果封禁发送者。
+### 设置“同频气氛组” {#同频气氛组}
 
-### 同频气氛组
+您可以让新版[“同频气氛组”](../group/automation/channel-commentary.md)在频道讨论群评论帖子，并调整人设、发言风格和对话方式。
 
-基于 nmBot 智能的新版[同频气氛组](../group/reply-channel.md) (Beta 版) 不仅提供更拟人的回复，还能以更自然的方式参与到与其他人的互动中。
+### 设置“关键词回复”的情绪条件 {#关键词回复情绪识别}
 
-### 关键词回复情绪识别
+<nmbot-plus-icon></nmbot-plus-icon> 订阅 nmBot+ 的群组可以在[“关键词回复”](../group/automation/keyword-replies.md)中按消息情绪匹配规则，包括仇视言论、侮辱性言论、脏话和暴力言论。
 
-订阅 nmBot+ 的群组可以在[“关键词回复”](../group/automation/keyword-replies.md)中识别消息文本的情绪，包括仇视言论、侮辱性言论、脏话、暴力言论等。
+### 了解“欢乐复读”的保护 {#欢乐复读保护}
 
-### 欢乐复读保护
+您开启[“欢乐复读”](../group/entertainment/repeat.md)后，nmBot 会跳过识别为骚扰的文字，因此不保证所有重复消息都得到回复。
 
-nmBot 智能可帮助阻止“欢乐复读”功能发送意外消息，提高功能的安全性。
+## 了解隐私保护 {#隐私保护}
 
-## 隐私保护
+您可以在[“nmBot 智能隐私”](privacy.md)中了解相关数据处理说明。
 
-了解 nmBot 智能如何保护您的隐私：[nmBot 智能隐私](./privacy.md)
+## 提交反馈 {#反馈}
 
-## 反馈
-
-如果您在使用 nmBot 智能功能时遇到问题或有任何建议，请通过[此处列出的方式](./feedback.md)向我们反馈。
+您可以用[“nmBot 智能反馈”](feedback.md)中的方式报告不符合预期的回复或提出建议。

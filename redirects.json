@@ -22,6 +22,11 @@
     "/nmbot-telegram/group/joint-ban/": "/nmbot-telegram/group/moderation/joint-prevention/",
     "/nmbot-telegram/group/channel-perspective-eye/": "/nmbot-telegram/channel/channel-perspective-eye/",
     "/nmbot-telegram/group/reg-panel/": "/nmbot-telegram/panel/managed-chats/",
-    "/nmbot-telegram/group/emergency-mode/": "/nmbot-telegram/group/moderation/emergency-mode/"
+    "/nmbot-telegram/group/emergency-mode/": "/nmbot-telegram/group/moderation/emergency-mode/",
+    "/nmbot-telegram/nmartchat/": "/nmbot-telegram/nmbot-intelligence/nmartchat/",
+    "/nmbot-telegram/group/reply-channel/": "/nmbot-telegram/group/automation/channel-commentary/",
+    "/nmbot-telegram/group/games/": "/nmbot-telegram/group/entertainment/",
+    "/nmbot-telegram/group/members-interaction/": "/nmbot-telegram/group/entertainment/member-interactions/",
+    "/nmbot-telegram/group/banme/": "/nmbot-telegram/group/entertainment/banme/"
   }
 }
