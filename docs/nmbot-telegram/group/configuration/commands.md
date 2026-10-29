@@ -22,7 +22,7 @@ index: 2
 
 ## 创建“指令映射”
 
-你可以把常用指令映射为更容易输入的别名。例如，发送 `/mapping credit points` 后，你以同一个身份发送 `/points` 就相当于发送 `/credit`。
+你可以把常用指令映射为更容易输入的别名。例如，发送 `/mapping mycredit points` 后，你以同一个身份发送 `/points` 就相当于发送 `/mycredit`。
 
 ```text
 /mapping 原指令 别名
@@ -37,7 +37,7 @@ index: 2
 发送 `/unmapping points` 可以移除上例中的映射。你也可以用原指令名移除它：
 
 ```text
-/unmapping credit
+/unmapping mycredit
 ```
 
 nmBot 提示移除成功后，这个别名不再生效，原指令仍然可以使用。
