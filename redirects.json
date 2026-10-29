@@ -13,6 +13,9 @@
     "/nmbot-telegram/group/delete-message-by-type/": "/nmbot-telegram/group/moderation/auto-delete-messages/",
     "/nmbot-telegram/group/key-word-reply/": "/nmbot-telegram/group/automation/keyword-replies/",
     "/nmbot-telegram/message-template/": "/nmbot-telegram/group/automation/message-templates/",
-    "/nmbot-telegram/nmbot-intelligence/nmbot-intelligence-chat/": "/nmbot-telegram/nmbot-intelligence/copilot/"
+    "/nmbot-telegram/nmbot-intelligence/nmbot-intelligence-chat/": "/nmbot-telegram/nmbot-intelligence/copilot/",
+    "/nmbot-telegram/group/warn/": "/nmbot-telegram/group/moderation/warnings/",
+    "/nmbot-telegram/group/pin/": "/nmbot-telegram/group/moderation/pin-messages/",
+    "/nmbot-telegram/group/speak-limitation/": "/nmbot-telegram/group/moderation/speaking-frequency/"
   }
 }

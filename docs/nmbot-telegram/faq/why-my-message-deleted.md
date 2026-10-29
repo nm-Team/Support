@@ -9,7 +9,7 @@
 
 - **[按类型自动删除消息](../group/moderation/auto-delete-messages.md)**：您发送的消息由于符合群组管理员设置的自动删除类型而被自动删除。
 - **[关键词回复](../group/automation/keyword-replies.md)**：您发送的消息触发了群组的关键词回复，且该关键词回复设置了删除触发的消息。
-- **[发言频率限制](../group/speak-limitation.md)**：您发送的消息过于频繁，超出了群组管理员设置的发言频率限制。
+- **[发言频率限制](../group/moderation/speaking-frequency.md)**：您发送的消息过于频繁，超出了群组管理员设置的发言频率限制。
 - **[骚扰拦截](../group/moderation/anti-spam.md)**：您发送的消息被 nmBot 识别为骚扰消息，因此被删除。
     若您曾联系过 nmBot，nmBot 将向您发送私信告知您这一情况。
 - **自定义骚扰拦截规则**：群组管理员设置了自定义骚扰拦截规则，您发送的消息被识别为骚扰消息，因此被删除。
