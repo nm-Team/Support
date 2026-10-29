@@ -1,17 +1,61 @@
 """Redirects generation tests."""
 
 import json
+import shutil
+import subprocess
 
 import pytest
 
 import nmteam_support.redirects as redirects_module
 
 
+@pytest.mark.parametrize(
+    ("incoming", "destination", "expected"),
+    [
+        ("/old/", "/new/", "/new/"),
+        ("/old", "/new/", "/new/"),
+        ("/old.html?ref=share#details", "/new/", "/new/?ref=share#details"),
+        ("/old.md#_3", "/new/", "/new/#_3"),
+        ("/old/child/?view=full#part", "/new/", "/new/?view=full#part"),
+        ("/old/?ref=share#before", "/new/#after", "/new/?ref=share#after"),
+        ("/old/?ref=share#before", "/new/?ref=target#after", "/new/?ref=target#after"),
+        ("/old/#%E4%B8%AD%E6%96%87", "/new/", "/new/#%E4%B8%AD%E6%96%87"),
+        ("/old-other/", "/new/", None),
+        ("/unmoved/?ref=share#details", "/new/", None),
+    ],
+)
+def test_generated_script_resolves_legacy_links(incoming, destination, expected):
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js is required to execute the generated browser JavaScript")
+    script = redirects_module.render_redirects_js({"/old/": destination})
+    harness = """
+const vm = require('node:vm');
+const input = JSON.parse(require('node:fs').readFileSync(0, 'utf8'));
+const location = new URL(input.url);
+let redirect = null;
+location.replace = value => { redirect = value; };
+vm.runInNewContext(input.script, { window: { location }, URL, console: { log() {} } });
+process.stdout.write(JSON.stringify(redirect));
+"""
+    result = subprocess.run(
+        [node, "-e", harness],
+        input=json.dumps({"url": "https://support.nmteam.xyz" + incoming, "script": script}),
+        capture_output=True,
+        text=True,
+        check=True,
+        timeout=10,
+    )
+    assert json.loads(result.stdout) == (
+        "https://support.nmteam.xyz" + expected if expected else None
+    )
+
+
 def test_render_redirects_js_contains_mapping():
     js = redirects_module.render_redirects_js({"/old/": "/new/"})
     assert "const redirects = {" in js
     assert '"/old/": "/new/"' in js
-    assert "window.location.replace(newPath);" in js
+    assert "window.location.replace(target.href);" in js
 
 
 def test_render_redirects_js_keeps_unicode():
