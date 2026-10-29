@@ -1,54 +1,50 @@
 ---
-title: nmBot 商业功能
-description: 了解 nmBot 商业功能，让 nmBot 以您的身份回复私信或处理您个人账号的事务。
+title: 使用“商业功能”管理个人账号
+description: 连接您的 Telegram 账号，让 nmBot 按规则回复私信或定时更改个人资料。
 ---
 
-# nmBot 商业功能
+# 使用“商业功能”管理个人账号 {#nmbot-商业功能}
 
-nmBot 商业功能允许 Telegram Business 用户将 nmBot 设置为商业机器人，让 nmBot 以您的身份回复私信或处理您个人账号的事务。
+您可以把 nmBot 连接到自己的 Telegram 账号，让它以您的身份回复私信，或按时间更改个人资料。面板的“商业”页面用于管理这些功能。
 
-## 开始使用
+<span id="nmbot"></span>
+<span id="_1"></span>
 
-要使用 nmBot 商业功能，您需要先订阅 Telegram Business（目前包含在 Telegram Premium 订阅中），然后将 nmBot 设置为您的商业机器人。
+## 连接账号 {#开始使用}
 
-请参阅[将 nmBot 设置为商业机器人](./set-business-chatbot.md)了解详细设置步骤。
+先[将 nmBot 设置为“商业机器人”](set-business-chatbot.md)，再选择需要的功能。Telegram 现在允许所有用户连接聊天机器人，连接本身不要求 Telegram Premium。
 
-## 商业机器人状态
+<span id="_2"></span>
 
-在 nmBot 面板“商业”页面中，您可以查看“商业机器人状态”部分，快速确认个人账号与 nmBot 的链接状态。
+## 检查“商业机器人状态” {#商业机器人状态}
 
-## 商业关键词回复
+您可以在“商业机器人状态”下查看“当前状态”。“已设置”表示账号已经连接，点按后可以查看授权的权限。“未设置”时，nmBot 无法代您执行商业功能。
 
-商业关键词回复功能允许您设置自动回复规则，当收到的私信符合条件时，nmBot 将自动以您的身份回复。
+<span id="_3"></span>
 
-### <nmbot-plus-icon></nmbot-plus-icon> 自动删除消息
+## 配置“商业关键词回复” {#商业关键词回复}
 
-订阅 nmBot+ 的用户可以设置商业关键词回复自动删除触发的消息和回复消息。
+您可以用[“商业关键词回复”](keyword-replies.md)匹配对方或您自己发送的消息，再以您的身份发送预设内容。
 
-### <nmbot-plus-icon></nmbot-plus-icon> 将消息标为已读
+<span id="_4"></span>
 
-订阅 nmBot+ 的用户可以设置商业关键词回复自动将消息标为已读，让您的商业对话管理更高效。
+### <nmbot-plus-icon></nmbot-plus-icon> 设置“自动删除” {#自动删除消息}
 
-## 商业定时任务
+订阅 nmBot+ 的个人账号可以为触发消息和回复消息分别设置自动删除时间。您还需要授权 nmBot 删除对应的消息。
 
-商业定时任务功能允许您按照时间自动更改账号信息。
+<span id="_5"></span>
 
-通过商业定时任务，您可以：
+### <nmbot-plus-icon></nmbot-plus-icon> 设置“将消息标为已读” {#将消息标为已读}
 
-- 定时修改您的名称
-- 定时修改您的个人简介
-- 定时修改您的用户名
+订阅 nmBot+ 的个人账号可以在规则匹配后让 nmBot 标记消息已读。您需要授权 nmBot 读取消息。
 
-[商业定时任务详细介绍](./scheduled-task.md)
+<span id="_6"></span>
+<span id="_7"></span>
+<span id="使用场景"></span>
 
-### 使用场景
+## 创建“商业定时任务” {#商业定时任务}
 
-例如，您可以设置：
+您可以用[“商业定时任务”](scheduled-task.md)按每天或指定星期更新名、姓、用户名和简介。例如，您可以在工作时段更改名称，在另一个时间用另一项任务更改回来。
 
-- 在每天的工作时间将自己的名称自动改为“绝赞接单版”
-- 在其他时间将名称设为“请勿打扰”
-- 在节假日自动更新个人简介
-
-## 相关文档
-
-- [将 nmBot 设置为商业机器人](./set-business-chatbot.md)
+<span id="_8"></span>
+<span id="相关文档"></span>

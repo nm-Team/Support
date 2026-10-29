@@ -19,6 +19,7 @@
     "/nmbot-telegram/group/speak-limitation/": "/nmbot-telegram/group/moderation/speaking-frequency/",
     "/nmbot-telegram/group/scheduled-task/": "/nmbot-telegram/group/automation/scheduled-tasks/",
     "/nmbot-telegram/group/action-log/": "/nmbot-telegram/group/moderation/action-log/",
-    "/nmbot-telegram/group/joint-ban/": "/nmbot-telegram/group/moderation/joint-prevention/"
+    "/nmbot-telegram/group/joint-ban/": "/nmbot-telegram/group/moderation/joint-prevention/",
+    "/nmbot-telegram/group/channel-perspective-eye/": "/nmbot-telegram/channel/channel-perspective-eye/"
   }
 }
