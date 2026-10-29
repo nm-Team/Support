@@ -1,10 +1,10 @@
 ---
-title: 使用 nmBot Copilot 管理配置
+title: 使用“nmBot Copilot”管理配置
 description: 用自然语言询问 nmBot 功能、提出配置更改，并确认操作或继续已有对话。
 index: 1
 ---
 
-# 使用 nmBot Copilot 管理配置 { #nmbot-copilot }
+# 使用“nmBot Copilot”管理配置 { #nmbot-copilot }
 
 如果你不确定某项功能在哪里设置，可以直接向“nmBot Copilot”描述目标。它可以解释 nmBot 的功能、提出配置更改，或引导你打开相应页面；需要执行操作时，请检查它列出的内容再确认。
 

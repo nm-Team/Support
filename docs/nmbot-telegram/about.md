@@ -1,17 +1,14 @@
 ---
-title: 关于 nmBot
+title: 了解“nmBot”
+description: 查看机器人版本、产品入口和帮助文档信息。
 ---
 
-<center>
-<!-- 图片 -->
-<img src="https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png" width="128" height="128" alt="nmBot logo" />  
-## nmBot  
-© 2022-2024 nmTeam. All rights reserved.  
-</center>
-nmBot 是由 nmTeam 出品的 Telegram 机器人，兼具扎实可靠的群组管理功能和温暖搞笑的互动娱乐功能。  
+# 了解“nmBot” {#nmbot}
 
-nmBot 高效安全、保障隐私。欢迎在您的群组免费使用 nmBot。
+您可以用 nmTeam 提供的 nmBot 管理 Telegram 对话、设置自动化操作和使用聊天工具。各项功能的前提条件和操作步骤可以从[帮助文档首页](index.md)找到。
 
-## 关于 nmBot 帮助文档
+在与 nmBot 的聊天中发送 `/about`，您可以查看正在使用的机器人版本、官方频道和支持入口。面板的“设置”→“关于”中也提供服务条款、隐私政策和相关产品链接。
 
-此帮助文档由 nmTeam 成员和社区志愿者共同编辑。
+## 使用“nmBot 帮助文档” {#关于-nmbot-帮助文档}
+
+这份帮助文档由 nmTeam 成员和社区志愿者编辑。您可以用页面导航或搜索查找功能；遇到文档描述与实际界面不一致时，可以[联系支持](support.md)说明对应页面。

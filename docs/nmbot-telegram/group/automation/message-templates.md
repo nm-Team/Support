@@ -39,6 +39,8 @@ index: 2
 
 ## 为文本添加格式 { #如何为消息模板添加格式 }
 
+<span id="fn:1"></span><span id="fnref:1"></span>
+
 “解析模式”决定文本如何显示。选择“无 (默认)”时，nmBot 会按普通文字发送。需要粗体、链接或代码等格式时，可以选择 Telegram 的 Markdown、MarkdownV2 或 HTML。
 
 <span id="markdownv2-风格"></span>
@@ -54,6 +56,8 @@ index: 2
 <b>群规</b>
 请友善交流，不要发送广告。
 ```
+
+<span id="fn:3"></span><span id="fnref:3"></span><span id="fnref2:3"></span>
 
 Telegram 的 Markdown 和 MarkdownV2 与一般文档网站的 Markdown 不完全相同。更多写法可查看 [Telegram 的格式化说明](https://core.telegram.org/bots/api#formatting-options)。
 
@@ -72,6 +76,8 @@ Telegram 的 Markdown 和 MarkdownV2 与一般文档网站的 Markdown 不完全
 <span id="_3"></span>
 
 ### 用户信息 { #用户信息变量 }
+
+<span id="fn:2"></span><span id="fnref:2"></span>
 
 - `{username}`：成员的显示名称。
 - `{userFirstName}`：成员的名。

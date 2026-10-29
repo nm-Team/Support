@@ -1,11 +1,12 @@
 ---
-title: nmBot 智能反馈
+title: 反馈“nmBot 智能”问题
+description: 向支持人员说明操作和错误提示，或在社区提交建议。
 ---
 
-# nmBot 智能反馈
+<span id="nmbot"></span>
 
-若您在使用 nmBot 智能时遇到使用问题，错误信息，或有任何建议和意见，请通过以下方式反馈：
+# 反馈“nmBot 智能”问题 {#nmbot-智能反馈}
 
-- 发送消息到 [Telegram 中的 nmTeam 支持机器人](https://t.me/nmteamsupportbot)。
-    请在消息中包含您的问题描述和相关的错误信息，并包含标签 `#nmBotIntelligence`。
-- 通过[社区](../../contact-us/forum.md)与其他用户交流，获取帮助和建议。
+您可以向 [nmTeam 支持机器人](https://t.me/nmteamsupportbot)反馈“nmBot 智能”的使用问题。请说明操作步骤、预期结果和实际提示，并在消息中加入标签 `#nmBotIntelligence`。
+
+如果您要提交功能建议或与其他用户交流，可以使用[nmTeam 社区](../../contact-us/forum.md)。截图、对话内容和诊断结果可能包含个人信息，公开发送后，其他人也能看到这些内容。
