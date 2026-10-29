@@ -5,6 +5,7 @@ on:
   push:
     branches: ["main", "dev"]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   ci:
@@ -30,6 +31,9 @@ jobs:
 
       - name: Run quality checks
         run: uv run nmteam check
+
+      - name: Check internal links
+        run: uv run nmteam check-links --no-build
 
       - name: Verify POSIX launcher
         if: runner.os != 'Windows'

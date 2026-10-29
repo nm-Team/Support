@@ -16,6 +16,7 @@ from mkdocs.commands.serve import serve as mkdocs_serve
 from mkdocs.config import load_config
 from mkdocs.exceptions import Abort, ConfigurationError, PluginError
 
+from nmteam_support.links import LinkCheckError, check_internal_links
 from nmteam_support.redirects import RedirectConfigError, read_redirects, write_redirects
 from nmteam_support.serve import DEFAULT_BIND, DEFAULT_PORT, serve_site
 
@@ -125,6 +126,23 @@ def check_site(config_path: Path, verbose: bool = False) -> None:
     build_site(config_path, verbose)
 
 
+def check_site_links(config_path: Path, no_build: bool, verbose: bool = False) -> None:
+    """Inspect a fresh production build, or reuse one explicitly in CI."""
+    if not no_build:
+        build_site(config_path, verbose)
+    try:
+        config = load_config(config_file=str(config_path), strict=True)
+        report = check_internal_links(Path(config.site_dir), config.site_url or "")
+    except (Abort, ConfigurationError, OSError, PluginError, LinkCheckError) as error:
+        raise LifecycleError(f"内部链接检查失败: {error}") from error
+    for issue in report.issues:
+        source = Path(config.site_dir) / issue.source
+        typer.echo(f"{source}:{issue.line}: {issue.url!r}: {issue.reason}", err=True)
+    if report.issues:
+        raise LifecycleError(f"发现 {len(report.issues)} 个失效的内部链接。")
+    typer.echo(f"内部链接检查通过: {report.pages} 个 HTML 页面，{report.checked} 个站内引用。")
+
+
 def _configure_logging(verbose: bool) -> None:
     level = logging.INFO if verbose else logging.WARNING
     logging.basicConfig(level=level, format="%(levelname)s - %(message)s", force=True)
@@ -199,6 +217,19 @@ def check_command(context: typer.Context) -> None:
     """Run linting, tests, formatting checks, and a strict build."""
     state = _state(context)
     _execute(lambda: check_site(_config_path(), state.verbose))
+
+
+@app.command("check-links")
+def check_links_command(
+    context: typer.Context,
+    no_build: Annotated[
+        bool,
+        typer.Option("--no-build", help="Inspect the existing build without rebuilding (for CI)."),
+    ] = False,
+) -> None:
+    """Build and check internal links, assets, and HTML anchors (separate from check)."""
+    state = _state(context)
+    _execute(lambda: check_site_links(_config_path(), no_build, state.verbose))
 
 
 def _managed_redirects() -> tuple[Path, dict[str, str]]:

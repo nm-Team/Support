@@ -13,7 +13,7 @@ def test_help_exposes_only_current_lifecycle_commands():
     result = runner.invoke(cli.app, ["--help"])
 
     assert result.exit_code == 0
-    for command in ("dev", "build", "preview", "check", "redirects"):
+    for command in ("dev", "build", "preview", "check", "check-links", "redirects"):
         assert command in result.stdout
     for removed in ("generate", "clean", "install", "serve"):
         removed_result = runner.invoke(cli.app, [removed])
@@ -159,3 +159,60 @@ def test_check_runs_tools_then_the_same_build_lifecycle(tmp_path, monkeypatch):
         ],
     ]
     assert builds == [(tmp_path / "mkdocs.yml", True)]
+
+
+def _link_check_project(tmp_path):
+    (tmp_path / "mkdocs.yml").write_text(
+        "site_name: Test\nsite_url: https://docs.example.test\nplugins: []\n", encoding="utf-8"
+    )
+    site = tmp_path / "site"
+    site.mkdir()
+    (site / "index.html").write_text(
+        '<a href="#home">Home</a><h1 id="home">Home</h1>', encoding="utf-8"
+    )
+    return site
+
+
+def test_check_links_builds_by_default_and_checks_real_output(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "mkdocs.yml").write_text(
+        "site_name: Test\nsite_url: https://docs.example.test\nplugins: []\n", encoding="utf-8"
+    )
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "docs/index.md").write_text("# Home\n", encoding="utf-8")
+
+    result = runner.invoke(cli.app, ["check-links"])
+
+    assert result.exit_code == 0, result.output
+    assert (tmp_path / "site/index.html").is_file()
+    assert "内部链接检查通过" in result.stdout
+
+
+def test_check_links_no_build_uses_existing_output_and_reports_broken_links(tmp_path, monkeypatch):
+    site = _link_check_project(tmp_path)
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "docs/index.md").write_text("# Home\n", encoding="utf-8")
+    (site / "index.html").write_text('<a href="/missing/">Broken</a>', encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+
+    result = runner.invoke(cli.app, ["check-links", "--no-build"])
+
+    assert result.exit_code == 1
+    assert "index.html:1:" in result.stderr
+    assert "/missing/" in result.stderr
+    assert "missing target" in result.stderr
+    assert "发现 1 个失效的内部链接" in result.stderr
+    assert not (site / "sitemap.xml").exists()
+
+
+def test_check_links_no_build_fails_without_output(tmp_path, monkeypatch):
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "mkdocs.yml").write_text(
+        "site_name: Test\nsite_url: https://docs.example.test\nplugins: []\n", encoding="utf-8"
+    )
+    monkeypatch.chdir(tmp_path)
+
+    result = runner.invoke(cli.app, ["check-links", "--no-build"])
+
+    assert result.exit_code == 1
+    assert "nmteam build" in result.stderr

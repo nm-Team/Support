@@ -135,6 +135,34 @@ uv run nmteam build
 
 以上检查由 CI（`.github/workflows/ci.yml`）自动执行。
 
+### 内部链接检查
+
+内部链接检查作为独立步骤在 GitHub Actions 的三平台 CI 中执行，也可以在
+Actions 页面手动运行 CI 并选择分支。它不计入 `nmteam check`，不作为提交前的
+强制要求。需要手动检查时运行：
+
+```bash
+uv run nmteam check-links
+```
+
+命令先严格构建，再离线检查 `site/` 中 HTML 的 `href`、`src` 等引用，覆盖
+相对路径、根路径、与 `site_url` 同域名的完整 URL、静态资源及 HTML 章节锚点。
+中文和百分号编码的路径、中文章节锚点及旧锚点别名都按实际构建结果检查。
+目录链接必须有 `index.html`，路径大小写在所有平台上严格匹配。
+外部网站和 `mailto:`、`tg:` 等协议不发起网络请求。
+
+发现失效链接时，命令输出生成页面路径、行号、原始 URL 和失败原因，并返回非零
+退出码。已有 `404.html` 或客户端重定向规则不会让缺失页面通过检查。
+检查针对本次构建，不验证生产服务器的部署、网络或重定向配置。
+
+CI 会复用 `nmteam check` 刚生成的产物，避免重复构建：
+
+```bash
+uv run nmteam check-links --no-build
+```
+
+本地使用 `--no-build` 前，需要确保 `site/` 已经按最新内容构建。
+
 ## 性能基准
 
 构建性能的测量在 `benchmarks/`，使用 `pytest-benchmark`。它们不计入
