@@ -129,15 +129,55 @@ def test_missing_git_hides_dates_with_an_explanation(git_docs, monkeypatch, capl
     assert "Git history is unavailable" in caplog.text
 
 
-def test_shallow_history_fails_instead_of_assigning_the_clone_boundary_date(git_docs, tmp_path):
+@pytest.mark.parametrize("remote", ["origin", "upstream"])
+def test_shallow_history_is_completed_without_changing_the_checkout(git_docs, tmp_path, remote):
     (git_docs / "older.md").write_text("# Older\n", encoding="utf-8")
     _commit(git_docs, "2020-01-01T00:00:00+00:00")
     (git_docs / "newer.md").write_text("# Newer\n", encoding="utf-8")
     _commit(git_docs, "2021-01-01T00:00:00+00:00")
     clone = tmp_path / "shallow"
     _git(tmp_path, "clone", "--depth=1", git_docs.parent.as_uri(), str(clone))
+    _git(clone, "checkout", "--detach")
+    if remote != "origin":
+        _git(clone, "remote", "rename", "origin", remote)
+    head = _git(clone, "rev-parse", "HEAD")
+    # Deployment checkouts can be older than the remote tip and contain local edits.
+    (git_docs / "older.md").write_text("# Updated remotely\n", encoding="utf-8")
+    _commit(git_docs, "2022-01-01T00:00:00+00:00")
+    (clone / "docs/older.md").write_text("# Local build edit\n", encoding="utf-8")
 
-    with pytest.raises(RevisionError, match="fetch-depth: 0"):
+    revisions = read_page_revisions(clone / "docs")
+
+    assert revisions == {
+        "older.md": PageRevision("2020-01-01T08:00:00+08:00", "2020-01-01 08:00"),
+        "newer.md": PageRevision("2021-01-01T08:00:00+08:00", "2021-01-01 08:00"),
+    }
+    assert _git(clone, "rev-parse", "--is-shallow-repository").strip() == "false"
+    assert _git(clone, "rev-parse", "HEAD") == head
+    assert (clone / "docs/older.md").read_text(encoding="utf-8") == "# Local build edit\n"
+    assert read_page_revisions(clone / "docs") == revisions
+
+
+def test_shallow_history_fetch_errors_are_reported_without_fabricating_dates(git_docs, tmp_path):
+    (git_docs / "page.md").write_text("# Page\n", encoding="utf-8")
+    _commit(git_docs, "2020-01-01T00:00:00+00:00")
+    clone = tmp_path / "shallow"
+    _git(tmp_path, "clone", "--depth=1", git_docs.parent.as_uri(), str(clone))
+    _git(clone, "remote", "set-url", "origin", str(tmp_path / "missing-remote"))
+
+    with pytest.raises(RevisionError, match="Cannot read Git history"):
+        read_page_revisions(clone / "docs")
+    assert _git(clone, "rev-parse", "--is-shallow-repository").strip() == "true"
+
+
+def test_shallow_history_without_a_remote_has_an_actionable_error(git_docs, tmp_path):
+    (git_docs / "page.md").write_text("# Page\n", encoding="utf-8")
+    _commit(git_docs, "2020-01-01T00:00:00+00:00")
+    clone = tmp_path / "shallow"
+    _git(tmp_path, "clone", "--depth=1", git_docs.parent.as_uri(), str(clone))
+    _git(clone, "remote", "remove", "origin")
+
+    with pytest.raises(RevisionError, match="configure an origin remote"):
         read_page_revisions(clone / "docs")
 
 
@@ -159,7 +199,8 @@ def test_git_timeouts_are_reported_with_context(git_docs, monkeypatch):
         read_page_revisions(git_docs)
 
 
-def test_material_footer_shows_per_page_times_and_hides_unknown_dates(git_docs):
+@pytest.mark.parametrize("shallow", [False, True])
+def test_material_footer_shows_per_page_times_and_hides_unknown_dates(git_docs, shallow):
     (git_docs / "index.md").write_text("# Home\n", encoding="utf-8")
     (git_docs / "older.md").write_text("# Older\n", encoding="utf-8")
     (git_docs / "newer.md").write_text("# Newer\n", encoding="utf-8")
@@ -169,6 +210,10 @@ def test_material_footer_shows_per_page_times_and_hides_unknown_dates(git_docs):
     _commit(git_docs, "2020-01-01T00:00:00+00:00")
     (git_docs / "newer.md").write_text("# Updated\n", encoding="utf-8")
     _commit(git_docs, "2022-02-02T00:00:00+00:00")
+    if shallow:
+        clone = git_docs.parent / "shallow-site"
+        _git(git_docs.parent, "clone", "--depth=1", git_docs.parent.as_uri(), str(clone))
+        git_docs = clone / "docs"
     (git_docs / "untracked.md").write_text("# Untracked\n", encoding="utf-8")
     overrides = Path(__file__).resolve().parents[1] / "overrides"
     config = git_docs.parent / "mkdocs.yml"

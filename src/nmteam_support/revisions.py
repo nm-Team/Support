@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import shutil
 import subprocess
 from dataclasses import dataclass
@@ -33,14 +34,11 @@ def read_page_revisions(docs_dir: Path) -> dict[str, PageRevision]:
     ):
         logger.info("Git history is unavailable; page update times will be hidden.")
         return {}
-    if _git(docs_dir, "rev-parse", "--is-shallow-repository").strip() == "true":
-        raise RevisionError(
-            "Page update times require complete Git history. Run `git fetch --unshallow` "
-            "or configure actions/checkout with `fetch-depth: 0`."
-        )
-    if not _git(docs_dir, "rev-parse", "--verify", "--quiet", "HEAD", success_codes=(0, 1)):
+    head = _git(docs_dir, "rev-parse", "--verify", "--quiet", "HEAD", success_codes=(0, 1)).strip()
+    if not head:
         logger.info("The repository has no commits; page update times will be hidden.")
         return {}
+    _complete_history(docs_dir, head)
     tracked_paths = set(_git(docs_dir, "ls-files", "-z", "--", ".").split("\0"))
     history = _git(
         docs_dir,
@@ -77,14 +75,53 @@ def read_page_revisions(docs_dir: Path) -> dict[str, PageRevision]:
     return revisions
 
 
-def _git(docs_dir: Path, *args: str, success_codes: tuple[int, ...] = (0,)) -> str:
+def _complete_history(docs_dir: Path, head: str) -> None:
+    """Fetch the checked-out commit's ancestors without changing the checkout."""
+    if _git(docs_dir, "rev-parse", "--is-shallow-repository").strip() != "true":
+        return
+    remotes = _git(docs_dir, "remote").splitlines()
+    if "origin" in remotes:
+        remote = "origin"
+    elif len(remotes) == 1:
+        remote = remotes[0]
+    else:
+        raise RevisionError(
+            "Cannot complete shallow Git history: configure an origin remote "
+            "or run `git fetch --unshallow <remote>` before building."
+        )
+    logger.info("Fetching complete Git history from %s for page update times.", remote)
+    _git(
+        docs_dir,
+        "-c",
+        "credential.interactive=false",
+        "fetch",
+        "--unshallow",
+        "--no-tags",
+        "--no-recurse-submodules",
+        "--no-write-fetch-head",
+        "--",
+        remote,
+        head,
+        timeout=120,
+    )
+    if _git(docs_dir, "rev-parse", "--is-shallow-repository").strip() == "true":
+        raise RevisionError(
+            "Git history is still shallow after fetching. The build remote must provide "
+            "the complete history of the checked-out commit."
+        )
+
+
+def _git(
+    docs_dir: Path, *args: str, success_codes: tuple[int, ...] = (0,), timeout: int = 30
+) -> str:
     try:
         result = subprocess.run(
             ["git", "-C", str(docs_dir), *args],
             capture_output=True,
             text=True,
             encoding="utf-8",
-            timeout=30,
+            timeout=timeout,
+            env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
             check=False,
         )
     except (OSError, UnicodeError, subprocess.TimeoutExpired) as error:
