@@ -5,14 +5,14 @@ description: 连接您的 Telegram 账号，让 nmBot 按规则回复私信或�
 
 # 使用“商业功能”管理个人账号 {#nmbot-商业功能}
 
-您可以把 nmBot 连接到自己的 Telegram 账号，让它以您的身份回复私信，或按时间更改个人资料。面板的“商业”页面用于管理这些功能。
+您可以把 nmBot 连接到自己的 Telegram 账号，让它以您的身份回复私信，或按时间更改个人资料。nmBot 面板的“商业”页面用于管理这些功能。
 
 <span id="nmbot"></span>
 <span id="_1"></span>
 
 ## 连接账号 {#开始使用}
 
-先[将 nmBot 设置为“商业机器人”](set-business-chatbot.md)，再选择需要的功能。Telegram 现在允许所有用户连接聊天机器人，连接本身不要求 Telegram Premium。
+先[将 nmBot 设置为商业机器人](set-business-chatbot.md)，再选择需要的功能。Telegram 现在允许所有用户连接聊天机器人，连接本身不要求 Telegram Premium。
 
 <span id="_2"></span>
 
@@ -22,9 +22,9 @@ description: 连接您的 Telegram 账号，让 nmBot 按规则回复私信或�
 
 <span id="_3"></span>
 
-## 配置“商业关键词回复” {#商业关键词回复}
+## 配置商业“关键词回复” {#商业关键词回复}
 
-您可以用[“商业关键词回复”](keyword-replies.md)匹配对方或您自己发送的消息，再以您的身份发送预设内容。
+您可以用商业[“关键词回复”](keyword-replies.md)匹配对方或您自己发送的消息，再以您的身份发送预设内容。
 
 <span id="_4"></span>
 

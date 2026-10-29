@@ -1,21 +1,21 @@
 ---
-title: 接入“nmBot MCP”并管理访问令牌
+title: 接入 nmBot MCP 并管理访问令牌
 description: 创建 MCP Access Token，让外部工具在您的权限内读取和修改 nmBot 配置。
 ---
 
 <span id="mcp-beta"></span><span id="mcp-配置-beta-版"></span><span id="mcp-配置可以做什么"></span><span id="mcp"></span>
 
-# 接入“nmBot MCP”并管理访问令牌 {#接入-nmbot-mcp}
+# 接入 nmBot MCP 并管理访问令牌 {#接入-nmbot-mcp}
 
 您可以在“MCP 配置”中创建访问令牌，让支持 MCP 的外部工具管理您的 nmBot 设置。工具能够读取和修改您的数据，所能执行的操作仍受您自己的账号和对话管理权限限制。
 
 <span id="_1"></span><span id="使用前须知"></span><span id="在哪里打开-mcp-配置"></span>
 
-## 创建“MCP Access Token” {#创建-mcp-access-token}
+## 创建 MCP Access Token {#创建-mcp-access-token}
 
-您需要先[登录面板](panel/launch.md)。普通账号最多保留 1 个有效令牌；个人账号订阅[“nmBot+”](plus/index.md)后，最多保留 5 个。
+您需要先[登录 nmBot 面板](panel/launch.md)。普通账号最多保留 1 个有效令牌；个人账号订阅[“nmBot+”](plus/index.md)后，最多保留 5 个。
 
-1. 在面板的“设置”中打开“MCP 配置”。
+1. 在 nmBot 面板的“设置”中打开“MCP 配置”。
 1. 点按“创建 Token”。页面会说明令牌允许外部工具读取和修改数据。
 1. 点按“继续创建”。
 1. 输入“Token 名称”，例如 `My VS Code`。
@@ -26,7 +26,7 @@ description: 创建 MCP Access Token，让外部工具在您的权限内读取�
 
 完整令牌只显示一次，返回列表后只能看到掩码。持有令牌的人或工具可以访问您的 nmBot 数据；令牌泄露后，可以在列表中删除它，原令牌便无法继续连接。
 
-## 配置“nmBot MCP”的连接 {#在其他-mcp-客户端中使用}
+## 配置 nmBot MCP 的连接 {#在其他-mcp-客户端中使用}
 
 在支持 HTTP MCP 的客户端中，您需要填写以下连接信息：
 
@@ -38,7 +38,7 @@ description: 创建 MCP Access Token，让外部工具在您的权限内读取�
 
 <span id="vs-code-nmbot"></span><span id="1-mcp"></span><span id="1-打开-mcp-用户配置"></span><span id="2-nmbot-mcp"></span><span id="2-添加-nmbot-mcp-服务器配置"></span><span id="3"></span><span id="3-保存并检查是否已加载"></span>
 
-## 在“VS Code”中接入“nmBot MCP” {#在-vs-code-中使用-nmbot-mcp}
+## 在 VS Code 中接入 nmBot MCP {#在-vs-code-中使用-nmbot-mcp}
 
 以下示例采用 [VS Code 格式的 MCP 配置](https://code.visualstudio.com/docs/agents/reference/mcp-configuration)，适用于支持此格式和交互式输入变量的 Local 会话。Copilot 会话使用的配置格式和凭据传入方式可能不同，您可以按 [VS Code 的连接说明](https://code.visualstudio.com/docs/agent-customization/mcp-servers)选择对应配置位置。
 
@@ -75,7 +75,7 @@ description: 创建 MCP Access Token，让外部工具在您的权限内读取�
 
 <span id="openclaw-nmbot-mcp"></span><span id="openclaw"></span><span id="openclaw-配置位置"></span><span id="openclaw_1"></span><span id="openclaw-排错建议"></span>
 
-## 在“OpenClaw”中接入“nmBot MCP” {#在-openclaw-中使用-nmbot-mcp}
+## 在 OpenClaw 中接入 nmBot MCP {#在-openclaw-中使用-nmbot-mcp}
 
 [OpenClaw 的 MCP 设置](https://docs.openclaw.ai/tools/mcp)支持直接添加远程服务器。您可以在控制界面的“Settings”→“MCP”中点按“Add server”，选择“Streamable HTTP”，填入 nmBot 服务地址。
 
@@ -83,13 +83,13 @@ description: 创建 MCP Access Token，让外部工具在您的权限内读取�
 
 <span id="nmbot-preview-mcp"></span>
 
-## 接入“nmBot Preview MCP” {#使用-nmbot-preview-mcp}
+## 接入 nmBot Preview MCP {#使用-nmbot-preview-mcp}
 
-如果您使用[“nmBot Preview”](beta.md)，服务地址为 `https://nmbot-preview-api.nmnm.fun/mcp`。您需要在对应版本的面板中创建令牌，并在客户端中使用不同的服务器名称，方便区分两个服务。
+如果您使用 [nmBot Preview](beta.md)，服务地址为 `https://nmbot-preview-api.nmnm.fun/mcp`。您需要在对应版本的 nmBot 面板中创建令牌，并在客户端中使用不同的服务器名称，方便区分两个服务。
 
 <span id="_3"></span>
 
-## 了解“nmBot MCP”的请求限制 {#速率限制}
+## 了解 nmBot MCP 的请求限制 {#速率限制}
 
 您需要控制客户端的请求频率，以下是已经公布的限制：
 
@@ -100,7 +100,7 @@ description: 创建 MCP Access Token，让外部工具在您的权限内读取�
 
 <span id="token"></span><span id="_4"></span>
 
-## 删除“MCP Access Token” {#token-管理建议}
+## 删除 MCP Access Token {#token-管理建议}
 
 在“MCP 配置”的“已创建 Token”中，找到对应名称，点按“删除 Token”并确认。看到“Token 已删除”后，使用这个令牌的客户端将无法继续连接。删除不可撤销。
 
@@ -114,4 +114,4 @@ description: 创建 MCP Access Token，让外部工具在您的权限内读取�
 
 <span id="_6"></span><span id="mcp-access-token"></span><span id="mcp_1"></span><span id="mcp_2"></span><span id="更多资源"></span><span id="相关说明"></span>
 
-您也可以从面板的“更多 Agents 资源”打开“nmBot Agent Skills”，获取配套的官方技能包。
+您也可以从 nmBot 面板的“更多 Agents 资源”打开“nmBot Agent Skills”，获取配套的官方技能包。

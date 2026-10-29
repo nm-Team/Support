@@ -1,18 +1,18 @@
 ---
-title: 查询“Telegram 数据中心”
+title: 查询 Telegram 数据中心
 description: 查询账号、对话或消息中媒体对应的数据中心结果。
 index: 3
 ---
 
 <span id="telegram"></span>
 
-# 查询“Telegram 数据中心” {#telegram-数据中心查询}
+# 查询 Telegram 数据中心 {#telegram-数据中心查询}
 
 您可以用 `/dc` 查看自己、指定对话或消息中媒体的数据中心结果。群组和频道的结果可能只是推测，不能作为账号归属地或实际网络位置的证明。
 
 <span id="_1"></span>
 
-## 查询“Telegram 数据中心” {#查询数据中心}
+## 查询 Telegram 数据中心 {#查询数据中心}
 
 在与 nmBot 的私聊中发送 `/dc`，可以查询自己的结果。查询个人或对话时，nmBot 需要能读取相应头像；没有可读取的头像时，会提示无法查询。
 
@@ -26,7 +26,7 @@ index: 3
 
 <span id="telegram_1"></span>
 
-## 理解“Telegram 数据中心”的结果 {#关于-telegram-数据中心}
+## 理解 Telegram 数据中心的结果 {#关于-telegram-数据中心}
 
 nmBot 会返回 DC 编号和对应的地点说明，并对部分结果注明推测。这个查询不会移动账号、改变 Telegram 的连接位置，也不能判断您当前使用的网络出口。
 

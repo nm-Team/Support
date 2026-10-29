@@ -1,11 +1,11 @@
 ---
-title: 获取“nmBot”支持
+title: 获取 nmBot 支持
 description: 联系 nmTeam 支持，反馈使用问题、付款问题或骚扰拦截误封。
 ---
 
 <span id="nmbot"></span>
 
-# 获取“nmBot”支持 {#nmbot-支持}
+# 获取 nmBot 支持 {#nmbot-支持}
 
 您可以通过 [nmTeam 支持机器人](https://t.me/nmteamsupportbot)反馈 nmBot 的使用问题。说明您执行的操作、预期结果和实际提示，可以帮助支持人员理解问题。
 
@@ -13,4 +13,4 @@ description: 联系 nmTeam 支持，反馈使用问题、付款问题或骚扰�
 
 截图和诊断结果可能包含个人信息。发送公开消息后，其他人也能看到其中的内容；访问令牌、密码和验证码不能用于公开反馈。
 
-您也可以到 [nmTeam 官方群组](https://t.me/nmteamchat/20055)与其他用户交流。关于指令的用法，可以直接[查找“nmBot 指令”](commands.md)。
+您也可以到 [nmTeam 官方群组](https://t.me/nmteamchat/20055)与其他用户交流。关于指令的用法，可以直接[查找 nmBot 指令](commands.md)。

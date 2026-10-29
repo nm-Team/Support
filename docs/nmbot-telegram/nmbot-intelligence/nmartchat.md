@@ -24,10 +24,10 @@ index: 2
 
 您需要[启用“群组管理功能”](../group/setup.md)，并拥有智能聊天的[群组功能管理权限](../group/admin-rights-and-features.md)。
 
-1. 在面板的“对话”中选择目标群组，打开“智能聊天”。
+1. 在 nmBot 面板的“对话”中选择目标群组，打开“智能聊天”。
 1. 打开或关闭“nmartChat”。更改会直接保存，后续群组消息按新的设置处理。
 
-群组管理功能关闭时，“nmartChat”默认开启，面板中的智能聊天设置只读。要关闭群组中的“nmartChat”，需要先启用群组管理功能。
+群组管理功能关闭时，“nmartChat”默认开启，nmBot 面板中的智能聊天设置只读。要关闭群组中的“nmartChat”，需要先启用群组管理功能。
 
 ## <nmbot-plus-icon></nmbot-plus-icon> 启用“nmartChat+” {#启用-nmartchat-plus}
 

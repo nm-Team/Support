@@ -1,15 +1,15 @@
 ---
-title: 管理“频道”
+title: 管理频道
 description: 设置频道帖子按钮和格式，管理讨论群回复，并配置频道身份。
 index: 3
 ---
 
-# 管理“频道” {#管理频道}
+# 管理频道 {#管理频道}
 
 <span id="_1"></span>
 
-你可以在面板的“对话”中选择频道，设置[帖子按钮和格式](posts.md)。频道绑定讨论群后，你也可以在讨论群设置[“自动回复频道帖子”和“自动取消置顶”](linked-group-posts.md)。
+你可以在 nmBot 面板的“对话”中选择频道，设置[帖子按钮和格式](posts.md)。频道绑定讨论群后，你也可以在讨论群设置[“自动回复频道帖子”和“自动取消置顶”](linked-group-posts.md)。
 
 如果你希望以频道身份调用支持个人身份的功能，可以配置[“频道透视眼”](channel-perspective-eye.md)。这项功能会关联频道所有者的个人账号，可能让其他人看到个人身份。
 
-你也可以让 nmBot [封禁主动退出频道的订阅者](../group/moderation/departing-members.md#%E5%AF%B9%E9%80%80%E5%87%BA%E9%A2%91%E9%81%93%E7%9A%84%E8%AE%A2%E9%98%85%E8%80%85%E5%90%AF%E7%94%A8%E5%9C%A8%E9%A2%91%E9%81%93%E4%B8%AD%E5%B0%81%E7%A6%81)。
+你也可以让 nmBot [封禁主动退出频道的订阅者](departing-subscribers.md)。
