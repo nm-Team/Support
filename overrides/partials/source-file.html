@@ -1,0 +1,12 @@
+{% if page.meta.page_revision %}
+  <aside class="md-source-file">
+    <span class="md-source-file__fact">
+      <span class="md-icon" aria-hidden="true">
+        {% include ".icons/material/clock-edit-outline.svg" %}
+      </span>
+      <span>
+        上次更新：<time datetime="{{ page.meta.page_revision.iso }}">{{ page.meta.page_revision.display }}</time>（UTC+8）
+      </span>
+    </span>
+  </aside>
+{% endif %}
