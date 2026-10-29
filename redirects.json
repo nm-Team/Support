@@ -27,6 +27,7 @@
     "/nmbot-telegram/group/reply-channel/": "/nmbot-telegram/group/automation/channel-commentary/",
     "/nmbot-telegram/group/games/": "/nmbot-telegram/group/entertainment/",
     "/nmbot-telegram/group/members-interaction/": "/nmbot-telegram/group/entertainment/member-interactions/",
-    "/nmbot-telegram/group/banme/": "/nmbot-telegram/group/entertainment/banme/"
+    "/nmbot-telegram/group/banme/": "/nmbot-telegram/group/entertainment/banme/",
+    "/nmbot-telegram/set-language/": "/nmbot-telegram/panel/settings/language/"
   }
 }

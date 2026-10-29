@@ -1,254 +1,117 @@
 ---
-title: MCP 配置 (Beta 版)
-description: 创建和管理 nmBot MCP Access Token，并在 VS Code 等外部工具中接入 nmBot MCP 服务。
+title: 接入“nmBot MCP”并管理访问令牌
+description: 创建 MCP Access Token，让外部工具在您的权限内读取和修改 nmBot 配置。
 ---
 
-# MCP 配置 (Beta 版)
+<span id="mcp-beta"></span><span id="mcp-配置-beta-版"></span><span id="mcp-配置可以做什么"></span><span id="mcp"></span>
 
-`MCP 配置` 用于创建和管理 `MCP Access Token`，让您在 `OpenClaw`、`VS Code` 等支持 MCP 的工具中接入 nmBot。
+# 接入“nmBot MCP”并管理访问令牌 {#接入-nmbot-mcp}
 
-## MCP 配置可以做什么
+您可以在“MCP 配置”中创建访问令牌，让支持 MCP 的外部工具管理您的 nmBot 设置。工具能够读取和修改您的数据，所能执行的操作仍受您自己的账号和对话管理权限限制。
 
-通过 nmBot MCP，您可以：
+<span id="_1"></span><span id="使用前须知"></span><span id="在哪里打开-mcp-配置"></span>
 
-- 在支持 MCP 的客户端中接入 nmBot。
-- 用 `MCP Access Token` 安全连接 nmBot 能力。
-- 在电脑端工具中更方便地完成相关操作。
+## 创建“MCP Access Token” {#创建-mcp-access-token}
 
-## 使用前须知
+您需要先[登录面板](panel/launch.md)。普通账号最多保留 1 个有效令牌；个人账号订阅[“nmBot+”](plus/index.md)后，最多保留 5 个。
 
-在开始前，请先确认以下事项：
+1. 在面板的“设置”中打开“MCP 配置”。
+1. 点按“创建 Token”。页面会说明令牌允许外部工具读取和修改数据。
+1. 点按“继续创建”。
+1. 输入“Token 名称”，例如 `My VS Code`。
+1. 确认创建。看到“Token 已创建”后，完整令牌会显示在弹窗中。
+1. 点按“拷贝并关闭”，保存令牌。
 
-- 您可以正常打开 nmBot 面板。
-- `MCP Access Token` 仅会完整显示一次，请在创建后立即复制并妥善保管。
-- 普通账号最多可保留 `1` 个有效 Token。
-- 升级到 `nmBot+` 后，最多可创建 `5` 个 MCP Access Token。
-- `MCP 配置` 当前为 `Beta 版`，界面和细节可能会继续调整。
+<span id="_2"></span><span id="创建后会看到什么"></span><span id="为什么我之后看不到完整-token"></span><span id="token_2"></span>
 
-## 在哪里打开 MCP 配置
+完整令牌只显示一次，返回列表后只能看到掩码。持有令牌的人或工具可以访问您的 nmBot 数据；令牌泄露后，可以在列表中删除它，原令牌便无法继续连接。
 
-您可以在 nmBot 面板中找到 `MCP 配置` 入口。
+## 配置“nmBot MCP”的连接 {#在其他-mcp-客户端中使用}
 
-![nmBot 面板中的 MCP 配置入口](/assets/images/nmbot/mcp/mcp-entry.png)
+在支持 HTTP MCP 的客户端中，您需要填写以下连接信息：
 
-![MCP 配置页面](/assets/images/nmbot/mcp/mcp-config-page.png){ width="360" }
+- 服务地址：`https://nmbot-api.nmnm.fun/mcp`。
+- 连接方式：HTTP，使用客户端的 Streamable HTTP 选项。
+- HTTP 请求头：`Authorization: Bearer <您的 MCP Access Token>`。
 
-## 创建 MCP Access Token
+您需要把占位文字替换为刚才创建的令牌，并保留 `Bearer ` 前缀。工具会列出账号可用的操作，其中可能包含发送消息、修改设置或删除数据的操作。外部客户端如何要求操作确认，取决于客户端自身的设置。
 
-请按以下步骤操作：
+<span id="vs-code-nmbot"></span><span id="1-mcp"></span><span id="1-打开-mcp-用户配置"></span><span id="2-nmbot-mcp"></span><span id="2-添加-nmbot-mcp-服务器配置"></span><span id="3"></span><span id="3-保存并检查是否已加载"></span>
 
-1. 打开 nmBot 面板中的 `MCP 配置` 页面。
-1. 点击 `创建 Token`。
-1. 在弹出的窗口中输入一个便于识别的 `Token 名称`，例如 `My VS Code`。
-1. 点击 `确认`。
-1. 创建成功后，系统会弹出提示框并展示完整 Token。
-1. 立即复制该 Token，并保存在安全的位置。
+## 在“VS Code”中接入“nmBot MCP” {#在-vs-code-中使用-nmbot-mcp}
 
-![创建 MCP Access Token](/assets/images/nmbot/mcp/mcp-create-token-dialog.png){ width="360" }
+以下示例采用 [VS Code 格式的 MCP 配置](https://code.visualstudio.com/docs/agents/reference/mcp-configuration)，适用于支持此格式和交互式输入变量的 Local 会话。Copilot 会话使用的配置格式和凭据传入方式可能不同，您可以按 [VS Code 的连接说明](https://code.visualstudio.com/docs/agent-customization/mcp-servers)选择对应配置位置。
 
-## 创建后会看到什么
-
-Token 创建成功后，完整 Token 只会展示这一次。返回列表后，通常只能看到 Token 名称、创建时间，以及经过部分隐藏的 Token 内容。
-
-![Token 创建成功后的提示](/assets/images/nmbot/mcp/mcp-token-created-dialog.png){ width="360" }
-
-## 在 VS Code 中使用 nmBot MCP
-
-请按以下步骤配置。
-
-### 1. 打开 MCP 用户配置
-
-在 VS Code 中打开命令面板，然后输入：
-
-- `MCP: 打开用户配置`
-- 或 `MCP: Open User Configuration`
-
-如果这是您个人长期使用的配置，通常更适合放在用户配置中。
-
-![在 VS Code 中打开 MCP 用户配置](/assets/images/nmbot/mcp/mcp-vscode-command-palette.png)
-
-### 2. 添加 nmBot MCP 服务器配置
-
-在打开的 MCP 配置文件中，加入类似下面的内容：
+1. 打开命令面板，运行 `MCP: Open User Configuration`。
+1. 在打开的配置中加入下面的服务器和输入项。如果已有其他配置，把对应条目加入现有的 `servers` 和 `inputs`。
 
 ```json
 {
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "nmbot-token",
+      "description": "nmBot MCP Access Token",
+      "password": true
+    }
+  ],
   "servers": {
     "nmbot": {
+      "type": "http",
       "url": "https://nmbot-api.nmnm.fun/mcp",
-      "type": "http",
       "headers": {
-        "Authorization": "Bearer <你的 MCP Access Token>"
+        "Authorization": "Bearer ${input:nmbot-token}"
       }
     }
   }
 }
 ```
 
-![VS Code 中的 MCP 配置示例](/assets/images/nmbot/mcp/mcp-vscode-user-config.png){ width="720" }
+1. 保存配置，运行 `MCP: List Servers`，选择 `nmbot` 并启动。
+1. 在凭据输入框中输入令牌。
+1. 让工具读取您自己的 nmBot 设置，检查实际调用的服务器和返回结果。
 
-请注意：
+客户端能列出工具并成功返回请求结果，才表示连接可用。仅保存配置或看到服务器名称，还不能确认令牌有效。
 
-- 将 `<你的 MCP Access Token>` 替换为真实 Token。
-- `Authorization` 中的 `Bearer` 前缀需要保留。
-- 如果已存在其他 `servers`，请把 `nmbot` 合并进去。
+<span id="openclaw-nmbot-mcp"></span><span id="openclaw"></span><span id="openclaw-配置位置"></span><span id="openclaw_1"></span><span id="openclaw-排错建议"></span>
 
-### 3. 保存并检查是否已加载
+## 在“OpenClaw”中接入“nmBot MCP” {#在-openclaw-中使用-nmbot-mcp}
 
-保存配置后，可用以下入口检查是否已生效：
+[OpenClaw 的 MCP 设置](https://docs.openclaw.ai/tools/mcp)支持直接添加远程服务器。您可以在控制界面的“Settings”→“MCP”中点按“Add server”，选择“Streamable HTTP”，填入 nmBot 服务地址。
 
-- `MCP: 浏览 MCP 服务器`
-- `MCP: Browse MCP Servers`
-- `扩展: 焦点在 MCP 服务器视图上`
+您还需要在该服务器的配置中设置 `Authorization` 请求头，值为 `Bearer <您的 MCP Access Token>`。凭据的保存方式取决于 OpenClaw 的配置环境，可以按其官方说明设置。保存后，运行 `openclaw mcp doctor nmbot --probe` 检查名为 `nmbot` 的服务器是否可连接。
 
-配置正确时，nmBot 服务器通常会出现在列表中，并显示可用工具数量。
+<span id="nmbot-preview-mcp"></span>
 
-## 在 OpenClaw 中使用 nmBot MCP
+## 接入“nmBot Preview MCP” {#使用-nmbot-preview-mcp}
 
-根据 OpenClaw 文档，OpenClaw 当前通常通过 `mcporter` 或 `mcp-remote` 这样的桥接方式接入远程 MCP 服务，而不是直接填写一个 `url` 类型的 HTTP MCP 服务器。可参考[OpenClaw 文档](https://docs.openclaw.ai/getting-started)与 [mcp-remote 文档](https://www.npmjs.com/package/mcp-remote)。
+如果您使用[“nmBot Preview”](beta.md)，服务地址为 `https://nmbot-preview-api.nmnm.fun/mcp`。您需要在对应版本的面板中创建令牌，并在客户端中使用不同的服务器名称，方便区分两个服务。
 
-如果您在 OpenClaw 当前使用的 MCP 客户端配置中看到 `mcpServers` 字段，可参考下面这种写法：
+<span id="_3"></span>
 
-```json
-{
-  "mcpServers": {
-    "nmbot": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "mcp-remote@latest",
-        "https://nmbot-api.nmnm.fun/mcp",
-        "--header",
-        "Authorization:${NMBOT_AUTH_HEADER}",
-        "--transport",
-        "http-only"
-      ],
-      "env": {
-        "NMBOT_AUTH_HEADER": "Bearer <你的 MCP Access Token>"
-      }
-    }
-  }
-}
-```
+## 了解“nmBot MCP”的请求限制 {#速率限制}
 
-请注意：
+您需要控制客户端的请求频率，以下是已经公布的限制：
 
-- 该示例基于 OpenClaw 的 `mcpServers` 命令式配置格式，以及 `mcp-remote` 官方文档中的 `--header` 用法。
-- 这里把 `Bearer <token>` 放进环境变量，避免直接在 `args` 中写带空格的完整认证头。
-- `--transport http-only` 用于明确按 HTTP 方式连接 nmBot MCP。
-- 不同版本的 OpenClaw、acpx 或外部 MCP 客户端，配置位置可能不同，请以当前环境中的 OpenClaw 文档为准。
+- 普通账号：每分钟 5 次，每小时 50 次。
+- 个人账号订阅“nmBot+”后：每分钟 20 次，每小时 500 次。
 
-如果您希望接入 `nmBot Preview MCP`，可将上面示例中的地址替换为：
+请求过于频繁时，客户端会暂时无法继续请求，您可以稍后重试。
 
-- `https://nmbot-preview-api.nmnm.fun/mcp`
+<span id="token"></span><span id="_4"></span>
 
-### OpenClaw 配置位置
+## 删除“MCP Access Token” {#token-管理建议}
 
-OpenClaw 文档说明其主配置默认位于 `~/.openclaw/openclaw.json`，并使用 `JSON5` 格式。
+在“MCP 配置”的“已创建 Token”中，找到对应名称，点按“删除 Token”并确认。看到“Token 已删除”后，使用这个令牌的客户端将无法继续连接。删除不可撤销。
 
-如果您不确定当前实际读取的是哪个配置文件，可先执行：
+<span id="_5"></span><span id="常见问题"></span><span id="token_1"></span><span id="为什么我不能创建多个-token"></span>
 
-```bash
-openclaw config file
-```
+达到令牌数量上限时，“创建 Token”会显示“已达上限”。您可以删除不再需要的令牌，或查看个人订阅的可用数量。
 
-如果您的 OpenClaw 安装或配套 MCP 客户端支持在该配置体系中维护 `mcpServers`，通常可以在那里查找或编辑对应条目。
+<span id="vs-code-nmbot-mcp"></span><span id="为什么我在-vs-code-中看不到-nmbot-服务器"></span>
 
-### OpenClaw 排错建议
+如果客户端连接失败，您可以检查服务地址、`Bearer ` 前缀和令牌是否完整。已经删除的令牌需要换成新令牌。如果客户端没有使用配置中的服务器，可以查看它实际读取的配置位置和工具启用状态。
 
-如果 OpenClaw 中的 nmBot MCP 没有正常工作，可依次检查：
+<span id="_6"></span><span id="mcp-access-token"></span><span id="mcp_1"></span><span id="mcp_2"></span><span id="更多资源"></span><span id="相关说明"></span>
 
-- 运行 `openclaw config validate`，确认配置没有语法问题。
-- 确认系统已安装可运行 `npx` 的 Node.js 环境。`mcp-remote` 文档要求 Node `18+`。
-- 确认 `NMBOT_AUTH_HEADER` 是 `Bearer <你的 MCP Access Token>`，而不是只填 Token 本体。
-- 如果改动后仍未生效，重启 OpenClaw 或重新开启相关会话再测试。
-- 如果怀疑是 `mcp-remote` 的本地认证缓存异常，可清理 `~/.mcp-auth` 后重新连接。
-- 如需进一步排查，可在 `args` 中加入 `--debug`。
-
-## 在其他 MCP 客户端中使用
-
-如果您使用的不是 VS Code，而是其他支持 MCP 的客户端，通常也需要以下信息：
-
-- 服务地址：`https://nmbot-api.nmnm.fun/mcp`
-- 连接方式：`HTTP`
-- 请求头：`Authorization: Bearer <你的 MCP Access Token>`
-
-不同客户端的配置方式可能不同，但核心信息通常相同。
-
-## 使用 nmBot Preview MCP
-
-如果您希望接入 `nmBot Preview MCP`，请将服务地址改为：
-
-- `https://nmbot-preview-api.nmnm.fun/mcp`
-
-例如，您可以在 VS Code 中加入类似下面的配置：
-
-```json
-{
-  "servers": {
-    "nmbot-preview": {
-      "url": "https://nmbot-preview-api.nmnm.fun/mcp",
-      "type": "http",
-      "headers": {
-        "Authorization": "Bearer <你的 MCP Access Token>"
-      }
-    }
-  }
-}
-```
-
-如果同时需要稳定版与 Preview 版，可以在同一个配置文件中保留两个不同名称的服务器项。
-
-## 速率限制
-
-nmBot MCP 请求存在速率限制，请按您的账号类型留意使用频率：
-
-- 普通用户：每分钟 `5` 次，每小时 `50` 次。
-- `nmBot+` 用户：每分钟 `20` 次，每小时 `500` 次。
-
-短时间内请求过多时，客户端可能暂时无法继续请求，需要稍后重试。
-
-## Token 管理建议
-
-建议您：
-
-- 为不同用途使用清晰的 Token 名称，例如 `VS Code`、`OpenClaw`。
-- 不要将 Token 发布到公开仓库、群组聊天或公开截图中。
-- 不要把完整 Token 直接发送给他人。
-- 如果怀疑 Token 已泄露，请尽快处理现有 Token，并在客户端中更新为新的 Token。
-
-## 更多资源
-
-除了 nmBot MCP，我们还发布了 nmBot Agent Skills。用户可通过安装由 nmBot 官方开发的技能，使智能体全面掌握 nmBot 功能，从而更有效地协助用户进行 nmBot 功能配置。nmBot Agent Skills 可通过 GitHub 访问：https://github.com/nm-Team/nmbot-skills
-
-## 常见问题
-
-### 为什么我不能创建多个 Token
-
-普通账号最多只能保留 `1` 个有效 Token。
-
-如果您需要更多 Token，可升级到 `nmBot+`，升级后最多可创建 `5` 个 Token。
-
-### 为什么我在 VS Code 中看不到 nmBot 服务器
-
-请检查以下内容：
-
-- MCP 配置文件中的 JSON 格式是否正确。
-- `url` 是否填写为 `https://nmbot-api.nmnm.fun/mcp`。
-- `Authorization` 是否包含正确的 `Bearer ` 前缀。
-- Token 是否已经完整粘贴，没有多余空格或遗漏字符。
-- 您是否把配置写入了正确的用户配置或工作区配置位置。
-
-必要时，重新打开 MCP 配置页面或刷新 VS Code 中的 MCP 服务器视图后再检查一次。
-
-### 为什么我之后看不到完整 Token
-
-这是正常情况。
-
-出于安全考虑，完整 Token 只会在创建成功时显示一次，请务必立即复制保存。
-
-## 相关说明
-
-如果您需要继续了解 nmBot 面板的使用方式，也可以参阅相关文档：
-
-- [打开并登录 nmBot 面板](panel/launch.md)
+您也可以从面板的“更多 Agents 资源”打开“nmBot Agent Skills”，获取配套的官方技能包。
