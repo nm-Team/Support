@@ -1,0 +1,60 @@
+{% macro review_icon(name) -%}
+  <span class="review-icon" aria-hidden="true">{% include ".icons/material/" ~ name ~ ".svg" %}</span>
+{%- endmacro %}
+<div class="review-tools" id="review-tools">
+  <button class="review-button review-launcher" id="review-open" type="button" aria-expanded="false" aria-controls="review-list">
+    {{ review_icon("comment-text-outline") }}
+    <span>审阅评论</span><span class="review-count" id="review-count">0</span>
+  </button>
+  <button class="review-button review-selection" id="review-add" type="button" hidden>
+    {{ review_icon("comment-plus-outline") }}<span>添加评论</span>
+  </button>
+
+  <section class="review-surface review-editor" id="review-editor" aria-labelledby="review-editor-title" hidden>
+    <form id="review-form">
+      <header class="review-heading">
+        <span class="review-editor-title" id="review-editor-title">添加评论</span>
+        <button class="review-button review-button--icon" id="review-editor-close" type="button" aria-label="关闭评论编辑" title="关闭">
+          {{ review_icon("close") }}
+        </button>
+      </header>
+      <p class="review-location review-editor-location" id="review-location"></p>
+      <blockquote class="review-quote review-editor-quote" id="review-quote"></blockquote>
+      <label class="review-sr-only" for="review-comment">评论</label>
+      <textarea id="review-comment" rows="3" placeholder="写下问题或修改建议…" required></textarea>
+      <p class="review-error" id="review-error" role="alert" hidden></p>
+      <footer class="review-editor-footer">
+        <span class="review-shortcut" id="review-shortcut">Ctrl ↵ 保存</span>
+        <button class="review-button review-button--primary" type="submit">保存评论 {{ review_icon("arrow-up") }}</button>
+      </footer>
+    </form>
+  </section>
+
+  <section class="review-surface review-panel" id="review-list" aria-labelledby="review-list-title" hidden>
+    <header class="review-heading review-panel-heading">
+      <h2 id="review-list-title">审阅评论 <span class="review-count" id="review-panel-count">0</span></h2>
+      <button class="review-button review-button--icon" id="review-list-close" type="button" aria-label="关闭评论列表" title="关闭">
+        {{ review_icon("close") }}
+      </button>
+    </header>
+    <div class="review-toolbar">
+      <button class="review-button review-button--primary" id="review-copy" type="button">{{ review_icon("content-copy") }}复制全部评论</button>
+      <button class="review-button review-button--quiet review-button--danger" id="review-clear" type="button">{{ review_icon("trash-can-outline") }}清空全部</button>
+    </div>
+    <p class="review-list-status" id="review-list-status" role="status" hidden></p>
+    <div class="review-items" id="review-items"></div>
+    <footer class="review-panel-footer">评论保存在此浏览器中</footer>
+  </section>
+
+  <div class="review-toast review-surface" id="review-toast" hidden>
+    {{ review_icon("check-circle-outline") }}
+    <span id="review-toast-text" role="status"></span>
+    <button class="review-button review-button--quiet review-undo" id="review-undo" type="button" hidden>撤销</button>
+    <button class="review-button review-button--icon" id="review-toast-close" type="button" aria-label="关闭提示">{{ review_icon("close") }}</button>
+  </div>
+  <p class="review-storage-error review-surface" id="review-status" role="alert" hidden></p>
+
+  <template id="review-icon-edit">{{ review_icon("pencil-outline") }}</template>
+  <template id="review-icon-delete">{{ review_icon("trash-can-outline") }}</template>
+  <template id="review-icon-empty">{{ review_icon("comment-text-outline") }}</template>
+</div>

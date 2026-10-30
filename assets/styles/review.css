@@ -1,0 +1,497 @@
+/* Development reviews share the document theme without obscuring the page. */
+.review-tools {
+    --review-surface: var(--md-default-bg-color);
+    --review-border: color-mix(in srgb, var(--md-default-fg-color) 12%, transparent);
+    --review-soft: color-mix(in srgb, var(--md-default-fg-color) 4%, var(--review-surface));
+    --review-muted: var(--md-default-fg-color--light);
+    --review-shadow: 0 8px 32px #00000014, 0 2px 8px #0000000a;
+    color: var(--md-default-fg-color);
+    font-family: var(--md-text-font-family, system-ui, sans-serif);
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+.review-tools *,
+.review-tools *::before,
+.review-tools *::after {
+    box-sizing: border-box;
+}
+
+.review-tools [hidden] {
+    display: none !important;
+}
+
+.review-tools button,
+.review-tools textarea {
+    font: inherit;
+}
+
+.review-surface {
+    border: 1px solid var(--review-border);
+    border-radius: 14px;
+    background: var(--review-surface);
+    box-shadow: var(--review-shadow);
+}
+
+.review-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 32px;
+    padding: 6px 10px;
+    border: 1px solid var(--review-border);
+    border-radius: 7px;
+    background: var(--review-surface);
+    color: inherit;
+    font-weight: 500;
+    line-height: 18px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 120ms ease, transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.review-button:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.review-button:focus-visible,
+.review-tools a:focus-visible,
+.review-tools textarea:focus-visible {
+    outline: 2px solid var(--md-default-fg-color--light);
+    outline-offset: 3px;
+}
+
+.review-button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.review-button--primary,
+.review-selection {
+    border-color: transparent;
+    background: var(--md-default-fg-color);
+    color: var(--review-surface);
+}
+
+.review-button--quiet,
+.review-button--icon {
+    border-color: transparent;
+    background: transparent;
+    color: var(--review-muted);
+}
+
+.review-button--icon {
+    flex: 0 0 auto;
+    width: 28px;
+    min-height: 28px;
+    padding: 5px;
+}
+
+.review-icon,
+.review-icon svg {
+    display: block;
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    fill: currentcolor;
+}
+
+.review-launcher {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 6;
+    gap: 9px;
+    min-height: 42px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px #00000012;
+}
+
+.review-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 5px;
+    background: var(--review-soft);
+    color: var(--review-muted);
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.review-selection {
+    position: fixed;
+    z-index: 8;
+    min-height: 30px;
+    padding: 5px 9px;
+    border-radius: 7px;
+    box-shadow: 0 3px 12px #0002;
+    font-size: 12px;
+}
+
+.review-editor {
+    position: fixed;
+    z-index: 10;
+    width: min(352px, calc(100vw - 24px));
+    padding: 14px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.review-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.review-editor .review-heading {
+    margin: -4px -5px 0 0;
+}
+
+.review-editor-title {
+    font-weight: 600;
+}
+
+.review-location {
+    display: block;
+    min-width: 0;
+    color: var(--review-muted);
+    font-size: 11px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+}
+
+.review-editor-location {
+    margin: 2px 0 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.review-quote {
+    margin: 10px 0;
+    padding: 1px 0 1px 10px;
+    border-left: 2px solid var(--review-border);
+    color: var(--review-muted);
+    font-size: 12px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    max-height: 60px;
+    overflow-y: auto;
+}
+
+.review-editor-quote {
+    margin: 0 0 12px;
+    max-height: 44px;
+    border-left-color: color-mix(in srgb, var(--md-primary-fg-color) 70%, var(--review-border));
+}
+
+.review-tools #review-comment {
+    display: block;
+    width: 100%;
+    min-height: 88px;
+    max-height: 220px;
+    padding: 10px 11px;
+    resize: vertical;
+    border: 1px solid var(--review-border);
+    border-radius: 8px;
+    background: var(--review-soft);
+    color: inherit;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.review-tools #review-comment::placeholder {
+    color: var(--review-muted);
+    opacity: 0.8;
+}
+
+.review-tools #review-comment:focus {
+    border-color: var(--md-default-fg-color--lighter);
+    outline: none;
+    box-shadow: 0 0 0 2px var(--review-soft);
+}
+
+.review-editor-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.review-shortcut {
+    color: var(--review-muted);
+    font-size: 10px;
+}
+
+.review-editor-footer .review-icon,
+.review-editor-footer svg {
+    width: 14px;
+    height: 14px;
+}
+
+.review-panel {
+    position: fixed;
+    right: 24px;
+    bottom: 78px;
+    z-index: 7;
+    display: flex;
+    flex-direction: column;
+    width: min(400px, calc(100vw - 24px));
+    max-height: min(680px, calc(100dvh - 110px));
+    overflow: hidden;
+}
+
+.review-panel-heading {
+    flex: 0 0 auto;
+    padding: 15px 14px 10px 18px;
+}
+
+.review-panel h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.review-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex: 0 0 auto;
+    padding: 0 16px 14px;
+    border-bottom: 1px solid var(--review-border);
+}
+
+.review-toolbar .review-button {
+    font-size: 12px;
+}
+
+.review-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.review-item {
+    flex: 0 0 auto;
+    padding: 12px 13px;
+    border: 1px solid var(--review-border);
+    border-radius: 10px;
+    background: var(--review-surface);
+}
+
+.review-item-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.review-item-heading .review-location {
+    flex: 1;
+    padding-top: 5px;
+    font-size: 11px;
+}
+
+.review-item-actions {
+    display: flex;
+    gap: 1px;
+    margin-right: -5px;
+}
+
+.review-item-actions .review-icon,
+.review-item-actions svg {
+    width: 14px;
+    height: 14px;
+}
+
+.review-comment {
+    margin: 10px 0 0;
+    font-size: 13px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.review-panel-footer {
+    flex: 0 0 auto;
+    padding: 10px 16px;
+    border-top: 1px solid var(--review-border);
+    background: var(--review-soft);
+    color: var(--review-muted);
+    font-size: 10px;
+    text-align: center;
+}
+
+.review-empty {
+    padding: 30px 16px;
+    color: var(--review-muted);
+    text-align: center;
+}
+
+.review-empty > .review-icon {
+    width: 28px;
+    height: 28px;
+    margin: 0 auto 12px;
+    opacity: 0.6;
+}
+
+.review-empty > .review-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.review-empty p {
+    margin: 5px 0 0;
+    font-size: 12px;
+}
+
+.review-empty strong {
+    color: var(--md-default-fg-color);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.review-error,
+.review-list-status {
+    color: var(--md-typeset-del-color, #c62828);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.review-error {
+    margin: 10px 0 0;
+}
+
+.review-list-status {
+    margin: 12px 16px 0;
+}
+
+.review-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    z-index: 12;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    max-width: calc(100vw - 24px);
+    padding: 8px 9px 8px 13px;
+    transform: translateX(-50%);
+    font-size: 12px;
+}
+
+.review-toast > .review-icon {
+    color: var(--review-muted);
+}
+
+.review-toast-text {
+    min-width: 0;
+}
+
+.review-undo {
+    padding: 4px 7px;
+    color: var(--md-default-fg-color);
+    font-size: 12px;
+}
+
+.review-storage-error {
+    position: fixed;
+    right: 24px;
+    bottom: 84px;
+    z-index: 12;
+    width: min(352px, calc(100vw - 24px));
+    margin: 0;
+    padding: 14px;
+    font-size: 12px;
+}
+
+.review-tools .review-clipboard {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    opacity: 0;
+}
+
+.review-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+::highlight(nmteam-review-selection) {
+    background-color: color-mix(in srgb, #f6ce46 30%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .review-button:hover:not(:disabled) {
+        background: var(--review-soft);
+    }
+
+    .review-button--primary:hover:not(:disabled),
+    .review-selection:hover:not(:disabled) {
+        background: color-mix(in srgb, var(--md-default-fg-color) 85%, var(--review-surface));
+    }
+
+    .review-button--danger:hover:not(:disabled) {
+        background: color-mix(in srgb, #d84444 9%, var(--review-surface));
+        color: #d84444;
+    }
+
+    .review-location:hover {
+        color: var(--md-default-fg-color);
+    }
+}
+
+@media (max-width: 600px) {
+    .review-launcher {
+        right: 12px;
+        bottom: 16px;
+    }
+
+    .review-panel {
+        right: 12px;
+        bottom: 70px;
+        max-height: calc(100dvh - 94px);
+    }
+
+    .review-tools #review-comment {
+        font-size: 16px;
+    }
+
+    .review-toast {
+        bottom: 70px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .review-button {
+        transition: none;
+    }
+
+    .review-button:active:not(:disabled) {
+        transform: none;
+    }
+}

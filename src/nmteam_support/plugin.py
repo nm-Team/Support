@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from hashlib import sha256
 from pathlib import Path
 from typing import Literal
 
@@ -14,6 +15,7 @@ from mkdocs.structure.pages import Page
 
 from nmteam_support.cache import CACHE_DIR_NAME
 from nmteam_support.contributing import (
+    render_contributing_note,
     render_doc_body,
     render_doc_file,
     should_hide_contributing_note,
@@ -26,6 +28,7 @@ from nmteam_support.minify import render_minified_html
 from nmteam_support.models import DocEntry
 from nmteam_support.nav import build_nav, is_renderable
 from nmteam_support.redirects import read_redirects, render_redirects_js
+from nmteam_support.review import REVIEW_ASSETS, render_review_context
 from nmteam_support.revisions import PageRevision, RevisionError, read_page_revisions
 from nmteam_support.scanner import DocumentCatalog, ScannedDir, refresh_catalog
 
@@ -50,6 +53,12 @@ class SupportPlugin(BasePlugin[SupportPluginConfig]):
 
     def on_config(self, config: MkDocsConfig) -> MkDocsConfig:
         root = _project_root(config)
+        config.extra["review_enabled"] = self._command == "serve"
+        for asset in REVIEW_ASSETS:
+            collection = config.extra_css if asset.endswith(".css") else config.extra_javascript
+            collection[:] = [item for item in collection if str(item) != asset]
+            if self._command == "serve":
+                collection.append(asset)
         for path in (root / "assets", root / "redirects.json"):
             value = str(path)
             if path.exists() and value not in config.watch:
@@ -82,6 +91,8 @@ class SupportPlugin(BasePlugin[SupportPluginConfig]):
             for source in sorted(assets_dir.rglob("*")):
                 if source.is_file() and source.suffix.lower() not in RASTER_SUFFIXES:
                     source_uri = f"assets/{source.relative_to(assets_dir).as_posix()}"
+                    if self._command != "serve" and source_uri in REVIEW_ASSETS:
+                        continue
                     files.append(File.generated(config, source_uri, abs_src_path=str(source)))
 
         redirects = read_redirects(root / "redirects.json")
@@ -132,10 +143,38 @@ class SupportPlugin(BasePlugin[SupportPluginConfig]):
         entry = self._entries.get(path)
         if entry is None or should_hide_contributing_note(entry):
             return markdown
-        return render_doc_body(markdown, path)
+        rendered = render_doc_body(markdown, path)
+        if self._command == "serve":
+            note = render_contributing_note(path)
+            rendered = rendered.replace(
+                note, '\n<div class="review-generated" markdown="1">\n' + note + "</div>\n"
+            )
+        return rendered
+
+    def on_page_content(
+        self, html: str, /, *, page: Page, config: MkDocsConfig, files: Files
+    ) -> str:
+        del files
+        if self._command != "serve":
+            return html
+        source = self._catalog.pages.get(page.file.src_uri) if self._catalog else None
+        path = (
+            Path(config.docs_dir).relative_to(_project_root(config)) / page.file.src_uri
+        ).as_posix()
+        return render_review_context(
+            html,
+            source=source.text if source else None,
+            path=path,
+            project=sha256(str(_project_root(config)).encode()).hexdigest()[:16],
+            extensions=config.markdown_extensions,
+            extension_configs=config.mdx_configs,
+        )
 
     def on_post_page(self, output: str, /, *, page: Page, config: MkDocsConfig) -> str:
         del page
+        # Review ranges use exact DOM text offsets, including inter-block whitespace.
+        if self._command == "serve":
+            return output
         return render_minified_html(output, cache_dir=_cache_dir(config, "html"))
 
     def on_post_template(
