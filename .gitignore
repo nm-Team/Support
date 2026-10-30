@@ -131,4 +131,7 @@ dmypy.json
 # Local design and implementation artifacts
 /docs/superpowers/
 
+# Browser verification artifacts
+/.playwright-cli/
+
 .DS_Store
