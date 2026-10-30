@@ -7,6 +7,7 @@ from typing import Literal
 
 from mkdocs.config.base import Config
 from mkdocs.config.defaults import MkDocsConfig
+from mkdocs.exceptions import PluginError
 from mkdocs.plugins import BasePlugin
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
@@ -25,6 +26,7 @@ from nmteam_support.minify import render_minified_html
 from nmteam_support.models import DocEntry
 from nmteam_support.nav import build_nav, is_renderable
 from nmteam_support.redirects import read_redirects, render_redirects_js
+from nmteam_support.revisions import PageRevision, RevisionError, read_page_revisions
 from nmteam_support.scanner import DocumentCatalog, ScannedDir, refresh_catalog
 
 
@@ -39,6 +41,7 @@ class SupportPlugin(BasePlugin[SupportPluginConfig]):
         self._catalog: DocumentCatalog | None = None
         self._directories: dict[str, ScannedDir] = {}
         self._entries: dict[str, DocEntry] = {}
+        self._revisions: dict[str, PageRevision] = {}
         self._command: Literal["build", "gh-deploy", "serve"] = "build"
 
     def on_startup(self, *, command: Literal["build", "gh-deploy", "serve"], dirty: bool) -> None:
@@ -55,6 +58,10 @@ class SupportPlugin(BasePlugin[SupportPluginConfig]):
 
     def on_files(self, files: Files, /, *, config: MkDocsConfig) -> Files:
         self._catalog = refresh_catalog(Path(config.docs_dir), self._catalog)
+        try:
+            self._revisions = read_page_revisions(Path(config.docs_dir))
+        except RevisionError as error:
+            raise PluginError(str(error)) from error
         self._directories = _directory_map(self._catalog.root)
         self._entries = _entry_map(self._catalog.root)
         config.nav = build_nav(self._catalog.root)
@@ -105,6 +112,9 @@ class SupportPlugin(BasePlugin[SupportPluginConfig]):
     ) -> str:
         del config, files
         path = page.file.src_uri
+        page.meta.pop("page_revision", None)
+        if path in self._catalog.pages and path in self._revisions:
+            page.meta["page_revision"] = self._revisions[path]
         directory = self._directories.get(path)
         if directory is not None:
             page.meta["automatically_generated"] = (

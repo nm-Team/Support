@@ -5,6 +5,7 @@ on:
   push:
     branches: ["main", "dev"]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   ci:
@@ -19,6 +20,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Install uv
         uses: astral-sh/setup-uv@v9.0.0
@@ -30,6 +33,9 @@ jobs:
 
       - name: Run quality checks
         run: uv run nmteam check
+
+      - name: Check internal links
+        run: uv run nmteam check-links --no-build
 
       - name: Verify POSIX launcher
         if: runner.os != 'Windows'

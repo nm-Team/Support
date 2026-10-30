@@ -40,13 +40,14 @@ html {
     outline-offset: 2px;
 }
 
-@media (max-width: 44.9375em) {
-    .md-typeset :is(h1, h2, h3, h4, h5, h6) {
-        padding-inline-start: 1.25em;
+@media (max-width: 76.1875em) {
+    .md-typeset [id] > .headerlink {
+        inset-inline-start: -0.8rem;
+        width: 0.8rem;
     }
 
-    .md-typeset [id] > .headerlink {
-        inset-inline-start: 0;
+    .md-typeset .headerlink::before {
+        inset-inline: 0.1rem;
     }
 }
 
