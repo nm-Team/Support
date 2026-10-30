@@ -11,9 +11,9 @@ description: 打开 nmBot 面板，配置群组和频道，查找工具、指令
 
 ## 配置“群组管理功能” {#配置群组管理}
 
-将 nmBot 添加到群组后，您可以[启用“群组管理功能”](group/setup.md)。常用的[“骚扰消息拦截”](group/moderation/anti-spam.md)、[“入群验证”](group/moderation/join-verification.md)和[“成员管理”](group/moderation/member-actions.md)都有对应的设置说明。
+将 nmBot 添加到群组后，您可以[启用“群组管理功能”](group/setup.md)，再设置[“骚扰消息拦截”](group/moderation/anti-spam.md)、[“入群验证”](group/moderation/join-verification.md)，或用指令[管理成员](group/moderation/member-actions.md)。
 
-您也可以为群组设置[“成员消息”](group/automation/member-messages.md)、[“关键词回复”](group/automation/keyword-replies.md)和[“定时任务”](group/automation/scheduled-tasks.md)。
+您也可以为群组设置[“入群欢迎”“退群消息”和“入群请求通知消息”](group/automation/member-messages.md)、[“关键词回复”](group/automation/keyword-replies.md)和[“定时任务”](group/automation/scheduled-tasks.md)。
 
 ## 管理频道和商业机器人 {#管理频道和商业机器人}
 

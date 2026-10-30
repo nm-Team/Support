@@ -33,7 +33,7 @@ Telegram 的[“Chat Automation”入口](https://telegram.org/blog/ai-bot-revol
 
 您需要根据要使用的功能授予权限：
 
-- 商业[“关键词回复”](keyword-replies.md)需要回复消息权限。自动删除和标记已读还需要各自对应的权限。
+- [“商业关键词回复”](keyword-replies.md)需要回复消息权限。自动删除和标记已读还需要各自对应的权限。
 - [“商业定时任务”](scheduled-task.md)需要更改名称、简介或用户名的权限，取决于您在任务中选择更新的资料。
 
 授权后，nmBot 可以在所选聊天中以您的身份操作。撤销某项权限后，依赖这项权限的操作会失败。
