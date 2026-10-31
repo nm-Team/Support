@@ -9,7 +9,7 @@ index: 1
 
 # 打开并登录 nmBot 面板 { #启动-nmbot-面板 }
 
-你可以在 nmBot 面板中管理群组、频道和个人设置。在 Telegram 中打开迷你 App，或在浏览器中登录后，都可以进入同一个 nmBot 面板。
+你可以通过 Telegram 迷你 App 或浏览器打开 nmBot 面板，管理群组、频道和个人设置。
 
 <span id="在-telegram-中启动-nmbot-面板"></span>
 <span id="telegram-nmbot"></span>
@@ -19,7 +19,7 @@ index: 1
 1. 打开你与 nmBot 的私信，发送 `/panel`。nmBot 会回复 nmBot 面板入口。
 1. 点按回复中的 nmBot 面板链接，打开 Telegram 迷你 App。
 
-你也可以直接点按 nmBot 私信中的菜单按钮打开 nmBot 面板。如果 Telegram 请求授权，请确认使用的是你要管理群组的账号。
+你也可以直接点按 nmBot 私信中的菜单按钮打开 nmBot 面板。
 
 <span id="在-web-浏览器中启动-nmbot-面板"></span>
 <span id="web-nmbot"></span>

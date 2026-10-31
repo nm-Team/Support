@@ -8,7 +8,7 @@ index: 4
 
 # 调整 nmBot 面板设置 {#调整面板设置}
 
-你可以在 nmBot 面板的“设置”中调整个人通知和 nmBot 面板显示方式。[“语言”](language.md)控制 nmBot 面板语言，机器人私聊语言则通过 `/lang` 设置。
+你可以在 nmBot 面板的“设置”中调整个人通知和 nmBot 面板显示方式。[“语言”](language.md)控制 nmBot 面板语言，机器人私信语言则通过 `/lang` 设置。
 
 在[“界面与体验”](experience.md)中，你可以更改外观、交互和迷你 App 行为。[“通知”](notifications.md)决定自己是否接收群组呼叫管理员的通知。
 

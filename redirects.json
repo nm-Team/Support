@@ -26,6 +26,7 @@
     "/nmbot-telegram/group/games/": "/nmbot-telegram/group/entertainment/",
     "/nmbot-telegram/group/members-interaction/": "/nmbot-telegram/group/entertainment/member-interactions/",
     "/nmbot-telegram/group/banme/": "/nmbot-telegram/group/entertainment/banme/",
-    "/nmbot-telegram/set-language/": "/nmbot-telegram/panel/settings/language/"
+    "/nmbot-telegram/set-language/": "/nmbot-telegram/panel/settings/language/",
+    "/nmbot-telegram/credit/annual-summary/": "/nmbot-telegram/credit/"
   }
 }

@@ -10,4 +10,4 @@ index: 5
 
 <span id="_1"></span>
 
-如果你需要聊天回复或频道评论，可以设置[“nmartChat”](../../nmbot-intelligence/nmartchat.md)或[“同频气氛组”](../automation/channel-commentary.md)。
+如果你需要对话回复或频道评论，可以设置[“nmartChat”](../../nmbot-intelligence/nmartchat.md)或[“同频气氛组”](../automation/channel-commentary.md)。

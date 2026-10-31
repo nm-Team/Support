@@ -21,4 +21,4 @@ description: 在 Telegram 迷你 App 中选择赞助金额，查看付款状态�
 
 每赞助 1 星币可获得 100 积分。你可以打开[“积分历史记录”](credit/credit.md)查看增加的积分。
 
-如果付款成功后积分没有更新，你可以[联系 nmTeam 支持](support.md)提供这笔交易的付款凭据。付款问题也可以在与 nmBot 的私聊中发送 `/paysupport` 获取支持入口。
+如果付款成功后积分没有更新，你可以[联系 nmTeam 支持](support.md)，提供这笔交易的付款凭据以获取帮助。付款问题也可以在与 nmBot 的私信中发送 `/paysupport` 获取支持入口。

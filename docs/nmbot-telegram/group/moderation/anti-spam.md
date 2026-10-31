@@ -63,11 +63,11 @@ index: 1
 
 <span id="combot-anti-spam"></span>
 
-### “Combot Anti-Spam” { #combot-anti-spam-集成 }
+### 设置“Combot Anti-Spam” { #combot-anti-spam-集成 }
 
 你可以为“被 Combot CAS 标记的用户”选择处理方式。该服务由 Combot 提供，用于识别已被 Combot Anti-Spam 标记的用户。
 
-### “AdBye” { #adbye }
+### 设置“AdBye” { #adbye }
 
 如果页面中显示“AdBye”分组，你可以为“AdBye 识别为广告的消息”选择处理方式。启用后，可用“AdBye 识别灵敏度”调整严格程度，越往右越严格。
 
@@ -96,7 +96,7 @@ index: 1
 <span id="如何启用关闭该功能"></span>
 <span id="我们如何保证该功能不被滥用"></span>
 
-## 处理误封 {#处理误封}
+## 如果成员被误封 {#处理误封}
 
 如果成员被误封，群组管理员可以解除封禁。需要避免同一成员再次被识别时，可以将其加入群组白名单；骚扰拦截提示中的白名单操作需要管理员拥有封禁用户的权限。
 

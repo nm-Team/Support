@@ -1,6 +1,6 @@
 ---
 title: 使用 nmBot 面板
-description: 了解如何使用 nmBot 面板来管理和配置您的 nmBot 机器人。
+description: 登录 nmBot 面板、添加要管理的对话，并调整个人设置。
 ---
 
 # 使用 nmBot 面板 {#nmbot-面板}

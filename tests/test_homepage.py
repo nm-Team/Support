@@ -15,4 +15,4 @@ def test_homepage_markdown_inside_html_sections_is_rendered():
     assert "### 参与改进 nmTeam 帮助文档" not in rendered
     assert "<h2>关于帮助文档</h2>" in rendered
     assert "<h3>参与改进 nmTeam 帮助文档</h3>" in rendered
-    assert '<a href="./about.md">在此</a>' in rendered
+    assert '<a href="./about.md">了解这份帮助文档</a>' in rendered

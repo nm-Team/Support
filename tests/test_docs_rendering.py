@@ -68,20 +68,17 @@ def test_panel_troubleshooting_lists_render_bold_labels():
 
     for label in (
         "检查网络连接：",
-        "清除浏览器缓存：",
-        "尝试使用其他浏览器：",
+        "重新加载页面：",
+        "尝试其他浏览器：",
         "检查防火墙设置：",
-        "查看 nmBot 面板服务状态：",
+        "查看服务状态：",
     ):
         assert f"<strong>{label}</strong>" in access
     for label in (
-        "检查网络连接：",
-        "确认你可以访问 Telegram：",
-        "清除浏览器缓存：",
-        "更新浏览器：",
-        "禁用浏览器插件：",
+        "清除网站缓存：",
+        "检查浏览器版本和扩展：",
         "使用其他浏览器或设备：",
-        "联系技术支持：",
+        "获取支持：",
     ):
         assert f"<strong>{label}</strong>" in login
     assert "\\*\\*" not in access

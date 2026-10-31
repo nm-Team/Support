@@ -36,13 +36,13 @@ hide:
 
 ## 关于帮助文档
 
-nmTeam 帮助文档为您提供 nmTeam 旗下产品的使用指南和支持信息。您还可以找到联系 nmTeam 支持的方式。
+nmTeam 帮助文档提供旗下产品的使用指南和支持信息。你可以按产品查找操作步骤，或了解联系 nmTeam 支持的方式。
 
-您可以[在此](./about.md)了解关于 nmTeam 帮助文档的信息。
+你可以[了解这份帮助文档](./about.md)的编辑和贡献者信息。
 
 ### 参与改进 nmTeam 帮助文档
 
-nmTeam 帮助文档由 nmTeam 成员和社区志愿者共同编辑。您可以在 [GitHub](https://github.com/nm-Team/Support) 上参与贡献此文档。
+nmTeam 帮助文档由 nmTeam 成员和社区志愿者共同编辑。你可以在 [GitHub](https://github.com/nm-Team/Support) 上参与贡献此文档。
 
 ## nmTeam 官方网站
 

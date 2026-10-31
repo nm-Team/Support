@@ -8,7 +8,7 @@ index: 1
 
 # 查看 nmBot+ 权益 {#nmbot-权益}
 
-您可以在 nmBot 面板的“nmBot+”中查看所选账号、群组或频道适用的权益。个人和对话的订阅分别生效。只有在功能明确支持时，个人订阅才能用于您管理的群组，例如处理成员时删除最近消息。
+你可以在 nmBot 面板的“nmBot+”中查看所选账号、群组或频道适用的权益。个人和对话的订阅分别生效。只有在功能明确支持时，个人订阅才能用于你管理的群组，例如处理成员时删除最近消息。
 
 <span id="_1"></span>
 
@@ -16,7 +16,7 @@ index: 1
 
 在 nmBot 面板的“对话”中选择目标群组，再打开“nmBot+”。这里会列出该群组可用的高级功能；购买入口还会显示适用于该群组类型和成员人数的计划。
 
-您可以从对应功能页面了解订阅后开放的设置：
+你可以从对应功能页面了解订阅后开放的设置：
 
 - [群组功能管理权限](../group/admin-rights-and-features.md)允许群主调整不同功能的管理权限。
 - [“骚扰消息拦截”](../group/moderation/anti-spam.md)提供自定义骚扰规则。
@@ -30,6 +30,7 @@ index: 1
 - [“关键词回复”](../group/automation/keyword-replies.md)提供更多回复和动作选项。
 - [“联防联控机制”](../group/moderation/joint-prevention.md)支持加入更多共享方案，以及自动添加或同步新封禁的用户。
 - [“按消息类型删除消息”](../group/moderation/auto-delete-messages.md)可在删除违规内容后警告发送者。
+- [“群组操作消息”的“自动删除”](../group/moderation/operation-messages.md)可在指定时间后清理 nmBot 发出的操作结果消息。
 - [退群成员的“自动封禁”](../group/moderation/departing-members.md)可以设置封禁时长。
 - [“nmartChat+”](../nmbot-intelligence/nmartchat.md)支持继续对话，[“同频气氛组”](../group/automation/channel-commentary.md)提供更多语气和人设选择。
 
@@ -42,18 +43,18 @@ index: 1
 
 ## 查看个人的 nmBot+ 权益 {#用户}
 
-从 nmBot 面板的“设置”打开“nmBot+”，您会看到个人账号适用的权益。这里购买的计划作用于您的个人账号，具体可用功能会列在页面中。
+从 nmBot 面板的“设置”打开“nmBot+”，你会看到个人账号适用的权益。这里购买的计划作用于你的个人账号，具体可用功能会列在页面中。
 
 个人订阅支持以下功能：
 
 - [nmBot MCP](../mcp.md)可保留更多访问令牌，并获得更高的请求额度。
 - [“nmBot Copilot”](../nmbot-intelligence/copilot.md#%E9%80%89%E6%8B%A9%E6%99%BA%E8%83%BD%E8%81%8A%E5%A4%A9%E7%AD%89%E7%BA%A7)可以选择“高级”智能聊天等级。
-- 在您有管理权限的群组中，可以使用[清理最近消息的成员操作](../group/moderation/member-actions.md#%E6%B8%85%E7%90%86%E6%9C%80%E8%BF%91%E6%B6%88%E6%81%AF)和 `/dwarn`，即使该群组没有订阅。
-- [“接收群组呼叫管理员通知”](../panel/settings/notifications.md)可以关闭，让 nmBot 跳过向您发送这类通知。
+- 在你有管理权限的群组中，可以使用[清理最近消息的成员操作](../group/moderation/member-actions.md#%E6%B8%85%E7%90%86%E6%9C%80%E8%BF%91%E6%B6%88%E6%81%AF)和 `/dwarn`，即使该群组没有订阅。
+- [“接收群组呼叫管理员通知”](../panel/settings/notifications.md)可以关闭，让 nmBot 跳过向你发送这类通知。
 - [“商业关键词回复”](../business/keyword-replies.md)可使用自动删除和标记已读，并可创建更多[“商业定时任务”](../business/scheduled-task.md)。
 
-## 处理 nmBot+ 权益没有生效 {#处理权益没有生效}
+## 如果 nmBot+ 权益没有生效 {#处理权益没有生效}
 
-您可以在购买对象的“nmBot+”中查看“当前状态”和“过期日”。如果个人状态显示激活而群组仍显示未激活，需要查看目标群组自己的订阅状态。
+你可以在购买对象的“nmBot+”中查看“当前状态”和“过期日”。如果个人状态显示激活而群组仍显示未激活，需要查看目标群组自己的订阅状态。
 
 付款后，页面可能先提示正在处理订单。状态长时间没有更新时，可以[联系 nmTeam 支持](../support.md)。

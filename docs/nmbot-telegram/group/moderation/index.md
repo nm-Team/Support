@@ -1,10 +1,10 @@
 ---
-title: 使用消息和成员管理
+title: 使用消息和成员管理功能
 description: 设置入群验证、识别骚扰消息，并按消息类型限制群组内容。
 index: 2
 ---
 
-# 使用消息和成员管理 {#管理消息和成员}
+# 使用消息和成员管理功能 {#管理消息和成员}
 
 <span id="_1"></span>
 
@@ -12,7 +12,7 @@ index: 2
 
 你可以手动[封禁、禁言或移出成员](member-actions.md)，也可以用[“警告”](warnings.md)记录违规。需要控制连续发言时，可以设置[“发言频率限制”](speaking-frequency.md)或[“新成员权限限制”](new-member-permissions.md)。
 
-清理单条消息时，可以[发送 `/d`](delete-messages.md)。你也可以[管理置顶消息](pin-messages.md)、维护[“群组成员白名单”](whitelist.md)，或设置[“指令限制”](command-restrictions.md)。
+清理单条消息时，可以[发送 `/d`](delete-messages.md)。你也可以[管理置顶消息](pin-messages.md)、维护[“群组成员白名单”](whitelist.md)，或设置[“指令限制”](command-restrictions.md)。需要清理 nmBot 发出的操作反馈时，可以设置[“群组操作消息”的“自动删除”](operation-messages.md)。
 
 需要查找管理员操作时，可以启用[“操作记录”](action-log.md)。多个群组共用封禁名单时，可以使用[“联防联控机制”](joint-prevention.md)。
 

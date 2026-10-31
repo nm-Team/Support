@@ -1,6 +1,6 @@
 ---
 title: 查找 nmBot 指令
-description: 从 nmBot 面板查看指令和参数，在聊天中获取帮助。
+description: 从 nmBot 面板查看指令和参数，在对话中获取帮助。
 ---
 
 <span id="nmbot"></span>
@@ -18,13 +18,15 @@ description: 从 nmBot 面板查看指令和参数，在聊天中获取帮助。
 
 输入框的菜单只显示部分常用指令。群组管理员可以调整[“自定义指令列表”](group/configuration/commands.md)，菜单中隐藏的指令仍可能可以手动输入。
 
-## 在聊天中获取指令帮助
+<span id="_2"></span>
+
+## 在对话中获取指令帮助 {#在聊天中获取指令帮助}
 
 你可以按需要发送以下指令：
 
 - `/start`：查看开始使用 nmBot 的提示和添加到群组或频道的入口。
 - `/help` 或 `/doc`：获取帮助文档入口。
 - `/about`：查看机器人版本、官方频道和支持入口。
-- `/whatis 指令名`：查看某条指令已登记的参数和权限，例如 `/whatis ban`。
+- `/whatis 指令名`：[查询指令用法](tools/command-help.md)，查看已登记的参数和权限，例如 `/whatis ban`。
 
 群组中的[指令限制](group/moderation/command-restrictions.md)可能阻止普通成员调用指令。权限不足或功能关闭时，具体操作还会受对应功能的要求限制。

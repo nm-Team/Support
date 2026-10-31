@@ -8,7 +8,7 @@ index: 200
 
 nmTeam 帮助文档由 nmTeam 成员和社区志愿者共同编辑。
 
-您可以在 [GitHub](https://github.com/nm-Team/Support) 上参与贡献此文档。
+你可以在 [GitHub](https://github.com/nm-Team/Support) 上参与贡献此文档。
 
 ## 贡献者
 
