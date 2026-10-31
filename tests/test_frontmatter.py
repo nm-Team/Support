@@ -1,5 +1,7 @@
 """Frontmatter parsing smoke tests."""
 
+import pytest
+
 from nmteam_support.frontmatter import parse_page, split_frontmatter
 
 
@@ -36,6 +38,36 @@ def test_title_falls_back_to_heading():
 def test_title_falls_back_to_filename():
     meta, _ = parse_page("", "my-doc.md")
     assert meta.title == "My Doc"
+
+
+@pytest.mark.parametrize(
+    ("heading", "title"),
+    [
+        ("如果你无法访问 nmBot 面板 {#如果您无法访问-nmbot-面板}", "如果你无法访问 nmBot 面板"),
+        (
+            "如果你无法在 nmBot 面板登录 { #如果您无法在-nmbot-面板登录 }",
+            "如果你无法在 nmBot 面板登录",
+        ),
+        ('标题 {#标题 .guide data-toc-label="目录名称"}', "标题"),
+        ("标题 {: #legacy}", "标题"),
+        ("标题 {#示例} {其他}", "标题 {#示例} {其他}"),
+        ("标题中的 `{#示例}`", "标题中的 `{#示例}`"),
+        ("标题 {#示例} 后续文字", "标题 {#示例} 后续文字"),
+    ],
+)
+def test_fallback_title_omits_heading_attributes_without_changing_body(heading, title):
+    source = f"# {heading}\n\n正文。\n"
+
+    meta, body = parse_page(source, "guide.md")
+
+    assert meta.title == title
+    assert body == source
+
+
+def test_explicit_metadata_title_is_not_treated_as_a_markdown_heading():
+    meta, _ = parse_page("---\ntitle: 标题 {#示例}\n---\n\n# 其他标题 {#其他}\n", "guide.md")
+
+    assert meta.title == "标题 {#示例}"
 
 
 def test_index_garbage_defaults_to_zero():

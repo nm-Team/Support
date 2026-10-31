@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import re
 
+from markdown.extensions.attr_list import AttrListTreeprocessor, get_attrs_and_remainder
+
 from nmteam_support.models import PageMetadata
 
 _MARKDOWN_CHARS = re.compile(r"[\[\]\(\)#`>*_]|\|")
@@ -56,7 +58,11 @@ def extract_title(metadata_raw: str, body: str, filename: str) -> str:
             return match.group(1).strip()
     match = re.search(r"# (.*)", body)
     if match:
-        return match.group(1).strip()
+        title = match.group(1).strip()
+        attributes = AttrListTreeprocessor.HEADER_RE.search(title)
+        if attributes and not get_attrs_and_remainder(attributes.group(1))[1]:
+            title = title[: attributes.start()].rstrip("#").rstrip()
+        return title
     return filename.replace(".md", "").replace("-", " ").title()
 
 

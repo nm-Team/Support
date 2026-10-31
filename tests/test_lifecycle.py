@@ -151,6 +151,38 @@ def test_browser_title_strips_markup_without_changing_rendered_navigation(tmp_pa
     assert "<nmbot-plus-icon></nmbot-plus-icon> nmBot+" in output
 
 
+def test_heading_attributes_stay_out_of_directory_titles_but_keep_the_target(tmp_path, docs_dir):
+    (docs_dir / "nmbot-telegram" / "mcp.md").write_text(
+        "# 如果你无法访问 nmBot 面板 { #legacy-panel }\n\n正文。\n", encoding="utf-8"
+    )
+    config = tmp_path / "mkdocs.yml"
+    config.write_text(
+        "site_name: Test\n"
+        "docs_dir: docs\n"
+        "site_dir: site\n"
+        "theme:\n"
+        "  name: material\n"
+        "plugins:\n"
+        "  - nmteam-support\n"
+        "markdown_extensions:\n"
+        "  - attr_list\n"
+        "  - toc\n",
+        encoding="utf-8",
+    )
+
+    build_site(config)
+
+    site = tmp_path / "site" / "nmbot-telegram"
+    directory = (site / "index.html").read_text(encoding="utf-8")
+    assert '<a class="link" href="/nmbot-telegram/mcp">如果你无法访问 nmBot 面板</a>' in directory
+    assert "{ #legacy-panel }" not in directory
+    portable = (site / "index.md").read_text(encoding="utf-8")
+    assert "[如果你无法访问 nmBot 面板](/nmbot-telegram/mcp)" in portable
+    assert "{ #legacy-panel }" not in portable
+    article = (site / "mcp" / "index.html").read_text(encoding="utf-8")
+    assert '<h1 id="legacy-panel">如果你无法访问 nmBot 面板</h1>' in article
+
+
 def test_unicode_heading_links_and_legacy_aliases_survive_the_production_build(tmp_path, docs_dir):
     (docs_dir / "about.md").write_text(
         "# 关于\n\n## 使用说明\n\n[旧链接](#_2) [新链接](#使用说明)\n",
