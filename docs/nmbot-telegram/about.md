@@ -4,7 +4,7 @@ title: 关于 nmBot
 
 <center>
 <!-- 图片 -->
-<img src="https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png" width="128" height="128" alt="nmBot logo" />  
+<img src="https://websiteres.nmteam.xyz/producticon/nmBot/logo2@128.png" width="128" height="128" alt="nmBot logo" />  
 ## nmBot  
 © 2022-2024 nmTeam. All rights reserved.  
 </center>

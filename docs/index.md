@@ -19,7 +19,7 @@ hide:
 </div>
 <div class="productsTable">
     <a class="product" href="nmbot-telegram">
-        <img src="https://websiteres.nmteam.xyz/producticon/nmBot/logo@128.png" alt="nmBot logo" />
+        <img src="https://websiteres.nmteam.xyz/producticon/nmBot/logo2@128.png" alt="nmBot logo" />
         <h3>nmBot</h3>
     </a>
     <a class="product" href="nmteam-account">
